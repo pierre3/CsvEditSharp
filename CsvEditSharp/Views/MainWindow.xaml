@@ -37,7 +37,7 @@
         <!-- ToolBar -->
         <ToolBarTray Grid.Row="0">
             <ToolBar>
-                <Label Margin="2,0">CSV Config Template</Label>
+                <Label Margin="2,0">Configuration Script</Label>
                 <ComboBox Width="160" x:Name="configTemplateComboBox" 
                           ItemsSource="{Binding ConfigFileTemplates}"
                           SelectedItem="{Binding SelectedTemplate}"/>

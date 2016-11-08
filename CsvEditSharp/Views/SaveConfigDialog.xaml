@@ -5,16 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CsvEditSharp.Views"
         mc:Ignorable="d"
-        Title="Save As" Height="200" Width="360">
+        Title="Save As" Height="200" Width="360" WindowStyle="ToolWindow">
     <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel>
-            <RadioButton Margin="2,8,2,2" GroupName="radioGroup1" IsChecked="{Binding IsTemplate}">Save as a new template</RadioButton>
+            <RadioButton Margin="2,8,2,2" GroupName="radioGroup1" IsChecked="{Binding IsTemplate}">Save as a new file</RadioButton>
             <StackPanel Orientation="Horizontal" Margin="16,0,0,0">
-                <Label>Template Name</Label>
+                <Label>Config Name</Label>
                 <TextBox Width="200" Text="{Binding TemplateName}"/>
             </StackPanel>
             <RadioButton Margin="2,8" GroupName="radioGroup1">Save into the current directory as "Default.config.csx"</RadioButton>

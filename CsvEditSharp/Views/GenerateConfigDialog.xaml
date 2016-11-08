@@ -7,7 +7,7 @@
              xmlns:models="clr-namespace:CsvEditSharp.Models"
              xmlns:bindings="clr-namespace:CsvEditSharp.Bindings"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             Title="CSV Config File Settings" WindowStyle="ToolWindow"
+             Title="Generate a configuration script" WindowStyle="ToolWindow"
              Height="160" Width="400" >
 
     <Window.Resources>
@@ -27,7 +27,7 @@
         </Grid.ColumnDefinitions>
 
 
-        <Label Grid.Row="0" Content="TemplateName"/>
+        <Label Grid.Row="0" Content="Config Name"/>
         <TextBox Grid.Row="0" Grid.Column="1" Margin="2,4"
                  Text="{Binding TemplateName}"/>
 
