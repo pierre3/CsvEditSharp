@@ -34,15 +34,14 @@ namespace CsvEditSharp.T4
             {
                 foreach (var h in headers)
                 {
-                    yield return new ColumnDefs { Index = i, Name = h };
-                    i++;
+                    yield return new ColumnDefs { Index = i++, Name = h };
                 }
             }
             else
             {
                 while (true)
                 {
-                    yield return new ColumnDefs { Index = i, Name = null };
+                    yield return new ColumnDefs { Index = i++, Name = null };
                 }
             }
         }
