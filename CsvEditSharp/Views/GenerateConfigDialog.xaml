@@ -8,7 +8,7 @@
              xmlns:bindings="clr-namespace:CsvEditSharp.Bindings"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              Title="Generate a configuration script" WindowStyle="ToolWindow"
-             Height="160" Width="400" >
+             Height="200" Width="400" >
 
     <Window.Resources>
         <bindings:EncodingInfoToStringConverter x:Key="encodingConverter"/>
@@ -16,6 +16,7 @@
 
     <Grid Margin="12">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -28,8 +29,8 @@
 
 
         <Label Grid.Row="0" Content="Config Name"/>
-        <TextBox Grid.Row="0" Grid.Column="1" Margin="2,4"
-                 Text="{Binding TemplateName}"/>
+        <TextBox x:Name="templateNameTextBox" Grid.Row="0" Grid.Column="1" Margin="2,4"
+                 Text="{Binding TemplateName,UpdateSourceTrigger=PropertyChanged}"/>
 
         <Label Grid.Row="1" Content="Target File Encoding"/>
         <ComboBox Grid.Row="1" Grid.Column="1" Margin="2,4" 
@@ -39,7 +40,10 @@
 
         <CheckBox Grid.Row="2" Grid.Column="1" Margin="2,4"
                   IsChecked="{Binding HasHeaderRecord}">Has header record</CheckBox>
-        <StackPanel Grid.Row="3" Grid.ColumnSpan="2" 
+        <TextBlock Margin="2" Grid.Row="3" Grid.ColumnSpan="2" 
+                       Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
+                       Foreground="Red" />
+        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <Button Padding="2" Margin="8,0" Width="90" IsCancel="True">Cancel</Button>
             <Button Padding="2" Margin="8,0" Width="90" IsDefault="True" 

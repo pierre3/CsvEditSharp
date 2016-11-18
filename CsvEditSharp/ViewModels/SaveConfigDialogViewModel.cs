@@ -12,13 +12,17 @@ namespace CsvEditSharp.ViewModels
         private bool _isTemplate = true;
 
         public ICommand ApplyCommand { get; }
-        
+
         public string TemplateName
         {
             get { return _templateName; }
-            set { SetProperty(ref _templateName, value); }
+            set
+            {
+                SetProperty(ref _templateName, value);
+                ValidateTemplateName();
+            }
         }
-       
+
         public bool IsTemplate
         {
             get { return _isTemplate; }
@@ -27,25 +31,21 @@ namespace CsvEditSharp.ViewModels
 
         public SaveConfigDialogViewModel()
         {
-            ApplyCommand = new DelegateCommand(_ => { }, _ => !HasErrors);
+            ApplyCommand = new DelegateCommand(_ => { }, _ => !string.IsNullOrWhiteSpace(TemplateName) && !HasErrors);
         }
-        
+
         private void ValidateTemplateName()
         {
             ClearErrorInfo(nameof(TemplateName));
-            if (string.IsNullOrWhiteSpace(TemplateName))
+            if (TemplateName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
             {
-                AddErrorInfo(nameof(TemplateName), $"[{TemplateName}]: Enter a \"Name\" box");
-            }
-            else if (TemplateName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
-            {
-                AddErrorInfo(nameof(TemplateName), $"[{TemplateName}]: Enter a valid name as file name.");
+                AddErrorInfo(nameof(TemplateName), "Enter a valid name as file name.");
             }
             else if (CsvConfigFileManager.Default.SettingsList.Contains(TemplateName))
             {
-                AddErrorInfo(nameof(TemplateName), $"[{TemplateName}]: {TemplateName} is already exist.");
+                AddErrorInfo(nameof(TemplateName), $"{TemplateName} is already exist.");
             }
         }
-        
+
     }
 }

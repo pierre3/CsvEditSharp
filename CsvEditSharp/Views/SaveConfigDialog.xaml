@@ -15,9 +15,13 @@
             <RadioButton Margin="2,8,2,2" GroupName="radioGroup1" IsChecked="{Binding IsTemplate}">Save as a new file</RadioButton>
             <StackPanel Orientation="Horizontal" Margin="16,0,0,0">
                 <Label>Config Name</Label>
-                <TextBox Width="200" Text="{Binding TemplateName}"/>
+                <TextBox x:Name="templateNameTextBox" Width="200" 
+                         Text="{Binding TemplateName, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
             <RadioButton Margin="2,8" GroupName="radioGroup1">Save into the current directory as "Default.config.csx"</RadioButton>
+            <TextBlock Margin="2" 
+                       Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
+                       Foreground="Red" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="4,8" 
                     HorizontalAlignment="Center" VerticalAlignment="Bottom">

@@ -45,7 +45,7 @@ namespace CsvEditSharp.ViewModels
 
         public GenerateConfigDialogViewModel()
         {
-            ApplyCommand = new DelegateCommand(_ => Apply(), _ => !HasErrors);
+            ApplyCommand = new DelegateCommand(_ => Apply(), _ => !string.IsNullOrWhiteSpace(TemplateName) && !HasErrors);
         
             TargetEncodingIndex = Encodings
                 .Select((x, i) => new { Info = x, Index = i })
@@ -67,17 +67,13 @@ namespace CsvEditSharp.ViewModels
         private void ValidateTemplateName()
         {
             ClearErrorInfo(nameof(TemplateName));
-            if (string.IsNullOrWhiteSpace(TemplateName))
+            if (TemplateName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
             {
-                AddErrorInfo(nameof(TemplateName), $"[{TemplateName}]: Enter a \"Name\" box");
-            }
-            else if (TemplateName.Any(c => Path.GetInvalidFileNameChars().Contains(c)))
-            {
-                AddErrorInfo(nameof(TemplateName), $"[{TemplateName}]: Enter a valid name as file name.");
+                AddErrorInfo(nameof(TemplateName), "Enter a valid name as file name.");
             }
             else if (CsvConfigFileManager.Default.SettingsList.Contains(TemplateName))
             {
-                AddErrorInfo(nameof(TemplateName), $"[{TemplateName}]: {TemplateName} is already exist.");
+                AddErrorInfo(nameof(TemplateName), $"{TemplateName} is already exist.");
             }
         }
         
