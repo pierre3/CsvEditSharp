@@ -11,25 +11,25 @@ namespace CsvEditSharp.Models
 {
     public class CsvConfigFileManager
     {
-        public static CsvConfigFileManager Default { get; private set; }
+        static readonly string AutoGenerateTemplateName = "(Auto Generate)";
 
-        private IList<string> _settingsList = new List<string>();
+        public static CsvConfigFileManager Default { get; private set; }
 
         public string ConfigFileDirectory { get; private set; }
 
         private IModalDialogService<GenerateConfigSettings> _dialogService;
 
-        public IReadOnlyCollection<string> SettingsList { get; private set; }
+        public ObservableCollection<string> SettingsList { get; private set; } = new ObservableCollection<string>();
 
         public string CurrentConfigFilePath { get; set; } = string.Empty;
 
         public CsvConfigFileManager(IModalDialogService<GenerateConfigSettings> dialogService, string configFileDirectory = null)
-        {
+        { 
             _dialogService = dialogService;
-
+            
             var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     Assembly.GetEntryAssembly().GetName().Name);
-            
+
             if (string.IsNullOrWhiteSpace(configFileDirectory))
             {
                 ConfigFileDirectory = Path.Combine(appData, "Config");
@@ -47,15 +47,21 @@ namespace CsvEditSharp.Models
         {
             Default = new CsvConfigFileManager(dialogService, configFileDirectory);
         }
-        
+
         public void GetConfigFiles()
         {
             Directory.CreateDirectory(ConfigFileDirectory);
             var files = Directory.GetFiles(ConfigFileDirectory, "*.config.csx");
-            _settingsList = files.Select(x => Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(x))).ToList();
-            SettingsList = new ReadOnlyCollection<string>(_settingsList);
+            SettingsList.Clear();
+
+            var items = new[] { AutoGenerateTemplateName }
+                .Concat(files.Select(x => Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(x))));
+             foreach(var item in items)
+            {
+                SettingsList.Add(item);
+            }
         }
-        
+
         public string GetCsvConfigString(string targetFilePath, string templateName)
         {
             //Read a default config file
@@ -68,9 +74,10 @@ namespace CsvEditSharp.Models
             }
 
             //Read a config file from selected template.
-            if (_settingsList.Contains(templateName))
+            if (SettingsList.Skip(1).Contains(templateName))
             {
                 var templateFilePath = Path.Combine(ConfigFileDirectory, templateName + ".config.csx");
+                if(File.Exists(templateFilePath)) { return $"Error! {templateFilePath} is not found."; }
                 var configText = File.ReadAllText(templateFilePath, Encoding.UTF8);
                 CurrentConfigFilePath = templateFilePath;
                 return configText;
@@ -129,7 +136,7 @@ namespace CsvEditSharp.Models
             File.WriteAllText(templateFilePath, configText);
 
             CurrentConfigFilePath = templateFilePath;
-            _settingsList.Add(newSettings.TemplateName);
+            SettingsList.Add(newSettings.TemplateName);
             return configText;
         }
     }

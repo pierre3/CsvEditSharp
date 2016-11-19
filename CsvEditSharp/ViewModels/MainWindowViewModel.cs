@@ -16,7 +16,6 @@ namespace CsvEditSharp.ViewModels
     public class MainWindowViewModel : BindableBase, IDisposable
     {
         private static readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
-        static readonly string AutoGenerateTemplateName = "(Auto Generate)";
 
         private ObservableCollection<object> _csvRows;
         private ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
@@ -94,7 +93,10 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _hasErrorMessages, value); }
         }
 
-        public IReadOnlyCollection<string> ConfigFileTemplates { get; }
+        public ObservableCollection<string> ConfigFileTemplates
+        {
+            get { return CsvConfigFileManager.Default.SettingsList; }
+        }
 
         public IDocument ConfigurationDoc
         {
@@ -196,10 +198,6 @@ namespace CsvEditSharp.ViewModels
 
         public MainWindowViewModel(IViewServiceProvider viewServiceProvider)
         {
-            ConfigFileTemplates
-                = new ReadOnlyCollection<string>(new[] { AutoGenerateTemplateName }
-                .Concat(CsvConfigFileManager.Default.SettingsList).ToList());
-
             _viewService = viewServiceProvider;
             _errorMessages.CollectionChanged += (_, __) => HasErrorMessages = _errorMessages.Count > 0;
             _host = new CsvEditSharpConfigurationHost();
@@ -211,7 +209,7 @@ namespace CsvEditSharp.ViewModels
             CurrentFilePath = string.Empty;
             CurrentFileName = "(Empty)";
             CurrentConfigName = "(Empty)";
-            SelectedTemplate = AutoGenerateTemplateName;
+            SelectedTemplate = ConfigFileTemplates.First();
             SelectedTab = 0;
         }
 
