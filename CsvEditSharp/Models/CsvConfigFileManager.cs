@@ -77,7 +77,7 @@ namespace CsvEditSharp.Models
             if (SettingsList.Skip(1).Contains(templateName))
             {
                 var templateFilePath = Path.Combine(ConfigFileDirectory, templateName + ".config.csx");
-                if(File.Exists(templateFilePath)) { return $"Error! {templateFilePath} is not found."; }
+                if(!File.Exists(templateFilePath)) { return $"Error! \"{templateFilePath}\" is not found."; }
                 var configText = File.ReadAllText(templateFilePath, Encoding.UTF8);
                 CurrentConfigFilePath = templateFilePath;
                 return configText;
