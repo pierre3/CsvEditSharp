@@ -49,7 +49,7 @@ namespace CsvEditSharp.Models
                         "System.Text",
                         "CsvHelper.Configuration",
                         "CsvHelper",
-                        "CsvEditSharp"),
+                        "CsvEditSharp.Models"),
                     typeof(ICsvEditSharpConfigurationHost));
 
                 _workspace.ClearSolution();
