@@ -132,7 +132,7 @@ RegisterClassMap<Person>(classMap => {
 }, RegisterClassMapTarget.Reader);
 ```
 
-## SetConfiguration
+## SetConfiguration Method
 
 ```cs
 void SetConfiguration(Action<CsvConfiguration> configurationSetter);
@@ -164,13 +164,13 @@ SetConfiguration(config =>
 });
 ```
 
-## AddValidation
+## AddValidation Method
 
 ```
 void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
 ```
 
-## Query
+## Query Method
 
 ```
 void Query<T>(Func<IEnumerable<T>, IEnumerable<T>> query);
