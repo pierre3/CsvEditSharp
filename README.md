@@ -11,6 +11,8 @@ This is the CSV Editor, describes a read/write setting in C# script.
 - [AvalonEdit](http://avalonedit.net/)
 - [Microsoft.CodeAnalysis.CSharp.Scripting](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp.Scripting/)
 
+![CsvEditSharpMain03](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main03.png)
+
 ## Exsamples
 
 ### sample csv
@@ -72,6 +74,5 @@ RegisterClassMap<Person>(classMap =>
         .TypeConverterOption(culcure);
 });
 ```
-![CsvEditSharpMain03](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main03.png)
-![CsvEditSharpMain01](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main01.png)
+![CsvEditSharpMain02](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main02.png)
 
