@@ -84,7 +84,8 @@ RegisterClassMap<Person>(classMap =>
 Encoding Encoding { get; set; }
 ```
 
-Usage
+Sets a `System.Text.Encoding` object for reading a CSV file.
+
 ```cs
 Encoding = Encoding.GetEncoding("utf-8");
 ```
@@ -97,12 +98,10 @@ void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter);
 void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter, RegisterClassMapTarget target);
 ```
 
-Usage
-
-Sets a class map settings, using `CsvHelper.Configuration.CsvClassMap`
+Set class map settings, using `CsvHelper.Configuration.CsvClassMap`.
 
 ```cs
-/* Sets a default class map */
+/* Set default class map settings */
 RegisterClassMap<Person>();
 
 /* Set class map settings for CSV reader and writer */
@@ -138,7 +137,7 @@ RegisterClassMap<Person>(classMap => {
 void SetConfiguration(Action<CsvConfiguration> configurationSetter);
 ```
 
-Usage
+Sets a configuration for CSV reader and writer, using `CsvHelper.Configuration.CsvConfiguration`
 
 (sample.csv)
 
@@ -150,8 +149,6 @@ Adele Owen;10/8/1993;Female;N;$2615.28
 Nina Pope;7/24/1967;Male;Y;$6265.55
 Marian Young;12/3/1969;Male;N;$9165.00
 ```
-
-Sets a configuration for CscReader and CsvWriter, using `CsvHelper.Configuration.CsvConfiguration`
 
 ```cs
 SetConfiguration(config =>
@@ -166,12 +163,30 @@ SetConfiguration(config =>
 
 ## AddValidation
 
-```
+```cs
 void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
 ```
 
-## Query
+Sets a Validation in column. 
+
+```cs
+AddValidation<Person,DateTime>(
+    m => m.Birthday , 
+    dt => dt <= DateTime.Now.Date,
+    "Cannot enter a future date.");
+
+AddValidation<Person, double>(
+    m => m.PocketMoney , 
+    n => (n > 0) && (n < 10000.0),
+    "PocketMoney must be in the range $0 to $10000.");
 
 ```
+
+![validation01](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/validation01.png)  
+![validation02](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/validation02.png)  
+
+## Query
+
+```cs
 void Query<T>(Func<IEnumerable<T>, IEnumerable<T>> query);
 ```
