@@ -198,3 +198,5 @@ Query<Person>(source => source
     .Where(m => m.Gender == Gender.Female )
     .OrderBy(m => m.PocketMoney) );
 ```
+
+![query](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/query.png)  
