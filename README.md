@@ -64,8 +64,8 @@ RegisterClassMap<Person>(classMap =>
         .TypeConverterOption("M/d/yyyy");
     classMap.Map(m => m.Gender).Name("Gender");
     classMap.Map(m => m.Married).Name("Married")
-        .TypeConverterOption(true,"N")
-        .TypeConverterOption(false,"Y");
+        .TypeConverterOption(true,"Y")
+        .TypeConverterOption(false,"N");
     
     var culcure = System.Globalization.CultureInfo.GetCultureInfo("en-us");
     classMap.Map(m => m.PocketMoney).Name("PocketMoney")
@@ -110,8 +110,8 @@ RegisterClassMap<Person>(classMap => {
     classMap.Map(m => m.Birthday);
     classMap.Map(m => m.Gender);
     classMap.Map(m => m.Married)
-        .TypeConverterOption(true,"N")
-        .TypeConverterOption(false,"Y");
+        .TypeConverterOption(true,"Y")
+        .TypeConverterOption(false,"N");
     classMap.Map(m => m.PocketMoney)
         .TypeConverterOption("C")
         .TypeConverterOption(NumberStyles.Currency);
@@ -123,15 +123,15 @@ RegisterClassMap<Person>(classMap => {
     classMap.Map(m => m.Birthday);
     classMap.Map(m => m.Gender);
     classMap.Map(m => m.Married)
-        .TypeConverterOption(true,"N")
-        .TypeConverterOption(false,"Y");
+        .TypeConverterOption(true,"Y")
+        .TypeConverterOption(false,"N");
     classMap.Map(m => m.PocketMoney)
         .TypeConverterOption("C")
         .TypeConverterOption(NumberStyles.Currency);
 }, RegisterClassMapTarget.Reader);
 ```
 
-## SetConfiguration
+### SetConfiguration Method
 
 ```cs
 void SetConfiguration(Action<CsvConfiguration> configurationSetter);
@@ -161,13 +161,13 @@ SetConfiguration(config =>
 });
 ```
 
-## AddValidation
+### AddValidation Method
 
 ```cs
 void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
 ```
 
-Sets a Validation in column. 
+Sets a validation in column. 
 
 ```cs
 AddValidation<Person,DateTime>(
@@ -185,8 +185,16 @@ AddValidation<Person, double>(
 ![validation01](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/validation01.png)  
 ![validation02](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/validation02.png)  
 
-## Query
+### Query Method
 
 ```cs
 void Query<T>(Func<IEnumerable<T>, IEnumerable<T>> query);
+```
+
+#### Filtering & Sorting Data
+
+```cs
+Query<Person>(source => source
+    .Where(m => m.Gender == Gender.Female )
+    .OrderBy(m => m.PocketMoney) );
 ```
