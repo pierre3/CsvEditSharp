@@ -189,14 +189,32 @@ AddValidation<Person, double>(
 
 ```cs
 void Query<T>(Func<IEnumerable<T>, IEnumerable<T>> query);
+void Query<T>(Action<IEnumerable<T>> query);
 ```
 
-#### Filtering & Sorting Data
+#### Filter & Sort Data
 
 ```cs
 Query<Person>(source => source
     .Where(m => m.Gender == Gender.Female )
+    .Where(m => m.Married )
     .OrderBy(m => m.PocketMoney) );
 ```
 
 ![query](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/query.png)  
+
+#### Update Data
+
+```cs
+Query<Person>( record => record
+	.Where( m => m.Gender == Gender.Male )
+	.Where( m => m.Married )
+	.ForEach( m =>
+	{
+		m.Name += " *";
+		m.PocketMoney = 0;
+	})
+);
+```
+
+![query](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/update.png)
