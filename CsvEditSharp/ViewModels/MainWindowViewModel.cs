@@ -5,6 +5,7 @@ using ICSharpCode.AvalonEdit.Document;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -38,6 +39,7 @@ namespace CsvEditSharp.ViewModels
         private ICommand _resetQueryCommand;
         private ICommand _saveConfigCommand;
         private ICommand _saveConfigAsCommand;
+        private ICommand _openConfigDirCommand;
 
         private CsvEditSharpWorkspace Workspace { get; }
 
@@ -196,6 +198,18 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
+        public ICommand OpenConfigDirCommand
+        {
+            get
+            {
+                if (_openConfigDirCommand == null)
+                {
+                    _openConfigDirCommand = new DelegateCommand(_ => Process.Start(CsvConfigFileManager.Default.ConfigFileDirectory), _ => true);
+                }
+                return _openConfigDirCommand;
+            }
+        }
+
         public MainWindowViewModel(IViewServiceProvider viewServiceProvider)
         {
             _viewService = viewServiceProvider;
@@ -332,7 +346,7 @@ namespace CsvEditSharp.ViewModels
                 CurrentConfigName = Path.GetFileName(fileName);
                 CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
                 CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-                
+
             }
         }
 
