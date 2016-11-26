@@ -74,6 +74,15 @@ namespace CsvEditSharp.Models
             this.query = source => query(source.Cast<T>()).Cast<object>();
         }
 
+        public void Query<T>(Action<IEnumerable<T>> query)
+        {
+            this.query = source =>
+            {
+                query(source.Cast<T>());
+                return source;
+            };
+        }
+
         public void ExecuteQuery()
         {
             Records = query?.Invoke(itemsSource) ?? itemsSource;
@@ -87,7 +96,7 @@ namespace CsvEditSharp.Models
         public void Read(TextReader baseReader)
         {
             using (var reader = new CsvReader(baseReader))
-            {                
+            {
                 configurationSetter?.Invoke(reader.Configuration);
                 if (ClassMapForReading != null)
                 {
@@ -155,7 +164,7 @@ namespace CsvEditSharp.Models
             }
         }
 
-        
+
     }
 
 

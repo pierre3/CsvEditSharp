@@ -8,12 +8,11 @@ namespace CsvEditSharp.Models
 {
     public static class EnumerableExt
     {
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
             foreach (var item in source)
             {
                 action((T)item);
-                yield return item;
             }
         }
     }

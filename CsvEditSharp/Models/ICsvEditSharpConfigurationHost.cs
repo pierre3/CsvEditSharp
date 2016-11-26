@@ -25,6 +25,7 @@ namespace CsvEditSharp.Models
 
         void Query<T>(Func<IEnumerable<T>, IEnumerable<T>> query);
 
+        void Query<T>(Action<IEnumerable<T>> query);
     }
 
 
