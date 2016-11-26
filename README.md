@@ -217,4 +217,4 @@ Query<Person>( record => record
 );
 ```
 
-![query](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/update.png)
+![foreach](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/foreach.png)
