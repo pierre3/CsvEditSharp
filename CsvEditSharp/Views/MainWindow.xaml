@@ -7,7 +7,7 @@
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="CSV Edit♯" Height="auto" Width="auto">
+        Title="CSV Edit♯" Height="auto" Width="auto" Icon="/CsvEditSharp;component/CsvEditSharp.ico">
 
     <Window.Resources>
         <Style x:Key="textColumnStyle" TargetType="{x:Type TextBox}">
