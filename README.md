@@ -4,6 +4,10 @@ This is the CSV Editor, describe read/write settings in C# script.
 
 ![CsvEditSharpMain03](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main03.png)
 
+## Download
+
+Download the pre-release v0.1.0.0 [here](https://github.com/pierre3/CsvEditSharp/releases/tag/v0.1.0.0) .
+
 ## Framework
 - Windows Presentation Foundation (WPF) 
 - .Net Framework 4.6.1
