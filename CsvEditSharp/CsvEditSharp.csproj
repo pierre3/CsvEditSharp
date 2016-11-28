@@ -303,8 +303,10 @@
     <Resource Include="Resources\CsvEditSharp_150.png" />
     <Resource Include="Resources\CsvEditSharp_44.png" />
     <Resource Include="Resources\CsvEditSharp_50.png" />
-    <None Include="Resources\AppIcon.ico" />
     <Resource Include="CsvEditSharp.ico" />
+    <Resource Include="Resources\CsvEditSharp.ico" />
+    <Content Include="Resources\CsvEditSharp.svg" />
+    <Resource Include="Resources\CsvEditSharp_256.png" />
     <Content Include="T4\ConfigurationTemplateGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ConfigurationTemplateGenerator.cs</LastGenOutput>
