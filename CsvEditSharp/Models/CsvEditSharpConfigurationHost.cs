@@ -1,5 +1,6 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -117,6 +118,13 @@ namespace CsvEditSharp.Models
                 configurationSetter?.Invoke(writer.Configuration);
                 if (ClassMapForWriting != null)
                 {
+                    var booleanMaps = ClassMapForWriting.PropertyMaps
+                        .Where(map => map.Data.TypeConverter is BooleanConverter);
+                    foreach(var map in booleanMaps)
+                    {
+                        map.Data.TypeConverter = new CustomBooleanConverter();
+                    }
+
                     writer.Configuration.RegisterClassMap(ClassMapForWriting);
                 }
                 writer.WriteRecords(records);

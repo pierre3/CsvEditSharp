@@ -204,6 +204,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\CustomBooleanConverter.cs" />
     <Compile Include="Models\EnumerableExt.cs" />
     <Compile Include="Models\SaveConfigSettings.cs" />
     <Compile Include="Services\SaveConfigDialogService.cs" />
