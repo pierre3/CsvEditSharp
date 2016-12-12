@@ -60,6 +60,7 @@ namespace CsvEditSharp.T4
 
         private string FieldToTypeName(string field)
         {
+            /* 
             bool b;
             if (bool.TryParse(field, out b))
             {
@@ -77,6 +78,7 @@ namespace CsvEditSharp.T4
             {
                 return "double";
             }
+            */
             return "string";
         }
 
