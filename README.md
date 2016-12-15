@@ -1,6 +1,6 @@
 # CsvEditSharp
 
-This is the CSV Editor, describe read/write settings in C# script.
+CsvEditSharp is a CSV editor. You can describe reading and writing settings in CSharp script.
 
 ![CsvEditSharpMain03](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main03.png)
 
