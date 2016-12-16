@@ -1,0 +1,7 @@
+@startuml
+enum RegisterClassMapTarget {
+    Reader,
+    Writer,
+    Both,
+}
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+class CsvConfigFileManager {
+    {static} <<readonly>> AutoGenerateTemplateName : string = "(Auto Generate)"
+    + {static} Default : CsvConfigFileManager <<get>>
+    + ConfigFileDirectory : string <<get>>
+    + SettingsList : ObservableCollection<string> <<get>>
+    + CurrentConfigFilePath : string <<get>> <<set>>
+    + CsvConfigFileManager(dialogService:IModalDialogService<GenerateConfigSettings>, configFileDirectory:string)
+    + {static} InitializeDefault(dialogService:IModalDialogService<GenerateConfigSettings>, settingsFileName:string, configFileDirectory:string) : void
+    + GetConfigFiles() : void
+    + GetCsvConfigString(targetFilePath:string, templateName:string) : string
+    + MakeCurrentConfigFilePath(templateName:string) : string
+    + SaveConfigFile(configText:string) : void
+}
+@enduml

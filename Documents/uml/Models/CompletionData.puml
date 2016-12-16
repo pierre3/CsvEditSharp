@@ -1,0 +1,11 @@
+@startuml
+class CompletionData {
+    + Content : object <<get>> <<set>>
+    + Description : object <<get>> <<set>>
+    + Image : ImageSource <<get>> <<set>> = null
+    + Priority : double <<get>> <<set>> = 0
+    + Text : string <<get>> <<set>>
+    + Complete(textArea:TextArea, completionSegment:ISegment, insertionRequestEventArgs:EventArgs) : void
+}
+ICompletionData <|-- CompletionData
+@enduml

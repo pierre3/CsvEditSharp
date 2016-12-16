@@ -1,0 +1,7 @@
+@startuml
+class SaveConfigDialogService {
+    + Result : SaveConfigSettings <<get>>
+    + ShowModal() : bool?
+}
+"IModalDialogService`1" "<SaveConfigSettings>" <|-- SaveConfigDialogService
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+interface "IModalDialogService`1"<T> {
+    Result : T <<get>>
+    ShowModal() : bool?
+}
+@enduml

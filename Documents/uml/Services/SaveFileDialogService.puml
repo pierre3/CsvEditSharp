@@ -1,0 +1,6 @@
+@startuml
+class SaveFileDialogService {
+    + SelectFile(title:string, filter:string, initialDirectory:string) : string
+}
+IFileSelectionService <|-- SaveFileDialogService
+@enduml

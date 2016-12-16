@@ -1,0 +1,12 @@
+@startuml
+class CsvEditSharpWorkspace {
+    + CsvEditSharpWorkspace(host:ICsvEditSharpConfigurationHost, errorMessages:IList<string>)
+    + HasScriptState : bool <<get>>
+    + CompileScript(code:string) : void
+    + <<async>> GetCompletionListAsync(position:int, code:string) : Task<IEnumerable<CompletionData>>
+    + <<async>> RunScriptAsync(code:string) : Task
+    + <<async>> ContinueScriptAsync(code:string) : Task
+    + Dispose() : void
+}
+IDisposable <|-- CsvEditSharpWorkspace
+@enduml

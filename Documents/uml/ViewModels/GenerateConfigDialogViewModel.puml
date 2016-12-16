@@ -1,0 +1,12 @@
+@startuml
+class GenerateConfigDialogViewModel {
+    + Settings : GenerateConfigSettings <<get>>
+    + {static} Encodings : IReadOnlyList<EncodingInfo> <<get>>
+    + TemplateName : string <<get>> <<set>>
+    + ApplyCommand : ICommand <<get>>
+    + TargetEncodingIndex : int <<get>> <<set>>
+    + HasHeaderRecord : bool <<get>> <<set>>
+    + GenerateConfigDialogViewModel()
+}
+ErrorNotificationBindableBase <|-- GenerateConfigDialogViewModel
+@enduml

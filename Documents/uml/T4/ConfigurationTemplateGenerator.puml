@@ -1,0 +1,27 @@
+@startuml
+class ConfigurationTemplateGenerator <<partial>> {
+    + <<virtual>> TransformText() : string
+}
+class ConfigurationTemplateGeneratorBase {
+    + Errors : System.CodeDom.Compiler.CompilerErrorCollection <<get>>
+    + CurrentIndent : string <<get>>
+    + <<virtual>> Session : global::System.Collections.Generic.IDictionary<string, object> <<get>> <<set>>
+    + Write(textToAppend:string) : void
+    + WriteLine(textToAppend:string) : void
+    + Write(format:string, args:object[]) : void
+    + WriteLine(format:string, args:object[]) : void
+    + Error(message:string) : void
+    + Warning(message:string) : void
+    + PushIndent(indent:string) : void
+    + PopIndent() : string
+    + ClearIndent() : void
+    + ToStringHelper : ToStringInstanceHelper <<get>>
+}
+class ToStringInstanceHelper {
+    - formatProviderField : System.IFormatProvider
+    + FormatProvider : System.IFormatProvider <<get>> <<set>>
+    + ToStringWithCulture(objectToConvert:object) : string
+}
+ConfigurationTemplateGeneratorBase +-- ToStringInstanceHelper
+ConfigurationTemplateGeneratorBase <|-- ConfigurationTemplateGenerator
+@enduml

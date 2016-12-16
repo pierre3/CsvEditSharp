@@ -1,0 +1,5 @@
+@startuml
+interface IFileSelectionService {
+    SelectFile(title:string, filter:string, initialDirectory:string) : string
+}
+@enduml

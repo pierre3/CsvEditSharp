@@ -1,0 +1,6 @@
+@startuml
+class MainWindow <<partial>> {
+    + MainWindow(vm:MainWindowViewModel)
+}
+Window <|-- MainWindow
+@enduml
