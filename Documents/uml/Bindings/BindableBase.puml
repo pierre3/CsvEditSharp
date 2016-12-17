@@ -1,0 +1,6 @@
+@startuml
+abstract class BindableBase {
+    +  <<event>> PropertyChanged : PropertyChangedEventHandler 
+}
+INotifyPropertyChanged <|-- BindableBase
+@enduml

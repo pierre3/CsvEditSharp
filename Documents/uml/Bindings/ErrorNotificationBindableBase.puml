@@ -1,0 +1,9 @@
+@startuml
+abstract class ErrorNotificationBindableBase {
+    + HasErrors : bool <<get>>
+    +  <<event>> ErrorsChanged : EventHandler<DataErrorsChangedEventArgs> 
+    + GetErrors(propertyName:string) : IEnumerable
+}
+BindableBase <|-- ErrorNotificationBindableBase
+INotifyDataErrorInfo <|-- ErrorNotificationBindableBase
+@enduml

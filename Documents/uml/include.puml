@@ -1,5 +1,11 @@
 @startuml
 !include .\\App.xaml.puml
+!include .\\Bindings\BindableBase.puml
+!include .\\Bindings\DataGridColumnConverter.puml
+!include .\\Bindings\DataGridColumnValidationRule.puml
+!include .\\Bindings\DelegateCommand.puml
+!include .\\Bindings\EncodingInfoToStringConverter.puml
+!include .\\Bindings\ErrorNotificationBindableBase.puml
 !include .\\Models\ColumnValidation.puml
 !include .\\Models\CompletionData.puml
 !include .\\Models\CsvConfigFileManager.puml
