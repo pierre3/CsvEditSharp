@@ -11,6 +11,7 @@ namespace CsvEditSharp.Services
         {
             var vm = new SaveConfigDialogViewModel();
             var dialog = new SaveConfigDialog();
+            dialog.Owner = App.Current.MainWindow;
             dialog.DataContext = vm;
             var result = dialog.ShowDialog();
             if (result == true)

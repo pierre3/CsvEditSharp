@@ -7,7 +7,7 @@
              xmlns:models="clr-namespace:CsvEditSharp.Models"
              xmlns:bindings="clr-namespace:CsvEditSharp.Bindings"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             Title="Generate a configuration script" WindowStyle="ToolWindow"
+             Title="Generate a configuration script" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
              Height="200" Width="400" >
 
     <Window.Resources>
