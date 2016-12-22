@@ -1,13 +1,12 @@
-﻿using CsvEditSharp.Services;
-using CsvEditSharp.ViewModels;
+﻿using CsvEditSharp.ViewModels;
 using ICSharpCode.AvalonEdit.CodeCompletion;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System;
 
 namespace CsvEditSharp
 {
@@ -149,5 +148,6 @@ namespace CsvEditSharp
                 }
             }
         }
+
     }
 }

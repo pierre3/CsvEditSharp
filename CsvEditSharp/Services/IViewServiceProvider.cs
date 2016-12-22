@@ -8,6 +8,7 @@ namespace CsvEditSharp.Services
         IFileSelectionService SaveFileSelectionService { get; }
         IModalDialogService<GenerateConfigSettings> GenerateConfigDialogService { get; }
         IModalDialogService<SaveConfigSettings> SaveConfigDialogService { get; }
+        IModalDialogService ConfigSettingsDialogService { get; }
     }
 
 }

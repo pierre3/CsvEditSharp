@@ -5,7 +5,6 @@ using ICSharpCode.AvalonEdit.Document;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,7 +38,8 @@ namespace CsvEditSharp.ViewModels
         private ICommand _resetQueryCommand;
         private ICommand _saveConfigCommand;
         private ICommand _saveConfigAsCommand;
-        private ICommand _openConfigDirCommand;
+        private ICommand _configSettingsCommand;
+        private ICommand _deleteTemplateCommand;
 
         private CsvEditSharpWorkspace Workspace { get; }
 
@@ -198,15 +198,28 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
-        public ICommand OpenConfigDirCommand
+        public ICommand ConfigSettingsCommand
         {
             get
             {
-                if (_openConfigDirCommand == null)
+                if (_configSettingsCommand == null)
                 {
-                    _openConfigDirCommand = new DelegateCommand(_ => Process.Start(CsvConfigFileManager.Default.ConfigFileDirectory), _ => true);
+                    _configSettingsCommand = new DelegateCommand(_ => _viewService.ConfigSettingsDialogService.ShowModal(), _ => true);
                 }
-                return _openConfigDirCommand;
+                return _configSettingsCommand;
+            }
+        }
+
+        public ICommand DeleteTemplateCommand
+        {
+            get
+            {
+                if (_deleteTemplateCommand == null)
+                {
+                    _deleteTemplateCommand = new DelegateCommand(_ => CsvConfigFileManager.Default.RemoveConfigFile(SelectedTemplate),
+                        _ => !string.IsNullOrEmpty(SelectedTemplate));
+                }
+                return _deleteTemplateCommand;
             }
         }
 

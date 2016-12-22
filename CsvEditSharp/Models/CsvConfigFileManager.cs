@@ -1,6 +1,5 @@
 ﻿using CsvEditSharp.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -24,9 +23,9 @@ namespace CsvEditSharp.Models
         public string CurrentConfigFilePath { get; set; } = string.Empty;
 
         public CsvConfigFileManager(IModalDialogService<GenerateConfigSettings> dialogService, string configFileDirectory = null)
-        { 
+        {
             _dialogService = dialogService;
-            
+
             var appData = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
                     Assembly.GetEntryAssembly().GetName().Name);
 
@@ -56,7 +55,7 @@ namespace CsvEditSharp.Models
 
             var items = new[] { AutoGenerateTemplateName }
                 .Concat(files.Select(x => Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(x))));
-             foreach(var item in items)
+            foreach (var item in items)
             {
                 SettingsList.Add(item);
             }
@@ -77,7 +76,7 @@ namespace CsvEditSharp.Models
             if (SettingsList.Skip(1).Contains(templateName))
             {
                 var templateFilePath = Path.Combine(ConfigFileDirectory, templateName + ".config.csx");
-                if(!File.Exists(templateFilePath)) { return $"Error! \"{templateFilePath}\" is not found."; }
+                if (!File.Exists(templateFilePath)) { return $"Error! \"{templateFilePath}\" is not found."; }
                 var configText = File.ReadAllText(templateFilePath, Encoding.UTF8);
                 CurrentConfigFilePath = templateFilePath;
                 return configText;
@@ -98,6 +97,42 @@ namespace CsvEditSharp.Models
         public void SaveConfigFile(string configText)
         {
             File.WriteAllText(CurrentConfigFilePath, configText);
+        }
+
+        public bool CanRemove(string name)
+        {
+            return (name != AutoGenerateTemplateName) && SettingsList.Contains(name);
+        }
+
+        public void RemoveConfigFile(string name)
+        {
+            SettingsList.Remove(name);
+            var path = MakeCurrentConfigFilePath(name);
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
+        public bool CanRename(string oldName, string newName)
+        {
+            return (oldName != AutoGenerateTemplateName)
+                && (!string.IsNullOrWhiteSpace(newName))
+                && SettingsList.Contains(oldName)
+                && !SettingsList.Contains(newName);
+        }
+
+        public void RenameConfigFile(string oldName, string newName)
+        {
+            var oldPath = MakeCurrentConfigFilePath(oldName);
+            var newPath = MakeCurrentConfigFilePath(newName);
+            if (File.Exists(oldPath))
+            {
+                File.Move(oldPath, newPath);
+            }
+            var index = SettingsList.IndexOf(oldName);
+            SettingsList.Insert(index, newName);
+            SettingsList.Remove(oldName);
         }
 
         private string GenerateCsvConfigText(string targetFilePath, Encoding targetFileEncoding, bool hasHeaders)

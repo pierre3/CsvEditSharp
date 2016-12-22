@@ -10,6 +10,9 @@
         Title="CSV Edit♯" Height="auto" Width="auto" Icon="/CsvEditSharp;component/CsvEditSharp.ico">
 
     <Window.Resources>
+        <ContextMenu x:Key="configListContextMenu">
+            <MenuItem Header="Delete" Command="{Binding DeleteTemplateCommand}"/>
+        </ContextMenu>
         <Style x:Key="textColumnStyle" TargetType="{x:Type TextBox}">
             <Style.Triggers>
                 <Trigger Property="Validation.HasError" Value="True">
@@ -39,6 +42,7 @@
             <ToolBar>
                 <Label Margin="2,0">Configuration Script</Label>
                 <ComboBox Width="160" x:Name="configTemplateComboBox" 
+                          ContextMenu="{StaticResource configListContextMenu}"
                           ItemsSource="{Binding ConfigFileTemplates}"
                           SelectedItem="{Binding SelectedTemplate}"/>
                 <Button Command="{Binding ReadCsvCommand}" ToolTip="Open" 
@@ -103,7 +107,7 @@
                                     HorizontalAlignment="Left" Command="{Binding SaveConfigAsCommand}">&#xE105; Save As..</Button>
                             <Separator/>
                             <Button FontFamily="Segoe UI Symbol" Padding="4,2"
-                                    HorizontalAlignment="Left" Command="{Binding OpenConfigDirCommand}">&#xE0FB; Open Config File Directory..</Button>
+                                    HorizontalAlignment="Left" Command="{Binding ConfigSettingsCommand}">&#xE115; Settings..</Button>
                         </ToolBar>
                     </ToolBarTray>
 

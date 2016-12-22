@@ -207,16 +207,25 @@
     <Compile Include="Models\CustomBooleanConverter.cs" />
     <Compile Include="Models\EnumerableExt.cs" />
     <Compile Include="Models\SaveConfigSettings.cs" />
+    <Compile Include="Services\ConfigSettingsDialogService.cs" />
     <Compile Include="Services\SaveConfigDialogService.cs" />
     <Compile Include="T4\ConfigurationTemplateGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigurationTemplateGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\ConfigSettingsDialogViewModel.cs" />
     <Compile Include="ViewModels\SaveConfigDialogViewModel.cs" />
+    <Compile Include="Views\ConfigSettingsDialog.xaml.cs">
+      <DependentUpon>ConfigSettingsDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SaveConfigDialog.xaml.cs">
       <DependentUpon>SaveConfigDialog.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\ConfigSettingsDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\GenerateConfigDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -1,0 +1,23 @@
+﻿<Window x:Class="CsvEditSharp.Views.ConfigSettingsDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CsvEditSharp.Views"
+        mc:Ignorable="d" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
+        Title="Config file settings" Height="300" Width="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <ListBox ItemsSource="{Binding Items}"
+                 SelectedItem="{Binding SelectedItem}" />
+        <StackPanel Grid.Column="1" Orientation="Vertical" >
+            <TextBlock Margin="8,0">new name</TextBlock>
+            <TextBox Width="120" Margin="4,0" Text="{Binding NewName,UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Width="120" Margin="4,2" Content="Rename" Command="{Binding RenameCommand}"/>
+            <Button Width="120" Margin="4,8" Content="Delete" Command="{Binding DeleteCommand}"/>
+        </StackPanel>
+    </Grid>
+</Window>
