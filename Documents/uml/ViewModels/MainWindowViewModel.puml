@@ -18,7 +18,8 @@ class MainWindowViewModel {
     + RunConfigCommand : ICommand <<get>>
     + SaveConfigCommand : ICommand <<get>>
     + SaveConfigAsCommand : ICommand <<get>>
-    + OpenConfigDirCommand : ICommand <<get>>
+    + ConfigSettingsCommand : ICommand <<get>>
+    + DeleteTemplateCommand : ICommand <<get>>
     + MainWindowViewModel(viewServiceProvider:IViewServiceProvider)
     + GetDataGridColumnValidation(propertyName:string) : DataGridColumnValidationRule
     + <<async>> GetCompletionListAsync(position:int, code:string) : Task<IEnumerable<CompletionData>>

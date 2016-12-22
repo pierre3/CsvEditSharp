@@ -17,6 +17,7 @@
 !include .\\Models\ICsvEditSharpConfigurationHost.puml
 !include .\\Models\RegisterClassMapTarget.puml
 !include .\\Models\SaveConfigSettings.puml
+!include .\\Services\ConfigSettingsDialogService.puml
 !include .\\Services\GenerageConfigDialogService.puml
 !include .\\Services\IFileSelectionService.puml
 !include .\\Services\IModalDialogService.puml
@@ -27,9 +28,11 @@
 !include .\\Services\ViewServiceProvider.puml
 !include .\\T4\ConfigurationTemplateGenerator.puml
 !include .\\T4\ConfigurationTemplateGenerator.pertial.puml
+!include .\\ViewModels\ConfigSettingsDialogViewModel.puml
 !include .\\ViewModels\GenerateConfigDialogViewModel.puml
 !include .\\ViewModels\MainWindowViewModel.puml
 !include .\\ViewModels\SaveConfigDialogViewModel.puml
+!include .\\Views\ConfigSettingsDialog.xaml.puml
 !include .\\Views\GenerateConfigDialog.xaml.puml
 !include .\\Views\MainWindow.xaml.puml
 !include .\\Views\SaveConfigDialog.xaml.puml

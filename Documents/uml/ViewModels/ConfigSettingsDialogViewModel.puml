@@ -1,0 +1,11 @@
+@startuml
+class ConfigSettingsDialogViewModel {
+    + SelectedItem : string <<get>> <<set>>
+    + NewName : string <<get>> <<set>>
+    + RenameCommand : ICommand <<get>>
+    + DeleteCommand : ICommand <<get>>
+    + Items : ObservableCollection<string> <<get>>
+    + ConfigSettingsDialogViewModel()
+}
+BindableBase <|-- ConfigSettingsDialogViewModel
+@enduml

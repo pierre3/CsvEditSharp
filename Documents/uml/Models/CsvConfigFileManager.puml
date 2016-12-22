@@ -11,5 +11,9 @@ class CsvConfigFileManager {
     + GetCsvConfigString(targetFilePath:string, templateName:string) : string
     + MakeCurrentConfigFilePath(templateName:string) : string
     + SaveConfigFile(configText:string) : void
+    + CanRemove(name:string) : bool
+    + RemoveConfigFile(name:string) : void
+    + CanRename(oldName:string, newName:string) : bool
+    + RenameConfigFile(oldName:string, newName:string) : void
 }
 @enduml

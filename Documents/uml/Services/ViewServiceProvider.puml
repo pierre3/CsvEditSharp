@@ -4,6 +4,7 @@ class ViewServiceProvider {
     + SaveFileSelectionService : IFileSelectionService <<get>>
     + GenerateConfigDialogService : IModalDialogService<GenerateConfigSettings> <<get>>
     + SaveConfigDialogService : IModalDialogService<SaveConfigSettings> <<get>>
+    + ConfigSettingsDialogService : IModalDialogService <<get>>
 }
 IViewServiceProvider <|-- ViewServiceProvider
 @enduml

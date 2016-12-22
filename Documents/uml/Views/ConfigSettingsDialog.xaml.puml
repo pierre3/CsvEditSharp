@@ -1,0 +1,6 @@
+@startuml
+class ConfigSettingsDialog <<partial>> {
+    + ConfigSettingsDialog()
+}
+Window <|-- ConfigSettingsDialog
+@enduml
