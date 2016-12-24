@@ -6,7 +6,7 @@ CsvEditSharp is a CSV editor. You can describe reading and writing settings in C
 
 ## Download
 
-Download the pre-release v0.1.0.1 [here](https://github.com/pierre3/CsvEditSharp/releases/tag/v0.1.0.1) .
+Download releases [here](https://github.com/pierre3/CsvEditSharp/releases/) .
 
 ## Framework
 - Windows Presentation Foundation (WPF) 
