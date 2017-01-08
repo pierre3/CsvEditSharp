@@ -6,7 +6,7 @@ CsvEditSharp is a CSV editor. You can describe reading and writing settings in C
 
 ## Download
 
-- CsvEditSharp is now available in the [Windows Store](https://www.microsoft.com/ja-jp/store/p/csveditsharp/9nblggh4197m). 
+- CsvEditSharp is now available in the [Windows Store](https://www.microsoft.com/store/apps/9nblggh4197m). 
 - Download binaries [here](https://github.com/pierre3/CsvEditSharp/releases/) .
 
 ## Framework
