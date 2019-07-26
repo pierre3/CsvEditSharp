@@ -18,7 +18,7 @@ namespace CsvEditSharp.ViewModels
 {
     public class MainWindowViewModel : BindableBase, IDisposable, IMainViewModel
     {
-        private static readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
+        public readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
 
         private ObservableCollection<object> _csvRows;
         private ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
@@ -46,16 +46,18 @@ namespace CsvEditSharp.ViewModels
 
         private IUnityContainer _iocContainer;
 
-        private CsvEditSharpWorkspace Workspace { get; }
+        public CsvEditSharpWorkspace Workspace { get; }
 
-        [Dependency]
-        public IViewServiceProvider ViewServiceProvider { get; set; }
+        [Dependency] public IViewServiceProvider ViewServiceProvider { get; set; }
 
         public int SelectedTab
         {
             get { return _selectedTab; }
             set { SetProperty(ref _selectedTab, value); }
         }
+
+        public IViewServiceProvider ViewService => _viewService;
+        public CsvEditSharpConfigurationHost Host => _host;
 
         public string SelectedTemplate
         {
@@ -120,17 +122,7 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _queryDoc, value); }
         }
 
-        public ICommand ReadCsvCommand
-        {
-            get
-            {
-                if (_readCsvCommand == null)
-                {
-                    _readCsvCommand = new DelegateCommand(para => ReadCsvAsync(para));
-                }
-                return _readCsvCommand;
-            }
-        }
+        public ICommand ReadCsvCommand { get; set; }
 
         public ICommand WriteCsvCommand
         {
@@ -168,17 +160,7 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
-        public ICommand RunConfigCommand
-        {
-            get
-            {
-                if (_runConfigComannd == null)
-                {
-                    _runConfigComannd = new DelegateCommand(async _ => await RunConfigurationAsync(), _ => CanExecuteRunConfigCommand());
-                }
-                return _runConfigComannd;
-            }
-        }
+        public ICommand RunConfigCommand { get; set; }
 
         public ICommand SaveConfigCommand
         {
@@ -270,65 +252,7 @@ namespace CsvEditSharp.ViewModels
                 && !string.IsNullOrWhiteSpace(ConfigurationDoc.Text);
         }
 
-        private async void ReadCsvAsync(object para)
-        {
-            var startupArgs = _iocContainer.Resolve<StartupEventArgs>();
-            string currentFilePath = null;
 
-            // para will not be null if invoked by Loaded event
-            if (para != null)
-            {
-                // If there is a parameter then load the file
-                if (startupArgs.Args.Length > 0)
-                    currentFilePath = startupArgs.Args[0];
-                else
-                    // Otherwise, we'll exit the load event
-                    return; 
-            }
-
-            var openFileService = _viewService.OpenFileSelectionService;
-            CurrentFilePath = currentFilePath == null
-                ? openFileService.SelectFile("Select a CSV File", CsvFileFilter, null)
-                : currentFilePath;
-
-            if (!File.Exists(CurrentFilePath)) { return; }
-
-            var configText = CsvConfigFileManager.Default.GetCsvConfigString(CurrentFilePath, _selectedTemplate);
-
-            CurrentConfigName = Path.GetFileName(CsvConfigFileManager.Default.CurrentConfigFilePath);
-            CurrentFileName = Path.GetFileName(CurrentFilePath);
-
-            ConfigurationDoc.Text = configText;
-
-            await RunConfigurationAsync();
-        }
-
-        private async Task RunConfigurationAsync()
-        {
-            _host.Reset();
-            ErrorMessages.Clear();
-
-            // Let UI refresh before long running task
-            await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
-
-            await Workspace.RunScriptAsync(ConfigurationDoc.Text);
-
-            try
-            {
-                using (var stream = new FileStream(_currentFilePath, FileMode.Open, FileAccess.Read))
-                using (var reader = new StreamReader(stream, _host.Encoding ?? Encoding.Default))
-                {
-                    _host.Read(reader);
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add(e.ToString());
-            }
-
-            CsvRows = new ObservableCollection<object>(_host.Records);
-            SelectedTab = 0;
-        }
 
         private void WriteCsv()
         {
