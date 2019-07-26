@@ -9,7 +9,10 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
+using Unity;
 
 namespace CsvEditSharp.ViewModels
 {
@@ -41,7 +44,12 @@ namespace CsvEditSharp.ViewModels
         private ICommand _configSettingsCommand;
         private ICommand _deleteTemplateCommand;
 
+        private IUnityContainer _iocContainer;
+
         private CsvEditSharpWorkspace Workspace { get; }
+
+        [Dependency]
+        public IViewServiceProvider ViewServiceProvider { get; set; }
 
         public int SelectedTab
         {
@@ -118,7 +126,7 @@ namespace CsvEditSharp.ViewModels
             {
                 if (_readCsvCommand == null)
                 {
-                    _readCsvCommand = new DelegateCommand(_ => ReadCsvAsync());
+                    _readCsvCommand = new DelegateCommand(para => ReadCsvAsync(para));
                 }
                 return _readCsvCommand;
             }
@@ -223,15 +231,20 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
-        public MainWindowViewModel(IViewServiceProvider viewServiceProvider)
+        public MainWindowViewModel(IViewServiceProvider viewServiceProvider, IUnityContainer iocContainer)
         {
+            _iocContainer = iocContainer;
             _viewService = viewServiceProvider;
             _errorMessages.CollectionChanged += (_, __) => HasErrorMessages = _errorMessages.Count > 0;
-            _host = new CsvEditSharpConfigurationHost();
-            Workspace = new CsvEditSharpWorkspace(_host, _errorMessages);
+
+            _host = iocContainer.Resolve<CsvEditSharpConfigurationHost>();
+            iocContainer.RegisterInstance<ICsvEditSharpConfigurationHost>(_host);
+            iocContainer.RegisterInstance<IList<string>>(_errorMessages);
+
+            Workspace = iocContainer.Resolve<CsvEditSharpWorkspace>();
 
             ConfigurationDoc = new TextDocument(StringTextSource.Empty);
-            QueryDoc = new TextDocument(new StringTextSource("Query<FieldData>( records => records.Where(row => true).OrderBy(row => row) );"));
+            QueryDoc = new TextDocument(new StringTextSource("Query<FieldData>( records => records.Where(row => true));"));
 
             CurrentFilePath = string.Empty;
             CurrentFileName = "(Empty)";
@@ -257,11 +270,27 @@ namespace CsvEditSharp.ViewModels
                 && !string.IsNullOrWhiteSpace(ConfigurationDoc.Text);
         }
 
-        private async void ReadCsvAsync()
+        private async void ReadCsvAsync(object para)
         {
-            //OpenFileDialog
+            var startupArgs = _iocContainer.Resolve<StartupEventArgs>();
+            string currentFilePath = null;
+
+            // para will not be null if invoked by Loaded event
+            if (para != null)
+            {
+                // If there is a parameter then load the file
+                if (startupArgs.Args.Length > 0)
+                    currentFilePath = startupArgs.Args[0];
+                else
+                    // Otherwise, we'll exit the load event
+                    return; 
+            }
+
             var openFileService = _viewService.OpenFileSelectionService;
-            CurrentFilePath = openFileService.SelectFile("Select a CSV File", CsvFileFilter, null);
+            CurrentFilePath = currentFilePath == null
+                ? openFileService.SelectFile("Select a CSV File", CsvFileFilter, null)
+                : currentFilePath;
+
             if (!File.Exists(CurrentFilePath)) { return; }
 
             var configText = CsvConfigFileManager.Default.GetCsvConfigString(CurrentFilePath, _selectedTemplate);
@@ -278,6 +307,10 @@ namespace CsvEditSharp.ViewModels
         {
             _host.Reset();
             ErrorMessages.Clear();
+
+            // Let UI refresh before long running task
+            await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
+
             await Workspace.RunScriptAsync(ConfigurationDoc.Text);
 
             try

@@ -55,9 +55,11 @@ namespace CsvEditSharp.Models
 
             var items = new[] { AutoGenerateTemplateName }
                 .Concat(files.Select(x => Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(x))));
+
             foreach (var item in items)
             {
-                SettingsList.Add(item);
+                if(!SettingsList.Contains(item))
+                    SettingsList.Add(item);
             }
         }
 
@@ -171,7 +173,10 @@ namespace CsvEditSharp.Models
             File.WriteAllText(templateFilePath, configText);
 
             CurrentConfigFilePath = templateFilePath;
-            SettingsList.Add(newSettings.TemplateName);
+
+            if(!SettingsList.Contains(newSettings.TemplateName))
+                SettingsList.Add(newSettings.TemplateName);
+
             return configText;
         }
     }

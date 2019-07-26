@@ -28,6 +28,14 @@ namespace CsvEditSharp
             configEdit.TextArea.TextEntering += TextArea_TextEntering;
             queryEdit.TextArea.TextEntered += TextArea_TextEntered;
             queryEdit.TextArea.TextEntering += TextArea_TextEntering;
+
+            // Bind F5 key to execute command
+            InputBinding f5 = new InputBinding(vm.QueryCommand, new KeyGesture(Key.F5)); this.InputBindings.Add(f5);
+            InputBinding f6 = new InputBinding(vm.ResetQueryCommand, new KeyGesture(Key.F6)); this.InputBindings.Add(f6);
+
+            // When the view is loaded we'll invoke the ReadCsvCommand
+            // in case the user double clicked a file 
+            this.Loaded += (s, e) => vm.ReadCsvCommand.Execute(e);
         }
 
         protected override void OnClosed(EventArgs e)
