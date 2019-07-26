@@ -16,7 +16,7 @@ using Unity;
 
 namespace CsvEditSharp.ViewModels
 {
-    public class MainWindowViewModel : BindableBase, IDisposable
+    public class MainWindowViewModel : BindableBase, IDisposable, IMainViewModel
     {
         private static readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
 

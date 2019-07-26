@@ -1,6 +1,9 @@
-﻿using CsvEditSharp.Models;
+﻿using CsvEditSharp.Ioc;
+using CsvEditSharp.Models;
+using CsvEditSharp.Presenters;
 using CsvEditSharp.Services;
 using CsvEditSharp.ViewModels;
+using CsvEditSharp.Views;
 using Prism.Events;
 using System.Windows;
 using Unity;
@@ -20,18 +23,20 @@ namespace CsvEditSharp
             base.OnStartup(e);
 
             _iocContainer
-                .RegisterType<IViewServiceProvider,ViewServiceProvider>(new ContainerControlledLifetimeManager())
-                .RegisterType<IEventAggregator, EventAggregator>(new ContainerControlledLifetimeManager())
+                .RegisterType<IViewServiceProvider, ViewServiceProvider>(Lifetime.Singleton)
+                .RegisterType<IEventAggregator, EventAggregator>(Lifetime.Singleton)
+
+                .RegisterType<IMainViewModel, MainWindowViewModel>(Lifetime.Singleton)
+                .RegisterType<IMainWindow, MainWindow>()
+
                 .RegisterInstance<StartupEventArgs>(e);
 
             var viewService = _iocContainer.Resolve<IViewServiceProvider>();
             CsvConfigFileManager.InitializeDefault(viewService.GenerateConfigDialogService);
-            var vm = _iocContainer.Resolve<MainWindowViewModel>();
-            _iocContainer.RegisterInstance(vm);
 
-            MainWindow = _iocContainer.Resolve<MainWindow>();
+            var presenter = _iocContainer.Resolve<MainWindowPresenter>();
+            MainWindow = presenter.Initialize();
             MainWindow.Show();
         }
-
     }
 }

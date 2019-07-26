@@ -219,10 +219,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Ioc\Lifetime.cs" />
     <Compile Include="Models\CustomBooleanConverter.cs" />
     <Compile Include="Models\EnumerableExt.cs" />
     <Compile Include="Models\IConfigFileManager.cs" />
     <Compile Include="Models\SaveConfigSettings.cs" />
+    <Compile Include="Presenters\IPresenter.cs" />
+    <Compile Include="Presenters\MainWindowPresenter.cs" />
     <Compile Include="Services\ConfigSettingsDialogService.cs" />
     <Compile Include="Services\SaveConfigDialogService.cs" />
     <Compile Include="T4\ConfigurationTemplateGenerator.cs">
@@ -231,10 +234,14 @@
       <DependentUpon>ConfigurationTemplateGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ConfigSettingsDialogViewModel.cs" />
+    <Compile Include="ViewModels\IMainViewModel.cs" />
+    <Compile Include="ViewModels\IViewModel.cs" />
     <Compile Include="ViewModels\SaveConfigDialogViewModel.cs" />
     <Compile Include="Views\ConfigSettingsDialog.xaml.cs">
       <DependentUpon>ConfigSettingsDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\IMainView.cs" />
+    <Compile Include="Views\IMainWindow.cs" />
     <Compile Include="Views\SaveConfigDialog.xaml.cs">
       <DependentUpon>SaveConfigDialog.xaml</DependentUpon>
     </Compile>

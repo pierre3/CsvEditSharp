@@ -61,8 +61,8 @@
                         <RowDefinition Height="*"/>
                         <RowDefinition Height="60"/>
                     </Grid.RowDefinitions>
-                    <DataGrid Grid.Row="0" AutoGenerateColumns="True" 
-                              AutoGeneratingColumn="DataGrid_AutoGeneratingColumn" 
+                    <DataGrid x:Name="grdMainData"
+                              Grid.Row="0" AutoGenerateColumns="True" 
                               ItemsSource="{Binding CsvRows}" />
                     <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="4" ResizeDirection="Rows"/>
                     <Grid Grid.Row="1" >
