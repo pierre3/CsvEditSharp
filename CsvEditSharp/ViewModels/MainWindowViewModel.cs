@@ -1,5 +1,4 @@
-﻿using Adventures.NetStandard.Common.Bindings;
-using CsvEditSharp.Bindings;
+﻿using CsvEditSharp.Bindings;
 using CsvEditSharp.Converters;
 using CsvEditSharp.Csv;
 using CsvEditSharp.Interfaces;

@@ -7,11 +7,9 @@ namespace CsvEditSharp.Services
 {
     class ConfigSettingsDialogService : IModalDialogService
     {
-        [Dependency]
-        public ConfigSettingsDialogViewModel DialogViewModel { get; set; }
+        [Dependency] public ConfigSettingsDialogViewModel DialogViewModel { get; set; }
 
-        [Dependency]
-        public ConfigSettingsDialog Dialog { get; set; }
+        [Dependency] public ConfigSettingsDialog Dialog { get; set; }
 
         public bool? ShowModal()
         {

@@ -1,5 +1,4 @@
-﻿using Adventures.NetStandard.Common.Bindings;
-using CsvEditSharp.Bindings;
+﻿using CsvEditSharp.Bindings;
 using CsvEditSharp.Csv;
 using System.Collections.ObjectModel;
 using System.Windows.Input;

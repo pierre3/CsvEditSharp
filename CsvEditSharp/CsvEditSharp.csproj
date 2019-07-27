@@ -219,6 +219,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bindings\BindableBase.cs" />
     <Compile Include="Commands\CommandReadCsv.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Interfaces\IConfigFileManager.cs" />
