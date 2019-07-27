@@ -90,8 +90,13 @@ namespace CsvEditSharp.ViewModels
         public ObservableCollection<object> CsvRows
         {
             get { return _csvRows; }
-            set { SetProperty(ref _csvRows, value); }
+            set {
+                SetProperty(ref _csvRows, value);
+                OnPropertyChanged("HasCsvRows");
+            }
         }
+
+        public bool HasCsvRows => (CsvRows?.Count ?? 0) > 0;
 
         public ObservableCollection<string> ErrorMessages
         {
@@ -127,18 +132,7 @@ namespace CsvEditSharp.ViewModels
 
         public ICommand RunConfigCommand { get; set; }
 
-
-        public ICommand WriteCsvCommand
-        {
-            get
-            {
-                if (_writeCsvCommand == null)
-                {
-                    _writeCsvCommand = new DelegateCommand(_ => WriteCsv(), _ => (CsvRows?.Count ?? 0) > 0);
-                }
-                return _writeCsvCommand;
-            }
-        }
+        public ICommand WriteCsvCommand { get; set; }
 
         public ICommand QueryCommand
         {
@@ -246,25 +240,6 @@ namespace CsvEditSharp.ViewModels
                 return new DataGridColumnValidationRule(columnValidaiton.Validation, columnValidaiton.ErrorMessage);
             }
             return null;
-        }
-
-        private void WriteCsv()
-        {
-            var saveFileService = _viewService.SaveFileSelectionService;
-            var fileName = saveFileService.SelectFile("Save As..", CsvFileFilter, _currentFilePath);
-            if (fileName == null) { return; }
-
-            try
-            {
-                using (var writer = new StreamWriter(fileName, false, _host.Encoding))
-                {
-                    _host.Write(writer, CsvRows);
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add(e.ToString());
-            }
         }
 
         private async Task ExecuteQueryAsync()

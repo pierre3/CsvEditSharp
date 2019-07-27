@@ -59,10 +59,10 @@ namespace CsvEditSharp.Presenters
 
             // When the view is loaded we'll invoke the ReadCsvCommand in case the user 
             // double clicked a file, the null lets command now we were not a button click
-            MainWindow.Loaded += (s, para) => InvokeCommand(ReadCsvCommand.CommandName,null);
+            MainWindow.Loaded += (s, para) => InvokeCommand(ReadCsvCommand.CommandName, null);
             MainWindow.Closed += MainWindow_Closed;
 
-            return (IWindow) MainWindow;
+            return MainWindow;
         }
 
 

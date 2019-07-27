@@ -34,6 +34,7 @@ namespace CsvEditSharp
                 .RegisterType<IMainWindow, MainWindow>()
 
                 .RegisterType<ICommand, ReadCsvCommand>(ReadCsvCommand.CommandName)
+                .RegisterType<ICommand, WriteCsvCommand>(WriteCsvCommand.CommandName)
                 .RegisterType<ICommand, RunConfigCommand>(RunConfigCommand.CommandName)
 
                 .RegisterInstance<StartupEventArgs>(e);

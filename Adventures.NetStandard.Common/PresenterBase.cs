@@ -37,16 +37,16 @@ namespace Adventures.NetStandard.Common
             EventAggregator.GetEvent<CommandButtonEvent>().Subscribe(ButtonEventHandler);
         }
 
-        private void ButtonEventHandler(CommandButtonEventArgs obj)
+        private void ButtonEventHandler(CommandButtonEventArgs e)
         {
-            switch (obj.CommandType)
+            switch (e.CommandType)
             {
                 case Enums.CommandType.Execute:
-                    ButtonExecute(obj.Button as Button);                        
+                    ButtonExecute(e);                        
                     break;
 
                 case Enums.CommandType.CanExecute:
-                    obj.CanExecute = CanButtonExecute(obj.Button as Button);
+                    e.CanExecute = CanButtonExecute(e);
                     break;
 
                 case Enums.CommandType.NotDefined:
@@ -54,15 +54,18 @@ namespace Adventures.NetStandard.Common
             }
         }
 
-        private void ButtonExecute(Button button)
+        private void ButtonExecute(CommandButtonEventArgs e)
         {
+            var button = e.Button as Button;
             var command = IocContainer.Resolve<ICommand>(button.Name);
-            command.Execute(button);
+            command.Execute(e);
         }
 
-        protected virtual bool CanButtonExecute(Button button)
+        protected virtual bool CanButtonExecute(CommandButtonEventArgs e)
         {
-            return true; // Default
+            var button = e.Button as Button;
+            var command = IocContainer.Resolve<ICommand>(button.Name);
+            return command.CanExecute(e);
         }
 
         public virtual IWindow Initialize(EventArgs e = null)

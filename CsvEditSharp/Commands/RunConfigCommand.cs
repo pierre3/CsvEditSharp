@@ -34,6 +34,8 @@ namespace CsvEditSharp.Commands
 
             MainViewModel.CsvRows = new ObservableCollection<object>(MainViewModel.Host.Records);
             MainViewModel.SelectedTab = 0;
+            MainViewModel.ButtonCommandRefresh();
+
         }
     }
 }

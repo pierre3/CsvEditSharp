@@ -1,9 +1,7 @@
 ﻿using CsvEditSharp.Csv;
 using CsvEditSharp.ViewModels;
 using System.IO;
-using System.Windows.Input;
 using System.Windows.Threading;
-using Unity;
 
 namespace CsvEditSharp.Commands
 {

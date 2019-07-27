@@ -27,13 +27,20 @@ namespace Adventures.NetStandard.Common.ViewModel
             ButtonCommand = new DelegateCommand<object>(ButtonExecute, CanButtonExecute);
         }
 
+        public void ButtonCommandRefresh()
+        {
+            ButtonCommand.RaiseCanExecuteChanged();
+        }
+
         public void ButtonExecute(object obj)
         {
             var button = obj as Button;
             var args = new CommandButtonEventArgs
             {
                 Button = obj,
+                ButtonCommand = ButtonCommand,
                 CommandType = Enums.CommandType.Execute
+
             };
 
             EventAggregator?.GetEvent<CommandButtonEvent>().Publish(args);
@@ -46,6 +53,7 @@ namespace Adventures.NetStandard.Common.ViewModel
             var args = new CommandButtonEventArgs
             {
                 Button = obj,
+                ButtonCommand = ButtonCommand,
                 CommandType = Enums.CommandType.CanExecute,
                 CanExecute = true // default
             };

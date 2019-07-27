@@ -223,6 +223,7 @@
     <Compile Include="Commands\CommandBase.cs" />
     <Compile Include="Commands\ReadCsvCommand.cs" />
     <Compile Include="Commands\RunConfigCommand.cs" />
+    <Compile Include="Commands\WriteCsvCommand.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Interfaces\IConfigFileManager.cs" />
     <Compile Include="Enums\RegisterClassMapTarget.cs" />
