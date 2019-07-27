@@ -1,10 +1,10 @@
 ﻿using Unity.Lifetime;
 
-namespace CsvEditSharp.Ioc
+namespace Adventures.NetStandard.Common.Ioc
 {
     public static class Lifetime
     {
-        public static ContainerControlledLifetimeManager Singleton => 
+        public static ContainerControlledLifetimeManager Singleton =>
             new ContainerControlledLifetimeManager();
     }
 }

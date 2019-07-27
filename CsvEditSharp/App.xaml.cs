@@ -1,9 +1,10 @@
-﻿using CsvEditSharp.Ioc;
-using CsvEditSharp.Models;
+﻿using Adventures.NetStandard.Common.Interfaces;
+using Adventures.NetStandard.Common.Ioc;
+using CsvEditSharp.Csv;
+using CsvEditSharp.Interfaces;
 using CsvEditSharp.Presenters;
 using CsvEditSharp.Services;
 using CsvEditSharp.ViewModels;
-using CsvEditSharp.Views;
 using Prism.Events;
 using System.Windows;
 using Unity;
@@ -35,7 +36,7 @@ namespace CsvEditSharp
             CsvConfigFileManager.InitializeDefault(viewService.GenerateConfigDialogService);
 
             var presenter = _iocContainer.Resolve<MainWindowPresenter>();
-            MainWindow = presenter.Initialize();
+            MainWindow = (Window) presenter.Initialize();
             MainWindow.Show();
         }
     }

@@ -1,4 +1,5 @@
-﻿using CsvEditSharp.Services;
+﻿using CsvEditSharp.Interfaces;
+using CsvEditSharp.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace CsvEditSharp.Models
+namespace CsvEditSharp.Csv
 {
     public class CsvConfigFileManager
     {
@@ -58,7 +59,7 @@ namespace CsvEditSharp.Models
 
             foreach (var item in items)
             {
-                if(!SettingsList.Contains(item))
+                if (!SettingsList.Contains(item))
                     SettingsList.Add(item);
             }
         }
@@ -103,7 +104,7 @@ namespace CsvEditSharp.Models
 
         public bool CanRemove(string name)
         {
-            return (name != AutoGenerateTemplateName) && SettingsList.Contains(name);
+            return name != AutoGenerateTemplateName && SettingsList.Contains(name);
         }
 
         public void RemoveConfigFile(string name)
@@ -118,8 +119,8 @@ namespace CsvEditSharp.Models
 
         public bool CanRename(string oldName, string newName)
         {
-            return (oldName != AutoGenerateTemplateName)
-                && (!string.IsNullOrWhiteSpace(newName))
+            return oldName != AutoGenerateTemplateName
+                && !string.IsNullOrWhiteSpace(newName)
                 && SettingsList.Contains(oldName)
                 && !SettingsList.Contains(newName);
         }
@@ -174,7 +175,7 @@ namespace CsvEditSharp.Models
 
             CurrentConfigFilePath = templateFilePath;
 
-            if(!SettingsList.Contains(newSettings.TemplateName))
+            if (!SettingsList.Contains(newSettings.TemplateName))
                 SettingsList.Add(newSettings.TemplateName);
 
             return configText;

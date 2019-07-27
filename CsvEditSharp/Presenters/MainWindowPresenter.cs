@@ -1,7 +1,8 @@
-﻿using CsvEditSharp.Bindings;
-using CsvEditSharp.Models;
+﻿using Adventures.NetStandard.Common.Interfaces;
+using CsvEditSharp.Bindings;
+using CsvEditSharp.Csv;
+using CsvEditSharp.Interfaces;
 using CsvEditSharp.ViewModels;
-using CsvEditSharp.Views;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
 using System.Collections.Generic;
@@ -44,7 +45,7 @@ namespace CsvEditSharp.Presenters
             MainWindow.DataContext = MainViewModel;
         }
 
-        public Window Initialize(EventArgs e = null)
+        public IWindow Initialize(EventArgs e = null)
         {
 
             // Command subscriptions
@@ -71,7 +72,7 @@ namespace CsvEditSharp.Presenters
             MainWindow.Loaded += (s, para) => MainViewModel.ReadCsvCommand.Execute(para);
             MainWindow.Closed += MainWindow_Closed;
 
-            return MainWindow;
+            return (IWindow) MainWindow;
         }
 
         private async void ReadCsvAsync(object para)

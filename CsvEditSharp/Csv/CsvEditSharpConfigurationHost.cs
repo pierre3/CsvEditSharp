@@ -1,4 +1,7 @@
-﻿using CsvHelper;
+﻿using CsvEditSharp.Enums;
+using CsvEditSharp.Interfaces;
+using CsvEditSharp.Models;
+using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 using System;
@@ -9,7 +12,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace CsvEditSharp.Models
+namespace CsvEditSharp.Csv
 {
     public class CsvEditSharpConfigurationHost : ICsvEditSharpConfigurationHost
     {
@@ -40,7 +43,7 @@ namespace CsvEditSharp.Models
 
         public void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter)
         {
-            RegisterClassMap<T>(propertyMapSetter, RegisterClassMapTarget.Both);
+            RegisterClassMap(propertyMapSetter, RegisterClassMapTarget.Both);
         }
 
         public void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter, RegisterClassMapTarget target)
@@ -120,7 +123,7 @@ namespace CsvEditSharp.Models
                 {
                     var booleanMaps = ClassMapForWriting.PropertyMaps
                         .Where(map => map.Data.TypeConverter is BooleanConverter);
-                    foreach(var map in booleanMaps)
+                    foreach (var map in booleanMaps)
                     {
                         map.Data.TypeConverter = new CustomBooleanConverter();
                     }

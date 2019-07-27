@@ -1,4 +1,5 @@
-﻿using CsvEditSharp.Models;
+﻿using CsvEditSharp.Interfaces;
+using CsvEditSharp.Models;
 using CsvEditSharp.ViewModels;
 using CsvEditSharp.Views;
 

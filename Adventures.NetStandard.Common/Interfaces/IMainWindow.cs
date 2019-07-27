@@ -1,11 +1,10 @@
-﻿using Adventures.NetStandard.Common.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CsvEditSharp.Views
+namespace Adventures.NetStandard.Common.Interfaces
 {
     public interface IMainWindow : IWindow
     {

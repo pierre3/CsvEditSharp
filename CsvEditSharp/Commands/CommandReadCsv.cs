@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using CsvEditSharp.Services;
 
-namespace CsvEditSharp.Models
+namespace CsvEditSharp.Commands
 {
-    public interface IConfigFileManager
+    public class CommandReadCsv
     {
-        void InitializeDefault();
     }
 }

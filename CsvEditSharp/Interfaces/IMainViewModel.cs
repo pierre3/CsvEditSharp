@@ -5,11 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace CsvEditSharp.ViewModels
+namespace CsvEditSharp.Interfaces
 {
     public interface IMainViewModel : IViewModel
     {
-        ICommand QueryCommand { get;  }
+        ICommand QueryCommand { get; }
         ICommand ResetQueryCommand { get; }
         ICommand ReadCsvCommand { get; }
     }

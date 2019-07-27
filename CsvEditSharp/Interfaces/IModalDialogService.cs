@@ -1,4 +1,4 @@
-﻿namespace CsvEditSharp.Services
+﻿namespace CsvEditSharp.Interfaces
 {
     public interface IModalDialogService
     {

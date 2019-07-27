@@ -219,12 +219,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Ioc\Lifetime.cs" />
-    <Compile Include="Models\CustomBooleanConverter.cs" />
-    <Compile Include="Models\EnumerableExt.cs" />
-    <Compile Include="Models\IConfigFileManager.cs" />
+    <Compile Include="Commands\CommandReadCsv.cs" />
+    <Compile Include="Extensions\EnumerableExtension.cs" />
+    <Compile Include="Interfaces\IConfigFileManager.cs" />
+    <Compile Include="Enums\RegisterClassMapTarget.cs" />
+    <Compile Include="Converters\CustomBooleanConverter.cs" />
     <Compile Include="Models\SaveConfigSettings.cs" />
-    <Compile Include="Presenters\IPresenter.cs" />
     <Compile Include="Presenters\MainWindowPresenter.cs" />
     <Compile Include="Services\ConfigSettingsDialogService.cs" />
     <Compile Include="Services\SaveConfigDialogService.cs" />
@@ -234,14 +234,12 @@
       <DependentUpon>ConfigurationTemplateGenerator.tt</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\ConfigSettingsDialogViewModel.cs" />
-    <Compile Include="ViewModels\IMainViewModel.cs" />
-    <Compile Include="ViewModels\IViewModel.cs" />
+    <Compile Include="Interfaces\IMainViewModel.cs" />
+    <Compile Include="Interfaces\IViewModel.cs" />
     <Compile Include="ViewModels\SaveConfigDialogViewModel.cs" />
     <Compile Include="Views\ConfigSettingsDialog.xaml.cs">
       <DependentUpon>ConfigSettingsDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\IMainView.cs" />
-    <Compile Include="Views\IMainWindow.cs" />
     <Compile Include="Views\SaveConfigDialog.xaml.cs">
       <DependentUpon>SaveConfigDialog.xaml</DependentUpon>
     </Compile>
@@ -266,18 +264,16 @@
     <Compile Include="Bindings\ErrorNotificationBindableBase.cs" />
     <Compile Include="Models\CompletionData.cs" />
     <Compile Include="Models\GenerateConfigSettings.cs" />
-    <Compile Include="Models\CsvConfigFileManager.cs" />
-    <Compile Include="Models\CsvEditSharpWorkspace.cs" />
-    <Compile Include="Models\RegisterClassMapTarget.cs" />
+    <Compile Include="Csv\CsvConfigFileManager.cs" />
+    <Compile Include="Converters\CsvEditSharpWorkspace.cs" />
     <Compile Include="Models\ColumnValidation.cs" />
-    <Compile Include="Models\ICsvEditSharpConfigurationHost.cs" />
-    <Compile Include="Models\CsvEditSharpConfigurationHost.cs" />
-    <Compile Include="Bindings\BindableBase.cs" />
+    <Compile Include="Interfaces\ICsvEditSharpConfigurationHost.cs" />
+    <Compile Include="Csv\CsvEditSharpConfigurationHost.cs" />
     <Compile Include="Bindings\DelegateCommand.cs" />
     <Compile Include="Services\GenerageConfigDialogService.cs" />
-    <Compile Include="Services\IModalDialogService.cs" />
-    <Compile Include="Services\IViewServiceProvider.cs" />
-    <Compile Include="Services\IFileSelectionService.cs" />
+    <Compile Include="Interfaces\IModalDialogService.cs" />
+    <Compile Include="Interfaces\IViewServiceProvider.cs" />
+    <Compile Include="Interfaces\IFileSelectionService.cs" />
     <Compile Include="Services\OpenFileDialogService.cs" />
     <Compile Include="Services\SaveFileDialogService.cs" />
     <Compile Include="Services\ViewServiceProvider.cs" />
@@ -348,8 +344,12 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Events\" />
+    <ProjectReference Include="..\Adventures.NetStandard.Common\Adventures.NetStandard.Common.csproj">
+      <Project>{f0465f3f-3b86-4251-a628-22a269a035a4}</Project>
+      <Name>Adventures.NetStandard.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
