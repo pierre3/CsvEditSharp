@@ -9,8 +9,6 @@ namespace CsvEditSharp.Interfaces
 {
     public interface IMainViewModel : IViewModel
     {
-        ICommand QueryCommand { get; }
-        ICommand ResetQueryCommand { get; }
-        ICommand ReadCsvCommand { get; }
+
     }
 }

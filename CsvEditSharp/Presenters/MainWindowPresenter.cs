@@ -39,14 +39,11 @@ namespace CsvEditSharp.Presenters
             _mainViewModel = viewModel;
 
             MainWindow.DataContext = MainViewModel;
+
         }
 
         public override IWindow Initialize(EventArgs e = null)
         {
-            // Bind F5 key to execute command
-            InputBinding f5 = new InputBinding(MainViewModel.QueryCommand, new KeyGesture(Key.F5)); MainWindow.InputBindings.Add(f5);
-            InputBinding f6 = new InputBinding(MainViewModel.ResetQueryCommand, new KeyGesture(Key.F6)); MainWindow.InputBindings.Add(f6);
-
             // MainWindow event subscriptions
             MainWindow.configEdit.TextArea.TextEntered += TextArea_TextEntered;
             MainWindow.configEdit.TextArea.TextEntering += TextArea_TextEntering;
@@ -59,7 +56,18 @@ namespace CsvEditSharp.Presenters
 
             // When the view is loaded we'll invoke the ReadCsvCommand in case the user 
             // double clicked a file, the null lets command now we were not a button click
-            MainWindow.Loaded += (s, para) => InvokeCommand(ReadCsvCommand.CommandName, null);
+            MainWindow.Loaded += (s, para) =>
+            {
+                InvokeCommand(ReadCsvCommand.CommandName, null);
+
+                // Bind F5-F6 key to execute commands
+                var queryCommand = IocContainer.Resolve<ICommand>(QueryCommand.CommandName);
+                var resetQueryCommand = IocContainer.Resolve<ICommand>(ResetQueryCommand.CommandName);
+
+                var f5 = new InputBinding(queryCommand, new KeyGesture(Key.F5)); MainWindow.InputBindings.Add(f5);
+                var f6 = new InputBinding(resetQueryCommand, new KeyGesture(Key.F6)); MainWindow.InputBindings.Add(f6);
+            };
+
             MainWindow.Closed += MainWindow_Closed;
 
             return MainWindow;

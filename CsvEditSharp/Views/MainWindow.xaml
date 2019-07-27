@@ -41,20 +41,21 @@
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
-                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="auto"/>
                     </Grid.RowDefinitions>
                     <DataGrid x:Name="grdMainData"
                               Grid.Row="0" AutoGenerateColumns="True" 
                               ItemsSource="{Binding CsvRows}" />
                     <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="4" ResizeDirection="Rows"/>
-                    <Grid Grid.Row="1" >
+                    <Grid Margin="1" Grid.Row="1">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="auto"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Vertical">
-                            <Button FontFamily="Segoe UI Symbol" Margin="4,4,4,2" Padding="4,2" Command="{Binding QueryCommand}">Execute &#xE102;</Button>
-                            <Button FontFamily="Segoe UI Symbol" Margin="4,2,4,4" Padding="4,2" Command="{Binding ResetQueryCommand}">Reset</Button>
+                        <StackPanel Orientation="Vertical" Margin="0,8,0,2">
+                            <Button x:Name="QueryCommand" Style="{DynamicResource ButtonCommand}">Execute &#xE102;</Button>
+                            <Label Height="3"/>
+                            <Button x:Name="ResetQueryCommand" Style="{DynamicResource ButtonCommand}" Padding="4,2">Reset</Button>
                         </StackPanel>
                         <avalonEdit:TextEditor Grid.Column="1" x:Name="queryEdit"
                             HorizontalAlignment="Stretch"
@@ -63,7 +64,7 @@
                             SyntaxHighlighting="C#"
                             ShowLineNumbers="True"
                             HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                            FontFamily="Consolas" Margin="4"
+                            FontFamily="Consolas" Margin="5,8,0,3"
                             FontSize="10Pt">
                         </avalonEdit:TextEditor>
                     </Grid>
@@ -81,12 +82,10 @@
                     <ToolBarTray Margin="4,6,2,2">
                         <ToolBar>
                             <Button x:Name="RunConfigCommand" Style="{DynamicResource ButtonCommand}"
-                                    Padding="4,2" HorizontalAlignment="Left">&#xE102; Run</Button>
+                                    HorizontalAlignment="Left">&#xE102; Run</Button>
                             <Separator/>
-                            <Button FontFamily="Segoe UI Symbol" Padding="4,2" 
-                                    HorizontalAlignment="Left" Command="{Binding SaveConfigCommand}">&#xE105; Save</Button>
-                            <Button FontFamily="Segoe UI Symbol" Padding="4,2" 
-                                    HorizontalAlignment="Left" Command="{Binding SaveConfigAsCommand}">&#xE105; Save As..</Button>
+                            <Button x:Name="SaveConfigCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left">&#xE105; Save</Button>
+                            <Button x:Name="SaveConfigAsCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left" >&#xE105; Save As..</Button>
                             <Separator/>
                             <Button FontFamily="Segoe UI Symbol" Padding="4,2"
                                     HorizontalAlignment="Left" Command="{Binding ConfigSettingsCommand}">&#xE115; Settings..</Button>

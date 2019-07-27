@@ -22,6 +22,7 @@ namespace CsvEditSharp.ViewModels
     {
         public readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
 
+        #region fields 
         private ObservableCollection<object> _csvRows;
         private ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
         private bool _hasErrorMessages = false;
@@ -45,19 +46,34 @@ namespace CsvEditSharp.ViewModels
         private ICommand _deleteTemplateCommand;
 
         private IUnityContainer _iocContainer;
+        #endregion 
+
+
+        [Dependency] public IViewServiceProvider ViewServiceProvider { get; set; }
 
         public CsvEditSharpWorkspace Workspace { get; }
 
-        [Dependency] public IViewServiceProvider ViewServiceProvider { get; set; }
+        public IViewServiceProvider ViewService => _viewService;
+
+        public CsvEditSharpConfigurationHost Host => _host;
+
+        public ObservableCollection<object> CsvRows
+        {
+            get { return _csvRows; }
+            set
+            {
+                SetProperty(ref _csvRows, value);
+                OnPropertyChanged("HasCsvRows");
+            }
+        }
+
+        public bool HasCsvRows => (CsvRows?.Count ?? 0) > 0;
 
         public int SelectedTab
         {
             get { return _selectedTab; }
             set { SetProperty(ref _selectedTab, value); }
         }
-
-        public IViewServiceProvider ViewService => _viewService;
-        public CsvEditSharpConfigurationHost Host => _host;
 
         public string SelectedTemplate
         {
@@ -86,17 +102,6 @@ namespace CsvEditSharp.ViewModels
                 SetProperty(ref _currentConfigName, value);
             }
         }
-
-        public ObservableCollection<object> CsvRows
-        {
-            get { return _csvRows; }
-            set {
-                SetProperty(ref _csvRows, value);
-                OnPropertyChanged("HasCsvRows");
-            }
-        }
-
-        public bool HasCsvRows => (CsvRows?.Count ?? 0) > 0;
 
         public ObservableCollection<string> ErrorMessages
         {
@@ -127,63 +132,6 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _queryDoc, value); }
         }
 
-
-        public ICommand ReadCsvCommand { get; set; }
-
-        public ICommand RunConfigCommand { get; set; }
-
-        public ICommand WriteCsvCommand { get; set; }
-
-        public ICommand QueryCommand
-        {
-            get
-            {
-                if (_queryCommand == null)
-                {
-                    _queryCommand = new DelegateCommand(async _ => await ExecuteQueryAsync(), _ => Workspace.HasScriptState);
-                }
-                return _queryCommand;
-            }
-        }
-
-        public ICommand ResetQueryCommand
-        {
-            get
-            {
-                if (_resetQueryCommand == null)
-                {
-                    _resetQueryCommand = new DelegateCommand(_ => ResetQuery(), _ => Workspace.HasScriptState);
-                }
-                return _resetQueryCommand;
-            }
-        }
-
-        public ICommand SaveConfigCommand
-        {
-            get
-            {
-                if (_saveConfigCommand == null)
-                {
-                    _saveConfigCommand = new DelegateCommand(_ => SaveConfigFile(), _ => !string.IsNullOrWhiteSpace(ConfigurationDoc.Text)
-                        && File.Exists(CsvConfigFileManager.Default.CurrentConfigFilePath));
-                }
-                return _saveConfigCommand;
-            }
-        }
-
-        public ICommand SaveConfigAsCommand
-        {
-            get
-            {
-                if (_saveConfigAsCommand == null)
-                {
-                    _saveConfigAsCommand = new DelegateCommand(_ => SaveConfigAs(), _ => !string.IsNullOrWhiteSpace(ConfigurationDoc.Text)
-                        && File.Exists(CsvConfigFileManager.Default.CurrentConfigFilePath));
-                }
-                return _saveConfigAsCommand;
-            }
-        }
-
         public ICommand ConfigSettingsCommand
         {
             get
@@ -208,7 +156,6 @@ namespace CsvEditSharp.ViewModels
                 return _deleteTemplateCommand;
             }
         }
-
 
         public MainWindowViewModel(IViewServiceProvider viewServiceProvider, IUnityContainer iocContainer)
         {
@@ -242,52 +189,6 @@ namespace CsvEditSharp.ViewModels
             return null;
         }
 
-        private async Task ExecuteQueryAsync()
-        {
-            ErrorMessages.Clear();
-            await Workspace.ContinueScriptAsync(QueryDoc.Text);
-            try
-            {
-                _host.ExecuteQuery();
-                CsvRows = new ObservableCollection<object>(_host.Records);
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add(e.ToString());
-            }
-        }
-
-        private void ResetQuery()
-        {
-            _host.ResetQuery();
-            CsvRows = new ObservableCollection<object>(_host.Records);
-        }
-
-        private void SaveConfigFile()
-        {
-            CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-        }
-
-        private void SaveConfigAs()
-        {
-            var service = _viewService.SaveConfigDialogService;
-            if (true == service.ShowModal())
-            {
-                var fileName = string.Empty;
-                if (service.Result.IsTemplate)
-                {
-                    fileName = CsvConfigFileManager.Default.MakeCurrentConfigFilePath(service.Result.TemplateName);
-                }
-                else
-                {
-                    fileName = Path.Combine(Path.GetDirectoryName(CurrentFilePath), "Default.config.csx");
-                }
-                CurrentConfigName = Path.GetFileName(fileName);
-                CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
-                CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-
-            }
-        }
 
         public async Task<IEnumerable<CompletionData>> GetCompletionListAsync(int position, string code)
         {

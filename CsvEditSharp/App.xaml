@@ -12,7 +12,7 @@
             
             <Style x:Key="ButtonCommand" TargetType="{x:Type Button}">
                 <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
-                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="FontSize" Value="12"/>
                 <Setter Property="Padding" Value="4"/>
                 <Setter Property="Command" Value="{Binding ButtonCommand}"/>
                 <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>

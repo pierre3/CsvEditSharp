@@ -221,8 +221,12 @@
     </ApplicationDefinition>
     <Compile Include="Bindings\BindableBase.cs" />
     <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\QueryCommand.cs" />
     <Compile Include="Commands\ReadCsvCommand.cs" />
+    <Compile Include="Commands\ResetQueryCommand.cs" />
     <Compile Include="Commands\RunConfigCommand.cs" />
+    <Compile Include="Commands\SaveConfigAsCommand.cs" />
+    <Compile Include="Commands\SaveConfigCommand.cs" />
     <Compile Include="Commands\WriteCsvCommand.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Interfaces\IConfigFileManager.cs" />

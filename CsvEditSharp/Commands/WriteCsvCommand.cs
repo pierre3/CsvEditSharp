@@ -1,8 +1,6 @@
-﻿using CsvEditSharp.Events;
-using CsvEditSharp.Interfaces;
+﻿using CsvEditSharp.Interfaces;
 using CsvEditSharp.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Unity;
 
