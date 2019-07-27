@@ -3,6 +3,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CsvEditSharp">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="visibilityConverter"/>
+
+            <ContextMenu x:Key="configListContextMenu">
+                <MenuItem Header="Delete" Command="{Binding DeleteTemplateCommand}"/>
+            </ContextMenu>
+            
+            <Style x:Key="ButtonCommand" TargetType="{x:Type Button}">
+                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                <Setter Property="FontSize" Value="16"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="Command" Value="{Binding ButtonCommand}"/>
+                <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+            </Style>
+            <Style x:Key="textColumnStyle" TargetType="{x:Type TextBox}">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="Background" Value="Red"/>
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <Binding
+                                        Path="(Validation.Errors)[0].ErrorContent"
+                                        RelativeSource="{x:Static RelativeSource.Self}"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

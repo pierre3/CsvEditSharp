@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Adventures.NetStandard.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,5 +11,7 @@ namespace CsvEditSharp.Events
     {
         public object Button { get; internal set; }
         public bool CanExecute { get; internal set; }
+
+        public CommandType CommandType { get; set; }
     }
 }

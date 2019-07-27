@@ -10,8 +10,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="MvpVm\" />
     <Folder Include="Models\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PresentationFramework">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\PresentationFramework.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -3,34 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CsvEditSharp"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         mc:Ignorable="d"
-        Title="CSV Edit♯" Height="auto" Width="auto" Icon="/CsvEditSharp;component/CsvEditSharp.ico">
-
-    <Window.Resources>
-        <ContextMenu x:Key="configListContextMenu">
-            <MenuItem Header="Delete" Command="{Binding DeleteTemplateCommand}"/>
-        </ContextMenu>
-        <Style x:Key="textColumnStyle" TargetType="{x:Type TextBox}">
-            <Style.Triggers>
-                <Trigger Property="Validation.HasError" Value="True">
-                    <Setter Property="Background" Value="Red"/>
-                    <Setter Property="ToolTip">
-                        <Setter.Value>
-                            <Binding
-                                    Path="(Validation.Errors)[0].ErrorContent"
-                                    RelativeSource="{x:Static RelativeSource.Self}"/>
-                        </Setter.Value>
-                    </Setter>
-                </Trigger>
-            </Style.Triggers>
-        </Style>
-        <BooleanToVisibilityConverter x:Key="visibilityConverter"/>
-    </Window.Resources>
+        Title="CSV Edit♯" 
+        Height="auto" Width="auto" 
+        Icon="/CsvEditSharp;component/CsvEditSharp.ico">
 
     <Grid Margin="8">
+        <Grid.Resources>
+            <ResourceDictionary>
+            </ResourceDictionary>
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -45,11 +29,9 @@
                           ContextMenu="{StaticResource configListContextMenu}"
                           ItemsSource="{Binding ConfigFileTemplates}"
                           SelectedItem="{Binding SelectedTemplate}"/>
-                <Button Command="{Binding ReadCsvCommand}" ToolTip="Open" 
-                        FontFamily="Segoe UI Symbol" FontSize="16" Padding="4">&#xE1A5;</Button>
+                <Button x:Name="ReadCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Open">&#xE1A5;</Button>
                 <Separator Margin="2,0"/>
-                <Button Command="{Binding WriteCsvCommand}" ToolTip="Save As" 
-                        FontFamily="Segoe UI Symbol" FontSize="16" Padding="4">&#xE105;</Button>
+                <Button x:Name="WriteCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Save As">&#xE105;</Button>
             </ToolBar>
         </ToolBarTray>
 
@@ -98,8 +80,8 @@
 
                     <ToolBarTray Margin="4,6,2,2">
                         <ToolBar>
-                            <Button FontFamily="Segoe UI Symbol" Padding="4,2" 
-                                    HorizontalAlignment="Left" Command="{Binding RunConfigCommand}">&#xE102; Run</Button>
+                            <Button x:Name="RunConfigCommand" Style="{DynamicResource ButtonCommand}"
+                                    Padding="4,2" HorizontalAlignment="Left">&#xE102; Run</Button>
                             <Separator/>
                             <Button FontFamily="Segoe UI Symbol" Padding="4,2" 
                                     HorizontalAlignment="Left" Command="{Binding SaveConfigCommand}">&#xE105; Save</Button>

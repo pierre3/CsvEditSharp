@@ -1,5 +1,6 @@
 ﻿using Adventures.NetStandard.Common.Interfaces;
 using Adventures.NetStandard.Common.Ioc;
+using CsvEditSharp.Commands;
 using CsvEditSharp.Csv;
 using CsvEditSharp.Interfaces;
 using CsvEditSharp.Presenters;
@@ -7,6 +8,7 @@ using CsvEditSharp.Services;
 using CsvEditSharp.ViewModels;
 using Prism.Events;
 using System.Windows;
+using System.Windows.Input;
 using Unity;
 using Unity.Lifetime;
 
@@ -18,6 +20,7 @@ namespace CsvEditSharp
     public partial class App : Application
     {
         private IUnityContainer _iocContainer = new UnityContainer();
+        public IPresenter _presenter;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -30,13 +33,16 @@ namespace CsvEditSharp
                 .RegisterType<IMainViewModel, MainWindowViewModel>(Lifetime.Singleton)
                 .RegisterType<IMainWindow, MainWindow>()
 
+                .RegisterType<ICommand, ReadCsvCommand>(ReadCsvCommand.CommandName)
+                .RegisterType<ICommand, RunConfigCommand>(RunConfigCommand.CommandName)
+
                 .RegisterInstance<StartupEventArgs>(e);
 
             var viewService = _iocContainer.Resolve<IViewServiceProvider>();
             CsvConfigFileManager.InitializeDefault(viewService.GenerateConfigDialogService);
 
-            var presenter = _iocContainer.Resolve<MainWindowPresenter>();
-            MainWindow = (Window) presenter.Initialize();
+            _presenter = _iocContainer.Resolve<MainWindowPresenter>();
+            MainWindow = (Window) _presenter.Initialize();
             MainWindow.Show();
         }
     }

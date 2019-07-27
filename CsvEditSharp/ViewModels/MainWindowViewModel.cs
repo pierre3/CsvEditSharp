@@ -18,7 +18,7 @@ using Unity;
 
 namespace CsvEditSharp.ViewModels
 {
-    public class MainWindowViewModel : BindableBase, IDisposable, IMainViewModel
+    public class MainWindowViewModel : BindableBase, IMainViewModel
     {
         public readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
 
@@ -36,10 +36,8 @@ namespace CsvEditSharp.ViewModels
         private string _currentConfigName;
         private string _selectedTemplate;
 
-        private ICommand _readCsvCommand;
         private ICommand _queryCommand;
         private ICommand _writeCsvCommand;
-        private ICommand _runConfigComannd;
         private ICommand _resetQueryCommand;
         private ICommand _saveConfigCommand;
         private ICommand _saveConfigAsCommand;
@@ -124,7 +122,11 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _queryDoc, value); }
         }
 
+
         public ICommand ReadCsvCommand { get; set; }
+
+        public ICommand RunConfigCommand { get; set; }
+
 
         public ICommand WriteCsvCommand
         {
@@ -161,8 +163,6 @@ namespace CsvEditSharp.ViewModels
                 return _resetQueryCommand;
             }
         }
-
-        public ICommand RunConfigCommand { get; set; }
 
         public ICommand SaveConfigCommand
         {
@@ -215,6 +215,7 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
+
         public MainWindowViewModel(IViewServiceProvider viewServiceProvider, IUnityContainer iocContainer)
         {
             _iocContainer = iocContainer;
@@ -246,15 +247,6 @@ namespace CsvEditSharp.ViewModels
             }
             return null;
         }
-
-        private bool CanExecuteRunConfigCommand()
-        {
-            return (CurrentFilePath != null)
-                && File.Exists(CurrentFilePath)
-                && !string.IsNullOrWhiteSpace(ConfigurationDoc.Text);
-        }
-
-
 
         private void WriteCsv()
         {
@@ -338,23 +330,9 @@ namespace CsvEditSharp.ViewModels
                 propertyMap.Data.TypeConverterOptions);
         }
 
-        public void Dispose()
+        protected override void OnDispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Workspace?.Dispose();
-            }
-        }
-
-        ~MainWindowViewModel()
-        {
-            Dispose(false);
+            Workspace?.Dispose();
         }
 
     }

@@ -1,20 +1,16 @@
-﻿using Adventures.NetStandard.Common.Interfaces;
-using CsvEditSharp.Bindings;
-using CsvEditSharp.Csv;
+﻿using Adventures.NetStandard.Common;
+using Adventures.NetStandard.Common.Interfaces;
+using CsvEditSharp.Commands;
 using CsvEditSharp.Interfaces;
 using CsvEditSharp.ViewModels;
 using ICSharpCode.AvalonEdit.CodeCompletion;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Unity;
 
 namespace CsvEditSharp.Presenters
@@ -23,7 +19,7 @@ namespace CsvEditSharp.Presenters
     /// The Presenter has access to both the View and ViewModel - this allows us to keep
     /// both of them decoupled while giving us direct access to the View (a limitation of MVVM)
     /// </summary>
-    public class MainWindowPresenter : IPresenter
+    public class MainWindowPresenter : PresenterBase
     {
         private IMainWindow _mainWindow;
         private IMainViewModel _mainViewModel;
@@ -45,17 +41,11 @@ namespace CsvEditSharp.Presenters
             MainWindow.DataContext = MainViewModel;
         }
 
-        public IWindow Initialize(EventArgs e = null)
+        public override IWindow Initialize(EventArgs e = null)
         {
-
-            // Command subscriptions
-            MainViewModel.ReadCsvCommand = new DelegateCommand(para => ReadCsvAsync(para));
-            MainViewModel.RunConfigCommand = new DelegateCommand(para => RunConfigurationAsync());
-
             // Bind F5 key to execute command
             InputBinding f5 = new InputBinding(MainViewModel.QueryCommand, new KeyGesture(Key.F5)); MainWindow.InputBindings.Add(f5);
             InputBinding f6 = new InputBinding(MainViewModel.ResetQueryCommand, new KeyGesture(Key.F6)); MainWindow.InputBindings.Add(f6);
-
 
             // MainWindow event subscriptions
             MainWindow.configEdit.TextArea.TextEntered += TextArea_TextEntered;
@@ -67,50 +57,14 @@ namespace CsvEditSharp.Presenters
             MainWindow.grdMainData.AutoGeneratingColumn += DataGrid_AutoGeneratingColumn;
             MainWindow.KeyDown += MainWindow_KeyDown;
 
-            // When the view is loaded we'll invoke the ReadCsvCommand
-            // in case the user double clicked a file 
-            MainWindow.Loaded += (s, para) => MainViewModel.ReadCsvCommand.Execute(para);
+            // When the view is loaded we'll invoke the ReadCsvCommand in case the user 
+            // double clicked a file, the null lets command now we were not a button click
+            MainWindow.Loaded += (s, para) => InvokeCommand(ReadCsvCommand.CommandName,null);
             MainWindow.Closed += MainWindow_Closed;
 
             return (IWindow) MainWindow;
         }
 
-        private async void ReadCsvAsync(object para)
-        {
-            string currentFilePath = null;
-
-            // para will not be null if invoked by Loaded event
-            if (para != null)
-            {
-                // If there is a parameter then load the file
-                if (StartupArgs.Args.Length > 0)
-                    currentFilePath = StartupArgs.Args[0];
-                else
-                    // Otherwise, we'll exit the load event
-                    return;
-            }
-
-            var openFileService = MainViewModel.ViewService.OpenFileSelectionService;
-            MainViewModel.CurrentFilePath = currentFilePath == null
-                ? openFileService.SelectFile("Select a CSV File", MainViewModel.CsvFileFilter, null)
-                : currentFilePath;
-
-            if (!File.Exists(MainViewModel.CurrentFilePath)) { return; }
-
-            var configText = CsvConfigFileManager.Default
-                .GetCsvConfigString(MainViewModel.CurrentFilePath, MainViewModel.SelectedTemplate);
-
-            MainViewModel.CurrentConfigName = Path.GetFileName(CsvConfigFileManager.Default.CurrentConfigFilePath);
-            MainViewModel.CurrentFileName = Path.GetFileName(MainViewModel.CurrentFilePath);
-
-            MainViewModel.ConfigurationDoc.Text = configText;
-
-
-            // Let UI refresh before long running task
-            await Dispatcher.Yield(DispatcherPriority.ApplicationIdle);
-
-            RunConfigurationAsync();
-        }
 
         #region MainWindow event handlers 
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -233,30 +187,7 @@ namespace CsvEditSharp.Presenters
         }
         #endregion 
 
-        private void RunConfigurationAsync()
-        {
-            MainViewModel.Host.Reset();
-            MainViewModel.ErrorMessages.Clear();
 
-
-            MainViewModel.Workspace.RunScriptAsync(MainViewModel.ConfigurationDoc.Text);
-
-            try
-            {
-                using (var stream = new FileStream(MainViewModel.CurrentFilePath, FileMode.Open, FileAccess.Read))
-                using (var reader = new StreamReader(stream, MainViewModel.Host.Encoding ?? Encoding.Default))
-                {
-                    MainViewModel.Host.Read(reader);
-                }
-            }
-            catch (Exception e)
-            {
-                MainViewModel.ErrorMessages.Add(e.ToString());
-            }
-
-            MainViewModel.CsvRows = new ObservableCollection<object>(MainViewModel.Host.Records);
-            MainViewModel.SelectedTab = 0;
-        }
 
 
     }
