@@ -1,4 +1,6 @@
-﻿using CsvHelper;
+﻿using CsvEditSharp.Interfaces;
+using CsvEditSharp.Models;
+using CsvHelper;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Scripting;
 using Microsoft.CodeAnalysis.Recommendations;
@@ -8,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace CsvEditSharp.Models
+namespace CsvEditSharp.Converters
 {
     public class CsvEditSharpWorkspace : IDisposable
     {
@@ -125,7 +127,7 @@ namespace CsvEditSharp.Models
                 _workspace?.Dispose();
             }
         }
-        ~ CsvEditSharpWorkspace()
+        ~CsvEditSharpWorkspace()
         {
             Dispose(false);
         }

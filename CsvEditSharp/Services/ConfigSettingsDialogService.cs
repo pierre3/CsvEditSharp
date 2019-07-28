@@ -1,16 +1,19 @@
-﻿using CsvEditSharp.ViewModels;
+﻿using CsvEditSharp.Extensions;
+using CsvEditSharp.ViewModels;
 using CsvEditSharp.Views;
+using Unity;
 
 namespace CsvEditSharp.Services
 {
-    class ConfigSettingsDialogService : IModalDialogService
+    public class ConfigSettingsDialogService : ServiceBase
     {
-        public bool? ShowModal()
+        [Dependency] public ConfigSettingsDialogViewModel DialogViewModel { get; set; }
+
+        public override bool? ShowModal()
         {
-            var dialog = new ConfigSettingsDialog();
-            dialog.Owner = App.Current.MainWindow;
-            dialog.DataContext = new ConfigSettingsDialogViewModel();
-            return dialog.ShowDialog();               
+            IocContainer.ShowDialog<ConfigSettingsDialog>(DialogViewModel);
+            return false;
         }
+
     }
 }

@@ -3,6 +3,54 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:CsvEditSharp">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="visibilityConverter"/>
+
+            <Style x:Key="MainWindow" TargetType="{x:Type Window}">
+                <Setter Property="MinWidth" Value="100"/>
+                <Setter Property="MinHeight" Value="46"/>
+                <!--CaptionHeight + ResizeBorderThickness * 2-->
+                <Setter Property="Background" Value="LightSteelBlue"/>
+                <Setter Property="Foreground" Value="DarkRed"/>
+            </Style>
+            <Style x:Key="CustomWindow" TargetType="{x:Type Window}">
+                <Setter Property="WindowStyle" Value="None"/>
+                <Setter Property="AllowsTransparency" Value="True"/>
+                <Setter Property="MinWidth" Value="100"/>
+                <Setter Property="MinHeight" Value="46"/>
+                <!--CaptionHeight + ResizeBorderThickness * 2-->
+                <Setter Property="Background" Value="LightSteelBlue"/>
+                <Setter Property="BorderBrush" Value="DarkGray"/>
+                <Setter Property="BorderThickness" Value="5"/>
+                <Setter Property="Foreground" Value="DarkRed"/>
+            </Style>
+            
+            <ContextMenu x:Key="configListContextMenu">
+                <MenuItem Header="Delete" Command="{Binding DeleteTemplateCommand}"/>
+            </ContextMenu>
+            
+            <Style x:Key="ButtonCommand" TargetType="{x:Type Button}">
+                <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
+                <Setter Property="FontSize" Value="12"/>
+                <Setter Property="Padding" Value="4"/>
+                <Setter Property="Command" Value="{Binding ButtonCommand}"/>
+                <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
+            </Style>
+            
+            <Style x:Key="textColumnStyle" TargetType="{x:Type TextBox}">
+                <Style.Triggers>
+                    <Trigger Property="Validation.HasError" Value="True">
+                        <Setter Property="Background" Value="Red"/>
+                        <Setter Property="ToolTip">
+                            <Setter.Value>
+                                <Binding
+                                        Path="(Validation.Errors)[0].ErrorContent"
+                                        RelativeSource="{x:Static RelativeSource.Self}"/>
+                            </Setter.Value>
+                        </Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

@@ -1,5 +1,5 @@
 ﻿using CsvEditSharp.Bindings;
-using CsvEditSharp.Models;
+using CsvEditSharp.Csv;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 

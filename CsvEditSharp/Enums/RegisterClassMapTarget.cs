@@ -1,4 +1,4 @@
-﻿namespace CsvEditSharp.Models
+﻿namespace CsvEditSharp.Enums
 {
     public enum RegisterClassMapTarget
     {

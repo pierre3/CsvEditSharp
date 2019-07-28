@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CsvEditSharp.Interfaces;
+using Microsoft.Win32;
 
 namespace CsvEditSharp.Services
 {

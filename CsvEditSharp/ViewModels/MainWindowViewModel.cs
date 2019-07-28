@@ -1,29 +1,29 @@
 ﻿using CsvEditSharp.Bindings;
+using CsvEditSharp.Converters;
+using CsvEditSharp.Csv;
+using CsvEditSharp.Interfaces;
 using CsvEditSharp.Models;
-using CsvEditSharp.Services;
 using ICSharpCode.AvalonEdit.Document;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using Unity;
 
 namespace CsvEditSharp.ViewModels
 {
-    public class MainWindowViewModel : BindableBase, IDisposable
+    public class MainWindowViewModel : BindableBase, IMainViewModel
     {
-        private static readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
+        public readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
 
+        #region fields 
         private ObservableCollection<object> _csvRows;
         private ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
         private bool _hasErrorMessages = false;
         private IDocument _configurationDoc;
         private IDocument _queryDoc;
         private CsvEditSharpConfigurationHost _host;
-        private IViewServiceProvider _viewService;
         private int _selectedTab;
 
         private string _currentFilePath;
@@ -31,17 +31,37 @@ namespace CsvEditSharp.ViewModels
         private string _currentConfigName;
         private string _selectedTemplate;
 
-        private ICommand _readCsvCommand;
-        private ICommand _queryCommand;
-        private ICommand _writeCsvCommand;
-        private ICommand _runConfigComannd;
-        private ICommand _resetQueryCommand;
-        private ICommand _saveConfigCommand;
-        private ICommand _saveConfigAsCommand;
-        private ICommand _configSettingsCommand;
         private ICommand _deleteTemplateCommand;
 
-        private CsvEditSharpWorkspace Workspace { get; }
+        #endregion 
+
+        [Dependency] public IViewServiceProvider ViewServiceProvider { get; set; }
+
+        public CsvEditSharpWorkspace Workspace { get; set; }
+
+        private bool _isLoading = false;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { _isLoading = value; OnPropertyChanged(); }
+        }
+
+        public CsvEditSharpConfigurationHost Host {
+            get { return _host;}
+            set { _host = value; }
+        }
+
+        public ObservableCollection<object> CsvRows
+        {
+            get { return _csvRows; }
+            set
+            {
+                SetProperty(ref _csvRows, value);
+                OnPropertyChanged("HasCsvRows");
+            }
+        }
+
+        public bool HasCsvRows => (CsvRows?.Count ?? 0) > 0;
 
         public int SelectedTab
         {
@@ -77,12 +97,6 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
-        public ObservableCollection<object> CsvRows
-        {
-            get { return _csvRows; }
-            set { SetProperty(ref _csvRows, value); }
-        }
-
         public ObservableCollection<string> ErrorMessages
         {
             get { return _errorMessages; }
@@ -112,104 +126,6 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _queryDoc, value); }
         }
 
-        public ICommand ReadCsvCommand
-        {
-            get
-            {
-                if (_readCsvCommand == null)
-                {
-                    _readCsvCommand = new DelegateCommand(_ => ReadCsvAsync());
-                }
-                return _readCsvCommand;
-            }
-        }
-
-        public ICommand WriteCsvCommand
-        {
-            get
-            {
-                if (_writeCsvCommand == null)
-                {
-                    _writeCsvCommand = new DelegateCommand(_ => WriteCsv(), _ => (CsvRows?.Count ?? 0) > 0);
-                }
-                return _writeCsvCommand;
-            }
-        }
-
-        public ICommand QueryCommand
-        {
-            get
-            {
-                if (_queryCommand == null)
-                {
-                    _queryCommand = new DelegateCommand(async _ => await ExecuteQueryAsync(), _ => Workspace.HasScriptState);
-                }
-                return _queryCommand;
-            }
-        }
-
-        public ICommand ResetQueryCommand
-        {
-            get
-            {
-                if (_resetQueryCommand == null)
-                {
-                    _resetQueryCommand = new DelegateCommand(_ => ResetQuery(), _ => Workspace.HasScriptState);
-                }
-                return _resetQueryCommand;
-            }
-        }
-
-        public ICommand RunConfigCommand
-        {
-            get
-            {
-                if (_runConfigComannd == null)
-                {
-                    _runConfigComannd = new DelegateCommand(async _ => await RunConfigurationAsync(), _ => CanExecuteRunConfigCommand());
-                }
-                return _runConfigComannd;
-            }
-        }
-
-        public ICommand SaveConfigCommand
-        {
-            get
-            {
-                if (_saveConfigCommand == null)
-                {
-                    _saveConfigCommand = new DelegateCommand(_ => SaveConfigFile(), _ => !string.IsNullOrWhiteSpace(ConfigurationDoc.Text)
-                        && File.Exists(CsvConfigFileManager.Default.CurrentConfigFilePath));
-                }
-                return _saveConfigCommand;
-            }
-        }
-
-        public ICommand SaveConfigAsCommand
-        {
-            get
-            {
-                if (_saveConfigAsCommand == null)
-                {
-                    _saveConfigAsCommand = new DelegateCommand(_ => SaveConfigAs(), _ => !string.IsNullOrWhiteSpace(ConfigurationDoc.Text)
-                        && File.Exists(CsvConfigFileManager.Default.CurrentConfigFilePath));
-                }
-                return _saveConfigAsCommand;
-            }
-        }
-
-        public ICommand ConfigSettingsCommand
-        {
-            get
-            {
-                if (_configSettingsCommand == null)
-                {
-                    _configSettingsCommand = new DelegateCommand(_ => _viewService.ConfigSettingsDialogService.ShowModal(), _ => true);
-                }
-                return _configSettingsCommand;
-            }
-        }
-
         public ICommand DeleteTemplateCommand
         {
             get
@@ -223,23 +139,6 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
-        public MainWindowViewModel(IViewServiceProvider viewServiceProvider)
-        {
-            _viewService = viewServiceProvider;
-            _errorMessages.CollectionChanged += (_, __) => HasErrorMessages = _errorMessages.Count > 0;
-            _host = new CsvEditSharpConfigurationHost();
-            Workspace = new CsvEditSharpWorkspace(_host, _errorMessages);
-
-            ConfigurationDoc = new TextDocument(StringTextSource.Empty);
-            QueryDoc = new TextDocument(new StringTextSource("Query<FieldData>( records => records.Where(row => true).OrderBy(row => row) );"));
-
-            CurrentFilePath = string.Empty;
-            CurrentFileName = "(Empty)";
-            CurrentConfigName = "(Empty)";
-            SelectedTemplate = ConfigFileTemplates.First();
-            SelectedTab = 0;
-        }
-
         public DataGridColumnValidationRule GetDataGridColumnValidation(string propertyName)
         {
             ColumnValidation columnValidaiton;
@@ -250,118 +149,6 @@ namespace CsvEditSharp.ViewModels
             return null;
         }
 
-        private bool CanExecuteRunConfigCommand()
-        {
-            return (CurrentFilePath != null)
-                && File.Exists(CurrentFilePath)
-                && !string.IsNullOrWhiteSpace(ConfigurationDoc.Text);
-        }
-
-        private async void ReadCsvAsync()
-        {
-            //OpenFileDialog
-            var openFileService = _viewService.OpenFileSelectionService;
-            CurrentFilePath = openFileService.SelectFile("Select a CSV File", CsvFileFilter, null);
-            if (!File.Exists(CurrentFilePath)) { return; }
-
-            var configText = CsvConfigFileManager.Default.GetCsvConfigString(CurrentFilePath, _selectedTemplate);
-
-            CurrentConfigName = Path.GetFileName(CsvConfigFileManager.Default.CurrentConfigFilePath);
-            CurrentFileName = Path.GetFileName(CurrentFilePath);
-
-            ConfigurationDoc.Text = configText;
-
-            await RunConfigurationAsync();
-        }
-
-        private async Task RunConfigurationAsync()
-        {
-            _host.Reset();
-            ErrorMessages.Clear();
-            await Workspace.RunScriptAsync(ConfigurationDoc.Text);
-
-            try
-            {
-                using (var stream = new FileStream(_currentFilePath, FileMode.Open, FileAccess.Read))
-                using (var reader = new StreamReader(stream, _host.Encoding ?? Encoding.Default))
-                {
-                    _host.Read(reader);
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add(e.ToString());
-            }
-
-            CsvRows = new ObservableCollection<object>(_host.Records);
-            SelectedTab = 0;
-        }
-
-        private void WriteCsv()
-        {
-            var saveFileService = _viewService.SaveFileSelectionService;
-            var fileName = saveFileService.SelectFile("Save As..", CsvFileFilter, _currentFilePath);
-            if (fileName == null) { return; }
-
-            try
-            {
-                using (var writer = new StreamWriter(fileName, false, _host.Encoding))
-                {
-                    _host.Write(writer, CsvRows);
-                }
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add(e.ToString());
-            }
-        }
-
-        private async Task ExecuteQueryAsync()
-        {
-            ErrorMessages.Clear();
-            await Workspace.ContinueScriptAsync(QueryDoc.Text);
-            try
-            {
-                _host.ExecuteQuery();
-                CsvRows = new ObservableCollection<object>(_host.Records);
-            }
-            catch (Exception e)
-            {
-                ErrorMessages.Add(e.ToString());
-            }
-        }
-
-        private void ResetQuery()
-        {
-            _host.ResetQuery();
-            CsvRows = new ObservableCollection<object>(_host.Records);
-        }
-
-        private void SaveConfigFile()
-        {
-            CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-        }
-
-        private void SaveConfigAs()
-        {
-            var service = _viewService.SaveConfigDialogService;
-            if (true == service.ShowModal())
-            {
-                var fileName = string.Empty;
-                if (service.Result.IsTemplate)
-                {
-                    fileName = CsvConfigFileManager.Default.MakeCurrentConfigFilePath(service.Result.TemplateName);
-                }
-                else
-                {
-                    fileName = Path.Combine(Path.GetDirectoryName(CurrentFilePath), "Default.config.csx");
-                }
-                CurrentConfigName = Path.GetFileName(fileName);
-                CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
-                CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-
-            }
-        }
 
         public async Task<IEnumerable<CompletionData>> GetCompletionListAsync(int position, string code)
         {
@@ -379,24 +166,9 @@ namespace CsvEditSharp.ViewModels
                 propertyMap.Data.TypeConverterOptions);
         }
 
-        public void Dispose()
+        protected override void OnDispose()
         {
-            Dispose(true);
-            GC.SuppressFinalize(this);
+            Workspace?.Dispose();
         }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Workspace?.Dispose();
-            }
-        }
-
-        ~MainWindowViewModel()
-        {
-            Dispose(false);
-        }
-
     }
 }

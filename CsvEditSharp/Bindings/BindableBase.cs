@@ -1,24 +1,9 @@
-﻿using System.ComponentModel;
+﻿using Adventures.NetStandard.Common.ViewModel;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
 namespace CsvEditSharp.Bindings
 {
-    public abstract class BindableBase : INotifyPropertyChanged
-    {
-        public event PropertyChangedEventHandler PropertyChanged;
+    public abstract class BindableBase : ViewModelBase { }
 
-        protected bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)
-        {
-            if (Equals(storage, value)) return false;
-
-            storage = value;
-            OnPropertyChanged(propertyName);
-            return true;
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-    }
 }

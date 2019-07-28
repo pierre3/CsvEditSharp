@@ -1,10 +1,12 @@
-﻿using CsvHelper.Configuration;
+﻿using CsvEditSharp.Enums;
+using CsvEditSharp.Models;
+using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
 
-namespace CsvEditSharp.Models
+namespace CsvEditSharp.Interfaces
 {
     public interface ICsvEditSharpConfigurationHost
     {

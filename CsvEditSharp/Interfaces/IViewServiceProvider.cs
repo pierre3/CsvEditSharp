@@ -1,6 +1,6 @@
 ﻿using CsvEditSharp.Models;
 
-namespace CsvEditSharp.Services
+namespace CsvEditSharp.Interfaces
 {
     public interface IViewServiceProvider
     {

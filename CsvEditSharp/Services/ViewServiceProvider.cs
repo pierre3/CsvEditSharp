@@ -1,4 +1,6 @@
-﻿using CsvEditSharp.Models;
+﻿using CsvEditSharp.Interfaces;
+using CsvEditSharp.Models;
+using Unity;
 
 namespace CsvEditSharp.Services
 {
@@ -10,13 +12,20 @@ namespace CsvEditSharp.Services
         private IModalDialogService<SaveConfigSettings> _saveConfigDialogService;
         private IModalDialogService _configSettingsDialogService;
 
+        private IUnityContainer _iocContainer;
+
+        public ViewServiceProvider(IUnityContainer iocContainer)
+        {
+            _iocContainer = iocContainer;
+        }
+
         public IFileSelectionService OpenFileSelectionService
         {
             get
             {
                 if (_openFileSelectionService == null)
                 {
-                    _openFileSelectionService = new OpenFileDialogService();
+                    _openFileSelectionService = _iocContainer.Resolve<OpenFileDialogService>();
                 }
                 return _openFileSelectionService;
             }
@@ -28,7 +37,7 @@ namespace CsvEditSharp.Services
             {
                 if (_saveFileSelectionService == null)
                 {
-                    _saveFileSelectionService = new SaveFileDialogService();
+                    _saveFileSelectionService = _iocContainer.Resolve<SaveFileDialogService>();
                 }
                 return _saveFileSelectionService;
             }
@@ -40,7 +49,7 @@ namespace CsvEditSharp.Services
             {
                 if (_generateConfigDialogService == null)
                 {
-                    _generateConfigDialogService = new GenerateConfigDialogService();
+                    _generateConfigDialogService = _iocContainer.Resolve<GenerateConfigDialogService>();
                 }
                 return _generateConfigDialogService;
             }
@@ -52,7 +61,7 @@ namespace CsvEditSharp.Services
             {
                 if (_saveConfigDialogService == null)
                 {
-                    _saveConfigDialogService = new SaveConfigDialogService();
+                    _saveConfigDialogService = _iocContainer.Resolve<SaveConfigDialogService>();
                 }
                 return _saveConfigDialogService;
             }
@@ -64,7 +73,7 @@ namespace CsvEditSharp.Services
             {
                 if (_configSettingsDialogService == null)
                 {
-                    _configSettingsDialogService = new ConfigSettingsDialogService();
+                    _configSettingsDialogService = _iocContainer.Resolve<ConfigSettingsDialogService>();
                 }
                 return _configSettingsDialogService;
             }

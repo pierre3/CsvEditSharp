@@ -1,4 +1,5 @@
-﻿using CsvEditSharp.Services;
+﻿using CsvEditSharp.Interfaces;
+using CsvEditSharp.Models;
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 
-namespace CsvEditSharp.Models
+namespace CsvEditSharp.Csv
 {
     public class CsvConfigFileManager
     {
@@ -55,9 +56,11 @@ namespace CsvEditSharp.Models
 
             var items = new[] { AutoGenerateTemplateName }
                 .Concat(files.Select(x => Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(x))));
+
             foreach (var item in items)
             {
-                SettingsList.Add(item);
+                if (!SettingsList.Contains(item))
+                    SettingsList.Add(item);
             }
         }
 
@@ -94,14 +97,16 @@ namespace CsvEditSharp.Models
             return Path.Combine(ConfigFileDirectory, templateName + ".config.csx");
         }
 
-        public void SaveConfigFile(string configText)
+        public void SaveConfigFile(string configText, string templateName=null)
         {
             File.WriteAllText(CurrentConfigFilePath, configText);
+            if (templateName!=null && !SettingsList.Contains(templateName))
+                SettingsList.Add(templateName);
         }
 
         public bool CanRemove(string name)
         {
-            return (name != AutoGenerateTemplateName) && SettingsList.Contains(name);
+            return name != AutoGenerateTemplateName && SettingsList.Contains(name);
         }
 
         public void RemoveConfigFile(string name)
@@ -116,8 +121,8 @@ namespace CsvEditSharp.Models
 
         public bool CanRename(string oldName, string newName)
         {
-            return (oldName != AutoGenerateTemplateName)
-                && (!string.IsNullOrWhiteSpace(newName))
+            return oldName != AutoGenerateTemplateName
+                && !string.IsNullOrWhiteSpace(newName)
                 && SettingsList.Contains(oldName)
                 && !SettingsList.Contains(newName);
         }
@@ -171,7 +176,10 @@ namespace CsvEditSharp.Models
             File.WriteAllText(templateFilePath, configText);
 
             CurrentConfigFilePath = templateFilePath;
-            SettingsList.Add(newSettings.TemplateName);
+
+            if (!SettingsList.Contains(newSettings.TemplateName))
+                SettingsList.Add(newSettings.TemplateName);
+
             return configText;
         }
     }
