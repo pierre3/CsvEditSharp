@@ -17,6 +17,7 @@
                 <Setter Property="Command" Value="{Binding ButtonCommand}"/>
                 <Setter Property="CommandParameter" Value="{Binding RelativeSource={RelativeSource Self}}"/>
             </Style>
+            
             <Style x:Key="textColumnStyle" TargetType="{x:Type TextBox}">
                 <Style.Triggers>
                     <Trigger Property="Validation.HasError" Value="True">

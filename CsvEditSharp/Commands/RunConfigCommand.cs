@@ -12,12 +12,12 @@ namespace CsvEditSharp.Commands
 
         public MainWindowViewModel MainViewModel => (MainWindowViewModel)ViewModel;
 
-        public override void Execute(object parameter)
+        public async override void Execute(object parameter)
         {
             MainViewModel.Host.Reset();
             MainViewModel.ErrorMessages.Clear();
 
-            MainViewModel.Workspace.RunScriptAsync(MainViewModel.ConfigurationDoc.Text);
+            await MainViewModel.Workspace.RunScriptAsync(MainViewModel.ConfigurationDoc.Text);
 
             try
             {

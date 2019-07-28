@@ -73,14 +73,13 @@ namespace CsvEditSharp.Presenters
             return MainWindow;
         }
 
-
         #region MainWindow event handlers 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             MainViewModel.Dispose();
         }
 
-        private void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private async void MainWindow_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (e.Key == Key.Space && e.KeyboardDevice.Modifiers.HasFlag(ModifierKeys.Control))
             {
@@ -95,7 +94,7 @@ namespace CsvEditSharp.Presenters
                 }
                 if (editor == null) { return; }
                 e.Handled = true;
-                ShowCompletionWindow(editor);
+                await ShowCompletionWindow(editor);
             }
         }
 
@@ -194,9 +193,5 @@ namespace CsvEditSharp.Presenters
             };
         }
         #endregion 
-
-
-
-
     }
 }

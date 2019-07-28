@@ -1,5 +1,4 @@
-﻿using Adventures.NetStandard.Common.Interfaces;
-using CsvEditSharp.Interfaces;
+﻿using CsvEditSharp.Interfaces;
 using System;
 using System.Windows;
 using System.Windows.Input;
@@ -28,6 +27,11 @@ namespace CsvEditSharp.Commands
         {
             var runConfigCmd = IocContainer.Resolve<ICommand>(commandName);
             runConfigCmd.Execute(para);
+        }
+
+        public void RaiseCanExecuteChanged()
+        {
+            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
     }
 }

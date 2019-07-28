@@ -38,6 +38,8 @@ namespace CsvEditSharp
                 .RegisterType<ICommand, RunConfigCommand>(RunConfigCommand.CommandName)
                 .RegisterType<ICommand, SaveConfigCommand>(SaveConfigCommand.CommandName)
                 .RegisterType<ICommand, SaveConfigAsCommand>(SaveConfigAsCommand.CommandName)
+                .RegisterType<ICommand, ConfigSettingsCommand>(ConfigSettingsCommand.CommandName)
+
                 .RegisterType<ICommand, QueryCommand>(QueryCommand.CommandName, Lifetime.Singleton)           // F5
                 .RegisterType<ICommand, ResetQueryCommand>(ResetQueryCommand.CommandName, Lifetime.Singleton) // F6
 

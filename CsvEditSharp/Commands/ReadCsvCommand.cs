@@ -1,13 +1,17 @@
 ﻿using CsvEditSharp.Csv;
+using CsvEditSharp.Interfaces;
 using CsvEditSharp.ViewModels;
 using System.IO;
 using System.Windows.Threading;
+using Unity;
 
 namespace CsvEditSharp.Commands
 {
     public class ReadCsvCommand : CommandBase
     {
         public static string CommandName = "ReadCsvCommand";
+
+        [Dependency] public IViewServiceProvider ViewService { get; set; }
 
         public MainWindowViewModel MainViewModel => (MainWindowViewModel) ViewModel;
 
@@ -26,7 +30,7 @@ namespace CsvEditSharp.Commands
                     return;
             }
 
-            var openFileService = MainViewModel.ViewService.OpenFileSelectionService;
+            var openFileService = ViewService.OpenFileSelectionService;
             MainViewModel.CurrentFilePath = currentFilePath == null
                 ? openFileService.SelectFile("Select a CSV File", MainViewModel.CsvFileFilter, null)
                 : currentFilePath;

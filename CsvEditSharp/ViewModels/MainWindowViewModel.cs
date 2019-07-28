@@ -4,16 +4,11 @@ using CsvEditSharp.Csv;
 using CsvEditSharp.Interfaces;
 using CsvEditSharp.Models;
 using ICSharpCode.AvalonEdit.Document;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using Unity;
 
 namespace CsvEditSharp.ViewModels
@@ -29,7 +24,6 @@ namespace CsvEditSharp.ViewModels
         private IDocument _configurationDoc;
         private IDocument _queryDoc;
         private CsvEditSharpConfigurationHost _host;
-        private IViewServiceProvider _viewService;
         private int _selectedTab;
 
         private string _currentFilePath;
@@ -37,23 +31,14 @@ namespace CsvEditSharp.ViewModels
         private string _currentConfigName;
         private string _selectedTemplate;
 
-        private ICommand _queryCommand;
-        private ICommand _writeCsvCommand;
-        private ICommand _resetQueryCommand;
-        private ICommand _saveConfigCommand;
-        private ICommand _saveConfigAsCommand;
-        private ICommand _configSettingsCommand;
         private ICommand _deleteTemplateCommand;
 
         private IUnityContainer _iocContainer;
         #endregion 
 
-
         [Dependency] public IViewServiceProvider ViewServiceProvider { get; set; }
 
         public CsvEditSharpWorkspace Workspace { get; }
-
-        public IViewServiceProvider ViewService => _viewService;
 
         public CsvEditSharpConfigurationHost Host => _host;
 
@@ -132,18 +117,6 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _queryDoc, value); }
         }
 
-        public ICommand ConfigSettingsCommand
-        {
-            get
-            {
-                if (_configSettingsCommand == null)
-                {
-                    _configSettingsCommand = new DelegateCommand(_ => _viewService.ConfigSettingsDialogService.ShowModal(), _ => true);
-                }
-                return _configSettingsCommand;
-            }
-        }
-
         public ICommand DeleteTemplateCommand
         {
             get
@@ -157,10 +130,9 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
-        public MainWindowViewModel(IViewServiceProvider viewServiceProvider, IUnityContainer iocContainer)
+        public MainWindowViewModel(IUnityContainer iocContainer)
         {
             _iocContainer = iocContainer;
-            _viewService = viewServiceProvider;
             _errorMessages.CollectionChanged += (_, __) => HasErrorMessages = _errorMessages.Count > 0;
 
             _host = iocContainer.Resolve<CsvEditSharpConfigurationHost>();
@@ -210,6 +182,5 @@ namespace CsvEditSharp.ViewModels
         {
             Workspace?.Dispose();
         }
-
     }
 }

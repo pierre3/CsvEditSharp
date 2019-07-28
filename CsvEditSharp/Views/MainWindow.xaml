@@ -87,8 +87,7 @@
                             <Button x:Name="SaveConfigCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left">&#xE105; Save</Button>
                             <Button x:Name="SaveConfigAsCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left" >&#xE105; Save As..</Button>
                             <Separator/>
-                            <Button FontFamily="Segoe UI Symbol" Padding="4,2"
-                                    HorizontalAlignment="Left" Command="{Binding ConfigSettingsCommand}">&#xE115; Settings..</Button>
+                            <Button x:Name="ConfigSettingsCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left" >&#xE115; Settings..</Button>
                         </ToolBar>
                     </ToolBarTray>
 

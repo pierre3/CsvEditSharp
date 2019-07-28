@@ -221,6 +221,7 @@
     </ApplicationDefinition>
     <Compile Include="Bindings\BindableBase.cs" />
     <Compile Include="Commands\CommandBase.cs" />
+    <Compile Include="Commands\ConfigSettingsCommand.cs" />
     <Compile Include="Commands\QueryCommand.cs" />
     <Compile Include="Commands\ReadCsvCommand.cs" />
     <Compile Include="Commands\ResetQueryCommand.cs" />
