@@ -4,15 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:avalonEdit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
+        xmlns:converters="clr-namespace:CsvEditSharp.Converters"
         mc:Ignorable="d"
         Title="CSV Edit♯" 
         Height="auto" Width="auto" 
         Icon="/CsvEditSharp;component/CsvEditSharp.ico"
-        Style="{StaticResource CustomWindow}">
+        Style="{StaticResource MainWindow}">
 
-    <Grid Margin="8">
+    <Grid >
         <Grid.Resources>
             <ResourceDictionary>
+                <converters:BoolToVisibilityConverter x:Key="BoolToHiddenConverter"  
+                                                      TrueValue="Visible" FalseValue="Hidden" />
             </ResourceDictionary>
         </Grid.Resources>
 
@@ -23,96 +27,99 @@
         </Grid.RowDefinitions>
 
         <!-- ToolBar -->
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition Width="30"/>
-            </Grid.ColumnDefinitions>
-            <ToolBarTray Grid.Row="0">
-                <ToolBar>
-                    <Label Margin="2,0">Configuration Script</Label>
-                    <ComboBox Width="160" x:Name="configTemplateComboBox" 
-                              ContextMenu="{StaticResource configListContextMenu}"
-                              ItemsSource="{Binding ConfigFileTemplates}"
-                              SelectedItem="{Binding SelectedTemplate}"/>
-                    <Button x:Name="ReadCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Open">&#xE1A5;</Button>
-                    <Separator Margin="2,0"/>
-                    <Button x:Name="WriteCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Save As">&#xE105;</Button>
-                </ToolBar>
-            </ToolBarTray>
-            <Button Margin="3,0" Background="AliceBlue" Grid.Column="1" IsCancel="True" Click="Button_Click">X</Button>
-        </Grid>
+        <ToolBarTray Grid.Row="0">
+            <ToolBar>
+                <Label Margin="0">Configuration Script</Label>
+                <ComboBox Width="160" x:Name="configTemplateComboBox" 
+                            ContextMenu="{StaticResource configListContextMenu}"
+                            ItemsSource="{Binding ConfigFileTemplates}"
+                            SelectedItem="{Binding SelectedTemplate}"/>
+                <Button x:Name="ReadCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Open">&#xE1A5;</Button>
+                <Separator Margin="2,0"/>
+                <Button x:Name="WriteCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Save As">&#xE105;</Button>
+            </ToolBar>
+        </ToolBarTray>
 
-        <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" >
-            <!-- CSV Editor Tab Page -->
-            <TabItem Header="{Binding CurrentFileName}" BorderThickness="1" BorderBrush="SteelBlue">
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <DataGrid x:Name="grdMainData"
-                              Grid.Row="0" AutoGenerateColumns="True" 
-                              ItemsSource="{Binding CsvRows}" />
-                    <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="4" ResizeDirection="Rows"/>
-                    <Grid Margin="1" Grid.Row="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Orientation="Vertical" Margin="0,8,0,2">
-                            <Button x:Name="QueryCommand" Style="{DynamicResource ButtonCommand}">Execute &#xE102;</Button>
-                            <Label Height="3"/>
-                            <Button x:Name="ResetQueryCommand" Style="{DynamicResource ButtonCommand}" Padding="4,2">Reset</Button>
-                        </StackPanel>
-                        <avalonEdit:TextEditor Grid.Column="1" x:Name="queryEdit"
-                            HorizontalAlignment="Stretch"
-                            BorderThickness="1" BorderBrush="SteelBlue"
-                            Document="{Binding QueryDoc,Mode=TwoWay}"
-                            SyntaxHighlighting="C#"
-                            ShowLineNumbers="True"
-                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                            FontFamily="Consolas" Margin="5,8,0,3"
-                            FontSize="10Pt">
+        <Border Grid.Row="1" BorderThickness="2" >
+            <TabControl SelectedIndex="{Binding SelectedTab}" Background="LightSteelBlue" >
+                <!-- CSV Editor Tab Page -->
+                <TabItem Header="{Binding CurrentFileName}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <DataGrid x:Name="grdMainData"
+                                    Grid.Row="0" AutoGenerateColumns="True" 
+                                    ItemsSource="{Binding CsvRows}" />
+                        <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Top" Height="4" ResizeDirection="Rows"/>
+                        <Grid  Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Orientation="Vertical" Margin="0,8,0,2">
+                                <Button x:Name="QueryCommand" Style="{DynamicResource ButtonCommand}">Execute &#xE102;</Button>
+                                <Label Height="3"/>
+                                <Button x:Name="ResetQueryCommand" Style="{DynamicResource ButtonCommand}" Padding="4,2">Reset</Button>
+                            </StackPanel>
+                            <avalonEdit:TextEditor Grid.Column="1" x:Name="queryEdit"
+                                HorizontalAlignment="Stretch"
+                                Document="{Binding QueryDoc,Mode=TwoWay}"
+                                SyntaxHighlighting="C#"
+                                ShowLineNumbers="True"
+                                HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                                FontFamily="Consolas" Margin="5,8,0,3"
+                                FontSize="10Pt">
+                            </avalonEdit:TextEditor>
+                        </Grid>
+                        <Grid Visibility="{Binding IsLoading, Converter={StaticResource BoolToHiddenConverter}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Label VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                                   FontWeight="Bold" FontStyle="Italic"
+                                   >Loading scripting engine</Label>
+                            <Image Grid.Row="1" 
+                                   VerticalAlignment="Top"
+                                   Width="100" gif:ImageBehavior.AnimatedSource="..//Resources/Gears.gif"/>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <!-- Configuration Settings -->
+                <TabItem Header="{Binding CurrentConfigName}" >
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <ToolBarTray>
+                            <ToolBar>
+                                <Button x:Name="RunConfigCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left">&#xE102; Run</Button>
+                                <Separator/>
+                                <Button x:Name="SaveConfigCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left">&#xE105; Save</Button>
+                                <Button x:Name="SaveConfigAsCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left" >&#xE105; Save As..</Button>
+                                <Separator/>
+                                <Button x:Name="ConfigSettingsCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left" >&#xE115; Settings..</Button>
+                            </ToolBar>
+                        </ToolBarTray>
+
+                        <avalonEdit:TextEditor Grid.Row="1" x:Name="configEdit"
+                                Document="{Binding ConfigurationDoc,Mode=TwoWay}"
+                                SyntaxHighlighting="C#"
+                                ShowLineNumbers="True"
+                                HorizontalScrollBarVisibility="Auto" 
+                                VerticalScrollBarVisibility="Auto"
+                                FontFamily="Consolas"
+                                FontSize="10Pt">
                         </avalonEdit:TextEditor>
                     </Grid>
-                </Grid>
-            </TabItem>
-
-            <!-- Configuration Settings -->
-            <TabItem Header="{Binding CurrentConfigName}" BorderThickness="1" BorderBrush="SteelBlue">
-                <Grid >
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-
-                    <ToolBarTray Margin="4,6,2,2">
-                        <ToolBar>
-                            <Button x:Name="RunConfigCommand" Style="{DynamicResource ButtonCommand}"
-                                    HorizontalAlignment="Left">&#xE102; Run</Button>
-                            <Separator/>
-                            <Button x:Name="SaveConfigCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left">&#xE105; Save</Button>
-                            <Button x:Name="SaveConfigAsCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left" >&#xE105; Save As..</Button>
-                            <Separator/>
-                            <Button x:Name="ConfigSettingsCommand" Style="{DynamicResource ButtonCommand}" HorizontalAlignment="Left" >&#xE115; Settings..</Button>
-                        </ToolBar>
-                    </ToolBarTray>
-
-                    <avalonEdit:TextEditor Grid.Row="1" x:Name="configEdit"
-                            BorderThickness="1" BorderBrush="SteelBlue"
-                            Document="{Binding ConfigurationDoc,Mode=TwoWay}"
-                            SyntaxHighlighting="C#"
-                            ShowLineNumbers="True"
-                            HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                            FontFamily="Consolas" Margin="4"
-                            FontSize="10Pt">
-                    </avalonEdit:TextEditor>
-
-                </Grid>
-            </TabItem>
-
-        </TabControl>
+                </TabItem>
+            </TabControl>
+        </Border>
+        
         <ListBox Grid.Row="2" ItemsSource="{Binding ErrorMessages}" Margin="4"
                  VerticalAlignment="Bottom" BorderThickness="1" BorderBrush="Crimson"
                  Visibility="{Binding HasErrorMessages,Converter={StaticResource visibilityConverter}}"/>

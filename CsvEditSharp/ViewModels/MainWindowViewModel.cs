@@ -39,6 +39,13 @@ namespace CsvEditSharp.ViewModels
 
         public CsvEditSharpWorkspace Workspace { get; set; }
 
+        private bool _isLoading = false;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { _isLoading = value; OnPropertyChanged(); }
+        }
+
         public CsvEditSharpConfigurationHost Host {
             get { return _host;}
             set { _host = value; }

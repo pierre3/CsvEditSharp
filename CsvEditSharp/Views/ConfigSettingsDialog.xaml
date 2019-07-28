@@ -17,7 +17,7 @@
             <ListBox ItemsSource="{Binding Items}"
                  SelectedItem="{Binding SelectedItem}" />
             <StackPanel Grid.Column="1" Orientation="Vertical" >
-                <TextBlock Margin="8,0">new name</TextBlock>
+                <TextBlock Margin="4,0" Foreground="Black">Name</TextBlock>
                 <TextBox Width="120" Margin="4,0" Text="{Binding NewName,UpdateSourceTrigger=PropertyChanged}"/>
                 <Button Width="120" Margin="4,2" Content="Rename" Command="{Binding RenameCommand}"/>
                 <Button Width="120" Margin="4,8" Content="Delete" Command="{Binding DeleteCommand}"/>

@@ -213,6 +213,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WpfAnimatedGif, Version=1.4.18.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WpfAnimatedGif.1.4.18\lib\net\WpfAnimatedGif.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -229,6 +232,7 @@
     <Compile Include="Commands\SaveConfigAsCommand.cs" />
     <Compile Include="Commands\SaveConfigCommand.cs" />
     <Compile Include="Commands\WriteCsvCommand.cs" />
+    <Compile Include="Converters\BooleanToVisibilityConverter.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
     <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Interfaces\IConfigFileManager.cs" />
@@ -347,6 +351,7 @@
     <Resource Include="Resources\CsvEditSharp.ico" />
     <Content Include="Resources\CsvEditSharp.svg" />
     <Resource Include="Resources\CsvEditSharp_256.png" />
+    <Resource Include="Resources\Gears.gif" />
     <Content Include="T4\ConfigurationTemplateGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>ConfigurationTemplateGenerator.cs</LastGenOutput>

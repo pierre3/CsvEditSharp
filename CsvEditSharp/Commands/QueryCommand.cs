@@ -18,6 +18,7 @@ namespace CsvEditSharp.Commands
         public async override void Execute(object parameter)
         {
             MainViewModel.ErrorMessages.Clear();
+            MainViewModel.IsLoading = true;
 
             await MainViewModel.Workspace.ContinueScriptAsync(MainViewModel.QueryDoc.Text);
             try
@@ -29,6 +30,7 @@ namespace CsvEditSharp.Commands
             {
                 MainViewModel.ErrorMessages.Add(e.ToString());
             }
+            MainViewModel.IsLoading = false;
         }
     }
 }
