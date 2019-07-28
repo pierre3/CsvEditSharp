@@ -1,8 +1,6 @@
 ﻿using CsvEditSharp.Csv;
-using CsvEditSharp.Interfaces;
 using CsvEditSharp.ViewModels;
 using System.IO;
-using Unity;
 
 namespace CsvEditSharp.Commands
 {
@@ -10,8 +8,6 @@ namespace CsvEditSharp.Commands
     {
         public static string CommandName = "SaveConfigAsCommand";
          
-        [Dependency] public IViewServiceProvider ViewService { get; set; }
-
         public MainWindowViewModel MainViewModel => (MainWindowViewModel)ViewModel;
 
         public override bool CanExecute(object parameter)

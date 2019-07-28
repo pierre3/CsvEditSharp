@@ -238,6 +238,7 @@
     <Compile Include="Presenters\MainWindowPresenter.cs" />
     <Compile Include="Services\ConfigSettingsDialogService.cs" />
     <Compile Include="Services\SaveConfigDialogService.cs" />
+    <Compile Include="Services\ServiceBase.cs" />
     <Compile Include="T4\ConfigurationTemplateGenerator.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -246,7 +247,7 @@
     <Compile Include="ViewModels\ConfigSettingsDialogViewModel.cs" />
     <Compile Include="Interfaces\IMainViewModel.cs" />
     <Compile Include="Interfaces\IViewModel.cs" />
-    <Compile Include="Views\SaveConfigDialogViewModel.cs" />
+    <Compile Include="ViewModels\SaveConfigDialogViewModel.cs" />
     <Compile Include="Views\ConfigSettingsDialog.xaml.cs">
       <DependentUpon>ConfigSettingsDialog.xaml</DependentUpon>
     </Compile>

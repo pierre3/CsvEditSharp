@@ -16,6 +16,8 @@ namespace CsvEditSharp.Commands
 
         [Dependency] public StartupEventArgs StartupArgs { get; set; }
 
+        [Dependency] public IViewServiceProvider ViewService { get; set; }
+
 
         public virtual bool CanExecute(object parameter) { return true; }
 

@@ -1,17 +1,12 @@
-﻿using CsvEditSharp.Interfaces;
-using CsvEditSharp.ViewModels;
+﻿using CsvEditSharp.ViewModels;
 using System;
 using System.IO;
-using Unity;
 
 namespace CsvEditSharp.Commands
 {
     public class WriteCsvCommand : CommandBase
     {
         public static string CommandName = "WriteCsvCommand";
-
-
-        [Dependency] public IViewServiceProvider ViewService { get; set; }
 
         public MainWindowViewModel MainViewModel => (MainWindowViewModel)ViewModel;
 

@@ -1,13 +1,6 @@
 ﻿using Adventures.NetStandard.Common.Interfaces;
 using CsvEditSharp.Interfaces;
-using ICSharpCode.AvalonEdit.CodeCompletion;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
 
 namespace CsvEditSharp
 {

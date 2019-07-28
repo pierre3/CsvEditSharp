@@ -1,18 +1,13 @@
 ﻿using CsvEditSharp.Extensions;
-using CsvEditSharp.Interfaces;
 using CsvEditSharp.Models;
 using CsvEditSharp.ViewModels;
 using CsvEditSharp.Views;
-using Unity;
 
 namespace CsvEditSharp.Services
 {
-    public class SaveConfigDialogService : IModalDialogService<SaveConfigSettings>
+    public class SaveConfigDialogService : ServiceBase<SaveConfigSettings>
     {
-        [Dependency] public IUnityContainer IocContainer { get; set; }
-
-        public SaveConfigSettings Result { get; private set; }
-        public bool? ShowModal() { 
+        public override bool? ShowModal() { 
 
             var vm = new SaveConfigDialogViewModel();
 

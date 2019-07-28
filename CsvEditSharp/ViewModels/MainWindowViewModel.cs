@@ -33,14 +33,16 @@ namespace CsvEditSharp.ViewModels
 
         private ICommand _deleteTemplateCommand;
 
-        private IUnityContainer _iocContainer;
         #endregion 
 
         [Dependency] public IViewServiceProvider ViewServiceProvider { get; set; }
 
-        public CsvEditSharpWorkspace Workspace { get; }
+        public CsvEditSharpWorkspace Workspace { get; set; }
 
-        public CsvEditSharpConfigurationHost Host => _host;
+        public CsvEditSharpConfigurationHost Host {
+            get { return _host;}
+            set { _host = value; }
+        }
 
         public ObservableCollection<object> CsvRows
         {
@@ -128,27 +130,6 @@ namespace CsvEditSharp.ViewModels
                 }
                 return _deleteTemplateCommand;
             }
-        }
-
-        public MainWindowViewModel(IUnityContainer iocContainer)
-        {
-            _iocContainer = iocContainer;
-            _errorMessages.CollectionChanged += (_, __) => HasErrorMessages = _errorMessages.Count > 0;
-
-            _host = iocContainer.Resolve<CsvEditSharpConfigurationHost>();
-            iocContainer.RegisterInstance<ICsvEditSharpConfigurationHost>(_host);
-            iocContainer.RegisterInstance<IList<string>>(_errorMessages);
-
-            Workspace = iocContainer.Resolve<CsvEditSharpWorkspace>();
-
-            ConfigurationDoc = new TextDocument(StringTextSource.Empty);
-            QueryDoc = new TextDocument(new StringTextSource("Query<FieldData>( records => records.Where(row => true));"));
-
-            CurrentFilePath = string.Empty;
-            CurrentFileName = "(Empty)";
-            CurrentConfigName = "(Empty)";
-            SelectedTemplate = ConfigFileTemplates.First();
-            SelectedTab = 0;
         }
 
         public DataGridColumnValidationRule GetDataGridColumnValidation(string propertyName)

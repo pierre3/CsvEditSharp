@@ -11,8 +11,6 @@ namespace CsvEditSharp.Commands
     {
         public static string CommandName = "ReadCsvCommand";
 
-        [Dependency] public IViewServiceProvider ViewService { get; set; }
-
         public MainWindowViewModel MainViewModel => (MainWindowViewModel) ViewModel;
 
         public async override void Execute(object para)

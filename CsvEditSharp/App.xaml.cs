@@ -10,7 +10,6 @@ using Prism.Events;
 using System.Windows;
 using System.Windows.Input;
 using Unity;
-using Unity.Lifetime;
 
 namespace CsvEditSharp
 {

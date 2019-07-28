@@ -1,23 +1,17 @@
-﻿using CsvEditSharp.Interfaces;
-using CsvEditSharp.Models;
+﻿using CsvEditSharp.Models;
 using CsvEditSharp.ViewModels;
 using CsvEditSharp.Views;
-using System.Windows;
 using Unity;
 
 namespace CsvEditSharp.Services
 {
-    public class GenerateConfigDialogService : IModalDialogService<GenerateConfigSettings>
+    public class GenerateConfigDialogService : ServiceBase<GenerateConfigSettings>
     {
-        public GenerateConfigSettings Result { get; private set; }
-
-        [Dependency] public StartupEventArgs StartupArgs { get; set; }
-
         [Dependency] public GenerateConfigDialog Dialog { get; set; }
 
         [Dependency] public GenerateConfigDialogViewModel ViewModel { get; set; }
 
-        public bool? ShowModal()
+        public override bool? ShowModal()
         {
             Dialog.Owner = App.Current.MainWindow;
             Dialog.DataContext = ViewModel;

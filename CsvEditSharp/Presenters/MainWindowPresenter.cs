@@ -1,10 +1,14 @@
 ﻿using Adventures.NetStandard.Common;
 using Adventures.NetStandard.Common.Interfaces;
 using CsvEditSharp.Commands;
+using CsvEditSharp.Converters;
+using CsvEditSharp.Csv;
 using CsvEditSharp.Interfaces;
 using CsvEditSharp.ViewModels;
 using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Document;
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -69,6 +73,24 @@ namespace CsvEditSharp.Presenters
             };
 
             MainWindow.Closed += MainWindow_Closed;
+
+            MainViewModel.ErrorMessages.CollectionChanged += (_, __) =>
+                MainViewModel.HasErrorMessages = MainViewModel.ErrorMessages.Count > 0;
+
+            MainViewModel.Host = IocContainer.Resolve<CsvEditSharpConfigurationHost>();
+            IocContainer.RegisterInstance<ICsvEditSharpConfigurationHost>(MainViewModel.Host);
+            IocContainer.RegisterInstance<IList<string>>(MainViewModel.ErrorMessages);
+
+            MainViewModel.Workspace = IocContainer.Resolve<CsvEditSharpWorkspace>();
+
+            MainViewModel.ConfigurationDoc = new TextDocument(StringTextSource.Empty);
+            MainViewModel.QueryDoc = new TextDocument(new StringTextSource("Query<FieldData>( records => records.Where(row => true));"));
+
+            MainViewModel.CurrentFilePath = string.Empty;
+            MainViewModel.CurrentFileName = "(Empty)";
+            MainViewModel.CurrentConfigName = "(Empty)";
+            MainViewModel.SelectedTemplate = MainViewModel.ConfigFileTemplates.First();
+            MainViewModel.SelectedTab = 0;
 
             return MainWindow;
         }
