@@ -36,7 +36,7 @@ namespace CsvEditSharp.Commands
                 }
                 MainViewModel.CurrentConfigName = Path.GetFileName(fileName);
                 CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
-                CsvConfigFileManager.Default.SaveConfigFile(MainViewModel.ConfigurationDoc.Text);
+                CsvConfigFileManager.Default.SaveConfigFile(MainViewModel.ConfigurationDoc.Text, service.Result.TemplateName);
             }
         }
     }

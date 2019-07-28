@@ -97,9 +97,11 @@ namespace CsvEditSharp.Csv
             return Path.Combine(ConfigFileDirectory, templateName + ".config.csx");
         }
 
-        public void SaveConfigFile(string configText)
+        public void SaveConfigFile(string configText, string templateName=null)
         {
             File.WriteAllText(CurrentConfigFilePath, configText);
+            if (templateName!=null && !SettingsList.Contains(templateName))
+                SettingsList.Add(templateName);
         }
 
         public bool CanRemove(string name)

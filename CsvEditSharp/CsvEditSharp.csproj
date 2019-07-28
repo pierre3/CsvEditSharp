@@ -229,6 +229,7 @@
     <Compile Include="Commands\SaveConfigCommand.cs" />
     <Compile Include="Commands\WriteCsvCommand.cs" />
     <Compile Include="Extensions\EnumerableExtension.cs" />
+    <Compile Include="Extensions\ObjectExtension.cs" />
     <Compile Include="Interfaces\IConfigFileManager.cs" />
     <Compile Include="Enums\RegisterClassMapTarget.cs" />
     <Compile Include="Converters\CustomBooleanConverter.cs" />

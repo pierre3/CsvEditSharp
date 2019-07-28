@@ -18,7 +18,7 @@ namespace CsvEditSharp.Commands
 
         public override void Execute(object parameter)
         {
-            CsvConfigFileManager.Default.SaveConfigFile(MainViewModel.ConfigurationDoc.Text);
+            CsvConfigFileManager.Default.SaveConfigFile(MainViewModel.ConfigurationDoc.Text, null);
         }
     }
 }

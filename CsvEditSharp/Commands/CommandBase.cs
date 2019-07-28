@@ -15,10 +15,7 @@ namespace CsvEditSharp.Commands
 
         [Dependency] public IMainViewModel ViewModel { get; set; }
 
-        [Dependency] public IMainWindow Window { get; set; }
-
         [Dependency] public StartupEventArgs StartupArgs { get; set; }
-
 
 
         public virtual bool CanExecute(object parameter) { return true; }

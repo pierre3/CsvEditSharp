@@ -1,4 +1,5 @@
-﻿using CsvEditSharp.Interfaces;
+﻿using CsvEditSharp.Extensions;
+using CsvEditSharp.Interfaces;
 using CsvEditSharp.ViewModels;
 using CsvEditSharp.Views;
 using Unity;
@@ -7,15 +8,15 @@ namespace CsvEditSharp.Services
 {
     class ConfigSettingsDialogService : IModalDialogService
     {
-        [Dependency] public ConfigSettingsDialogViewModel DialogViewModel { get; set; }
+        [Dependency] public IUnityContainer IocContainer { get; set; }
 
-        [Dependency] public ConfigSettingsDialog Dialog { get; set; }
+        [Dependency] public ConfigSettingsDialogViewModel DialogViewModel { get; set; }
 
         public bool? ShowModal()
         {
-            Dialog.Owner = App.Current.MainWindow;
-            Dialog.DataContext = DialogViewModel;
-            return Dialog.ShowDialog();               
+            IocContainer.ShowDialog<ConfigSettingsDialog>(DialogViewModel);
+            return false;
         }
+
     }
 }
