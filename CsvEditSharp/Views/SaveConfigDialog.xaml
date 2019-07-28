@@ -3,30 +3,34 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CsvEditSharp.Views"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner"
-        Title="Save As" Height="200" Width="360" WindowStyle="ToolWindow">
-    <Grid Margin="8">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="auto"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <StackPanel>
-            <RadioButton Margin="2,8,2,2" GroupName="radioGroup1" IsChecked="{Binding IsTemplate}">Save as a new file</RadioButton>
-            <StackPanel Orientation="Horizontal" Margin="16,0,0,0">
-                <Label>Config Name</Label>
-                <TextBox x:Name="templateNameTextBox" Width="200" 
+        Title="Save As" Height="200" Width="360" 
+        Style="{StaticResource CustomWindow}">
+
+    <Border BorderThickness="5" BorderBrush="AliceBlue">
+
+        <Grid Margin="8">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <StackPanel>
+                <RadioButton Margin="2,8,2,2" GroupName="radioGroup1" IsChecked="{Binding IsTemplate}">Save as a new file</RadioButton>
+                <StackPanel Orientation="Horizontal" Margin="16,0,0,0">
+                    <Label>Config Name</Label>
+                    <TextBox x:Name="templateNameTextBox" Width="200" 
                          Text="{Binding TemplateName, UpdateSourceTrigger=PropertyChanged}" />
-            </StackPanel>
-            <RadioButton Margin="2,8" GroupName="radioGroup1">Save into the current directory as "Default.config.csx"</RadioButton>
-            <TextBlock Margin="2" 
+                </StackPanel>
+                <RadioButton Margin="2,8" GroupName="radioGroup1">Save into the current directory as "Default.config.csx"</RadioButton>
+                <TextBlock Margin="2" 
                        Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
                        Foreground="Red" />
-        </StackPanel>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="4,8" 
-                    HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button Margin="4" Width="90" IsCancel="True">Cancel</Button>
-            <Button Margin="4" Width="90" IsDefault="True" Click="Button_Click" Command="{Binding ApplyCommand}">OK</Button>
-        </StackPanel>
-    </Grid>
+            </StackPanel>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="4,8" 
+                    HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button Margin="4" Width="90" IsDefault="True" Click="Button_Click" Command="{Binding ApplyCommand}">OK</Button>
+                <Button Margin="4" Width="90" IsCancel="True">Cancel</Button>
+            </StackPanel>
+        </Grid>
+    </Border>
 </Window>

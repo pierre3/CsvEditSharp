@@ -6,6 +6,18 @@
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="visibilityConverter"/>
 
+            <Style x:Key="CustomWindow" TargetType="{x:Type Window}">
+                <Setter Property="WindowStyle" Value="None"/>
+                <Setter Property="AllowsTransparency" Value="True"/>
+                <Setter Property="MinWidth" Value="100"/>
+                <Setter Property="MinHeight" Value="46"/>
+                <!--CaptionHeight + ResizeBorderThickness * 2-->
+                <Setter Property="Background" Value="LightSteelBlue"/>
+                <Setter Property="BorderBrush" Value="DarkGray"/>
+                <Setter Property="BorderThickness" Value="5"/>
+                <Setter Property="Foreground" Value="DarkRed"/>
+            </Style>
+            
             <ContextMenu x:Key="configListContextMenu">
                 <MenuItem Header="Delete" Command="{Binding DeleteTemplateCommand}"/>
             </ContextMenu>

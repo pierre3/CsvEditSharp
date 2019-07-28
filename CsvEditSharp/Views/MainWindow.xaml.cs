@@ -13,5 +13,15 @@ namespace CsvEditSharp
         {
             InitializeComponent();
         }
+
+        private void ResetQueryCommand_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Title="CSV Edit♯" 
         Height="auto" Width="auto" 
-        Icon="/CsvEditSharp;component/CsvEditSharp.ico">
+        Icon="/CsvEditSharp;component/CsvEditSharp.ico"
+        Style="{StaticResource CustomWindow}">
 
     <Grid Margin="8">
         <Grid.Resources>
@@ -22,18 +23,25 @@
         </Grid.RowDefinitions>
 
         <!-- ToolBar -->
-        <ToolBarTray Grid.Row="0">
-            <ToolBar>
-                <Label Margin="2,0">Configuration Script</Label>
-                <ComboBox Width="160" x:Name="configTemplateComboBox" 
-                          ContextMenu="{StaticResource configListContextMenu}"
-                          ItemsSource="{Binding ConfigFileTemplates}"
-                          SelectedItem="{Binding SelectedTemplate}"/>
-                <Button x:Name="ReadCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Open">&#xE1A5;</Button>
-                <Separator Margin="2,0"/>
-                <Button x:Name="WriteCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Save As">&#xE105;</Button>
-            </ToolBar>
-        </ToolBarTray>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+            <ToolBarTray Grid.Row="0">
+                <ToolBar>
+                    <Label Margin="2,0">Configuration Script</Label>
+                    <ComboBox Width="160" x:Name="configTemplateComboBox" 
+                              ContextMenu="{StaticResource configListContextMenu}"
+                              ItemsSource="{Binding ConfigFileTemplates}"
+                              SelectedItem="{Binding SelectedTemplate}"/>
+                    <Button x:Name="ReadCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Open">&#xE1A5;</Button>
+                    <Separator Margin="2,0"/>
+                    <Button x:Name="WriteCsvCommand" Style="{DynamicResource ButtonCommand}" ToolTip="Save As">&#xE105;</Button>
+                </ToolBar>
+            </ToolBarTray>
+            <Button Margin="3,0" Background="AliceBlue" Grid.Column="1" IsCancel="True" Click="Button_Click">X</Button>
+        </Grid>
 
         <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" >
             <!-- CSV Editor Tab Page -->
