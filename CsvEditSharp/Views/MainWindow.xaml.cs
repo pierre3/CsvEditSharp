@@ -22,6 +22,9 @@ namespace CsvEditSharp
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Close();
+
+            // Force shutdown (in case we have dangling references)
+            Application.Current.Shutdown(); 
         }
     }
 }
