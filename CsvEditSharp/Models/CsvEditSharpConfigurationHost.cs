@@ -13,16 +13,15 @@ namespace CsvEditSharp.Models
 {
     public class CsvEditSharpConfigurationHost : ICsvEditSharpConfigurationHost
     {
-        private Action<CsvConfiguration> configurationSetter;
-
+        private Action<Configuration> configurationSetter;
         private Type recordType;
         private IList<object> itemsSource;
         private Func<IEnumerable<object>, IEnumerable<object>> query;
 
         public IEnumerable<object> Records { get; private set; }
-        public CsvClassMap ClassMapForReading { get; private set; }
+        public ClassMap ClassMapForReading { get; private set; }
 
-        public CsvClassMap ClassMapForWriting { get; private set; }
+        public ClassMap ClassMapForWriting { get; private set; }
 
         public Encoding Encoding { get; set; }
 
@@ -38,12 +37,12 @@ namespace CsvEditSharp.Models
             recordType = typeof(T);
         }
 
-        public void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter)
+        public void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter)
         {
             RegisterClassMap<T>(propertyMapSetter, RegisterClassMapTarget.Both);
         }
 
-        public void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter, RegisterClassMapTarget target)
+        public void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter, RegisterClassMapTarget target)
         {
             recordType = typeof(T);
             if (propertyMapSetter != null)
@@ -65,7 +64,7 @@ namespace CsvEditSharp.Models
             }
         }
 
-        public void SetConfiguration(Action<CsvConfiguration> configurationSetter)
+        public void SetConfiguration(Action<Configuration> configurationSetter)
         {
             this.configurationSetter = configurationSetter;
         }
@@ -98,7 +97,7 @@ namespace CsvEditSharp.Models
         {
             using (var reader = new CsvReader(baseReader))
             {
-                configurationSetter?.Invoke(reader.Configuration);
+                configurationSetter?.Invoke(reader.Configuration as Configuration);
                 if (ClassMapForReading != null)
                 {
                     reader.Configuration.RegisterClassMap(ClassMapForReading);
@@ -115,10 +114,10 @@ namespace CsvEditSharp.Models
         {
             using (var writer = new CsvWriter(baseWriter))
             {
-                configurationSetter?.Invoke(writer.Configuration);
+                configurationSetter?.Invoke(writer.Configuration as Configuration);
                 if (ClassMapForWriting != null)
                 {
-                    var booleanMaps = ClassMapForWriting.PropertyMaps
+                    var booleanMaps = ClassMapForWriting.MemberMaps
                         .Where(map => map.Data.TypeConverter is BooleanConverter);
                     foreach(var map in booleanMaps)
                     {
@@ -164,9 +163,9 @@ namespace CsvEditSharp.Models
 
         }
 
-        private class AnonimousCsvClassMap<T> : CsvClassMap<T>
+        private class AnonimousCsvClassMap<T> : ClassMap<T>
         {
-            public AnonimousCsvClassMap(Action<CsvClassMap<T>> propertyMapSetter)
+            public AnonimousCsvClassMap(Action<ClassMap<T>> propertyMapSetter)
             {
                 propertyMapSetter(this);
             }

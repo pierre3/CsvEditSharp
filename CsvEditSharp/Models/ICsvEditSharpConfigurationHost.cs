@@ -9,17 +9,17 @@ namespace CsvEditSharp.Models
     public interface ICsvEditSharpConfigurationHost
     {
         Encoding Encoding { get; set; }
-        CsvClassMap ClassMapForReading { get; }
-        CsvClassMap ClassMapForWriting { get; }
+        ClassMap ClassMapForReading { get; }
+        ClassMap ClassMapForWriting { get; }
         IDictionary<string, ColumnValidation> ColumnValidations { get; }
 
         void RegisterClassMap<T>();
 
-        void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter);
+        void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter);
 
-        void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter, RegisterClassMapTarget target);
+        void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter, RegisterClassMapTarget target);
 
-        void SetConfiguration(Action<CsvConfiguration> configurationSetter);
+        void SetConfiguration(Action<Configuration> configurationSetter);
 
         void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
 

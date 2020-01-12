@@ -1,14 +1,18 @@
 ﻿using System.Linq;
+using CsvHelper;
+using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
 
 namespace CsvEditSharp.Models
 {
     public class CustomBooleanConverter : BooleanConverter
     {
-        public override string ConvertToString(TypeConverterOptions options, object value)
+        public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
         {
+            
             if (!(value is bool)) { return null; }
             var b = (bool)value;
+            var options = memberMapData.TypeConverterOptions;
             if (options != null)
             {
                 var trueString = options.BooleanTrueValues.FirstOrDefault();
@@ -28,7 +32,7 @@ namespace CsvEditSharp.Models
                     }
                 }
             }
-            return base.ConvertToString(options, value);
+            return base.ConvertToString(value,row,memberMapData);
         }
     }
 }

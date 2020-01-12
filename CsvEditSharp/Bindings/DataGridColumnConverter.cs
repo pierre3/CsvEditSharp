@@ -1,4 +1,5 @@
-﻿using CsvHelper.TypeConversion;
+﻿using CsvHelper.Configuration;
+using CsvHelper.TypeConversion;
 using System;
 using System.Globalization;
 using System.Windows;
@@ -10,14 +11,15 @@ namespace CsvEditSharp.Bindings
     {
 
         private ITypeConverter typeConverter;
-        private TypeConverterOptions converterOptions;
-
+        private MemberMapData memberMapData;
         public string HeaderName { get; }
         
-        public DataGridColumnConverter(string headerName, ITypeConverter converter, TypeConverterOptions options)
+        public DataGridColumnConverter(MemberMapData mapData)
         {
+            var headerName = mapData.Names[mapData.NameIndex];
+            var converter = mapData.TypeConverter;
             typeConverter = converter ?? new DefaultTypeConverter();
-            converterOptions = options ?? new TypeConverterOptions();
+            memberMapData = mapData;
             HeaderName = headerName;
         }
 
@@ -26,7 +28,7 @@ namespace CsvEditSharp.Bindings
             if (targetType != typeof(string)) { return value; }
             try
             {
-                return typeConverter.ConvertToString(converterOptions, value);
+                return typeConverter.ConvertToString(value, null, memberMapData);
             }
             catch
             {
@@ -40,7 +42,7 @@ namespace CsvEditSharp.Bindings
             if (oldValue == null) { return value; }
             try
             {
-                return typeConverter.ConvertFromString(converterOptions, oldValue);
+                return typeConverter.ConvertFromString(oldValue, null, memberMapData);
             }
             catch
             {
