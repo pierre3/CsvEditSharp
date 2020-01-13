@@ -12,10 +12,12 @@
 
     <Window.Resources>
         <bindings:EncodingInfoToStringConverter x:Key="encodingConverter"/>
+        <bindings:CultureInfoToStringConverter x:Key="cultureInfoConverter"/>
     </Window.Resources>
 
     <Grid Margin="12">
         <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
@@ -43,7 +45,13 @@
         <TextBlock Margin="2" Grid.Row="3" Grid.ColumnSpan="2" 
                        Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
                        Foreground="Red" />
-        <StackPanel Grid.Row="4" Grid.ColumnSpan="2" 
+        <Label Grid.Row="3" Content="Culture Info"/>
+        <ComboBox Grid.Row="3" Grid.Column="1" Margin="2,4" 
+                  IsEditable="False"
+                  SelectedIndex="{Binding CultureInfoIndex}" 
+                  ItemsSource="{Binding CultureInfoList, Converter={StaticResource cultureInfoConverter}}"/>
+
+        <StackPanel Grid.Row="5" Grid.ColumnSpan="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
             <Button Padding="2" Margin="8,0" Width="90" IsCancel="True">Cancel</Button>
             <Button Padding="2" Margin="8,0" Width="90" IsDefault="True" 

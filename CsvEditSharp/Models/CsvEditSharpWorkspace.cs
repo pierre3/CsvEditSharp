@@ -48,7 +48,10 @@ namespace CsvEditSharp.Models
                         "System.Globalization",
                         "System.Text",
                         "CsvHelper.Configuration",
+                        "CsvHelper.Configuration.Attributes",
                         "CsvHelper",
+                        "CsvHelper.TypeConversion",
+                        "CsvHelper.Expressions",
                         "CsvEditSharp.Models"),
                     typeof(ICsvEditSharpConfigurationHost));
 

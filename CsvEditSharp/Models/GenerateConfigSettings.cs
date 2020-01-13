@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 namespace CsvEditSharp.Models
 {
@@ -7,6 +8,7 @@ namespace CsvEditSharp.Models
         public string TemplateName { get; set; } = string.Empty;
 
         public Encoding TargetFileEncoding { get; set; }
+        public CultureInfo CaltureInfo { get; set; }
 
         public string TargetFileEncodingName
         {

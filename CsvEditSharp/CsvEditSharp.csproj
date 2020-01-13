@@ -291,6 +291,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Bindings\CultureInfoToStringConverter.cs" />
     <Compile Include="Models\CustomBooleanConverter.cs" />
     <Compile Include="Models\EnumerableExt.cs" />
     <Compile Include="Models\SaveConfigSettings.cs" />

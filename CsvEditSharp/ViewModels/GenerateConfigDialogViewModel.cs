@@ -1,11 +1,12 @@
 ﻿using CsvEditSharp.Bindings;
 using CsvEditSharp.Models;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Input;
-
+using System.Collections.ObjectModel;
 namespace CsvEditSharp.ViewModels
 {
     public class GenerateConfigDialogViewModel : ErrorNotificationBindableBase
@@ -15,8 +16,12 @@ namespace CsvEditSharp.ViewModels
         public static IReadOnlyList<EncodingInfo> Encodings { get; }
             = Encoding.GetEncodings();
 
+        public static IReadOnlyList<CultureInfo> CultureInfoList { get; }
+            = CultureInfo.GetCultures(CultureTypes.SpecificCultures);
+        
         private string _templateName = "NewCSVConfigTemplate";
         private int _targetEncodingIndex;
+        private int _cultureInfoIndex;
         private bool _hasHeaderRecord;
 
         public string TemplateName
@@ -37,6 +42,12 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _targetEncodingIndex, value); }
         }
 
+        public int CultureInfoIndex
+        {
+            get { return _cultureInfoIndex; }
+            set { SetProperty(ref _cultureInfoIndex, value); }
+        }
+
         public bool HasHeaderRecord
         {
             get { return _hasHeaderRecord; }
@@ -51,6 +62,9 @@ namespace CsvEditSharp.ViewModels
                 .Select((x, i) => new { Info = x, Index = i })
                 .FirstOrDefault(a => a.Info.CodePage == Encoding.UTF8.CodePage)?.Index ?? 0;
 
+            CultureInfoIndex = CultureInfoList
+                .Select((x, i) => new { Info = x, Index = i })
+                .FirstOrDefault(a => a.Info.LCID == CultureInfo.CurrentCulture.LCID)?.Index ?? 0;
             HasHeaderRecord = true;
         }
 
@@ -60,6 +74,7 @@ namespace CsvEditSharp.ViewModels
             {
                 TemplateName = TemplateName,
                 TargetFileEncoding = Encodings[TargetEncodingIndex].GetEncoding(),
+                CaltureInfo = CultureInfoList[CultureInfoIndex],
                 HasHeaderRecord = HasHeaderRecord
             };
         }

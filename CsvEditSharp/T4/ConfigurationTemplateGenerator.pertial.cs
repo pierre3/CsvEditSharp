@@ -1,6 +1,7 @@
 ﻿using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace CsvEditSharp.T4
@@ -10,20 +11,22 @@ namespace CsvEditSharp.T4
         private IEnumerable<PropertyDefs> Prop { get; }
         private bool HasHeaders { get; }
         private string EncodingName { get; }
-        public ConfigurationTemplateGenerator(string encodingName, IEnumerable<string> firstRow, IEnumerable<string> headers = null)
+        private CultureInfo CultureInfo { get; }
+        public ConfigurationTemplateGenerator(string encodingName, CultureInfo cultureInfo, IEnumerable<string> firstRow, IEnumerable<string> headers = null)
         {
             if (firstRow == null) { throw new ArgumentNullException(nameof(firstRow)); }
 
             EncodingName = encodingName;
             HasHeaders = headers != null;
-
+            CultureInfo = cultureInfo?? CultureInfo.CurrentCulture;
             Prop = firstRow.Select(field => FieldToTypeName(field))
                 .Zip(GenerateColumnDefs(headers), (type, defs) =>
                     new PropertyDefs
                     {
                         Column = defs,
                         Name = IsIdentifier(defs.Name) ? defs.Name : $"column_{ defs.Index}",
-                        Type = type
+                        Type = type,
+                        CultureInfo = CultureInfo
                     });
         }
 
@@ -60,25 +63,21 @@ namespace CsvEditSharp.T4
 
         private string FieldToTypeName(string field)
         {
-            /* 
-            bool b;
-            if (bool.TryParse(field, out b))
+            if (field.ToLower() == "true" || field.ToLower() == "false")
             {
                 return "bool";
             }
 
-            DateTime dt;
-            if (DateTime.TryParse(field, out dt))
+            if (DateTime.TryParse(field,CultureInfo, DateTimeStyles.None , out DateTime _))
             {
                 return "DateTime";
             }
 
-            double d;
-            if (double.TryParse(field, out d))
+            if (decimal.TryParse(field,NumberStyles.Any, CultureInfo, out decimal _))
             {
-                return "double";
+                return "decimal";
             }
-            */
+            
             return "string";
         }
 
@@ -93,6 +92,7 @@ namespace CsvEditSharp.T4
             public ColumnDefs Column { get; set; }
             public string Name { get; set; }
             public string Type { get; set; }
+            public CultureInfo CultureInfo { get;set; }
 
         }
     }
