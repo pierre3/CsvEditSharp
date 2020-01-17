@@ -8,20 +8,28 @@ Encoding = Encoding.GetEncoding("<#= EncodingName #>");
 class FieldData
 {
 <# foreach(var p in Prop) { #>
-	public <#= p.Type #> <#= p.Name #> { get; set; }
+<# var isNullable = false; #>
+<# if( p.Type == "DateTime" ){ 
+	isNullable = true;
+#>
+	[CultureInfo("<#= p.CultureInfo.Name #>")]
+<# } #>
+<# if( p.Type == "decimal" ) { 
+	isNullable = true;
+#>
+	[CultureInfo("<#= p.CultureInfo.Name #>")]
+	[NumberStyles(NumberStyles.Any)] 
+<# } #>
+<# if( p.Column.Name == null ) { #>
+	[Index(<#= p.Column.Index #>)]
+<# } #>
+	public <#= p.Type #><#= isNullable? "?" : "" #> <#= p.Name #> { get; set; }
 <# } #>
 }
 
 RegisterClassMap<FieldData>(classMap =>
 {
-<# foreach(var p in Prop) { 
-	if (p.Column.Name == null) { 
-#>
-	classMap.Map(m => m.<#= p.Name #>).Index(<#= p.Column.Index #>);
-<# } else { #>
-    classMap.Map(m => m.<#= p.Name #>).Name("<#= p.Column.Name #>");
-<# } 
-} #>
+	classMap.AutoMap();
 });
 
 SetConfiguration(config=>
@@ -31,7 +39,4 @@ SetConfiguration(config=>
 <# } else { #>
 	config.HasHeaderRecord = false;
 <# } #>
-	//config.AllowComments = true;
-	//config.Comment = '#';
-	//config.Delimiter = ',';
 });

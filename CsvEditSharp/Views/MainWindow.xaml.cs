@@ -99,7 +99,7 @@ namespace CsvEditSharp
             completionWindow = new CompletionWindow(editor.TextArea);
             IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
 
-            var position = editor.TextArea.Caret.Offset + 1;
+            var position = editor.TextArea.Caret.Offset;
             var code = editor.Document.Text + " ";
             if (editor == queryEdit)
             {

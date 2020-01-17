@@ -263,14 +263,18 @@ namespace CsvEditSharp.ViewModels
             var openFileService = _viewService.OpenFileSelectionService;
             CurrentFilePath = openFileService.SelectFile("Select a CSV File", CsvFileFilter, null);
             if (!File.Exists(CurrentFilePath)) { return; }
+            try
+            {
+                var configText = CsvConfigFileManager.Default.GetCsvConfigString(CurrentFilePath, _selectedTemplate);
 
-            var configText = CsvConfigFileManager.Default.GetCsvConfigString(CurrentFilePath, _selectedTemplate);
-
-            CurrentConfigName = Path.GetFileName(CsvConfigFileManager.Default.CurrentConfigFilePath);
-            CurrentFileName = Path.GetFileName(CurrentFilePath);
-
-            ConfigurationDoc.Text = configText;
-
+                CurrentConfigName = Path.GetFileName(CsvConfigFileManager.Default.CurrentConfigFilePath);
+                CurrentFileName = Path.GetFileName(CurrentFilePath);
+                ConfigurationDoc.Text = configText;
+            }
+            catch(Exception e)
+            {
+                ErrorMessages.Add(e.ToString());
+            }
             await RunConfigurationAsync();
         }
 

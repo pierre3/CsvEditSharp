@@ -20,6 +20,8 @@ namespace CsvEditSharp.Models
         }
 
         public bool HasHeaderRecord { get; set; }
+
+        public bool AutoTypeDetection { get; set; }
     }
     
 }

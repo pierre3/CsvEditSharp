@@ -23,6 +23,7 @@ namespace CsvEditSharp.ViewModels
         private int _targetEncodingIndex;
         private int _cultureInfoIndex;
         private bool _hasHeaderRecord;
+        private bool _autoTypeDetection;
 
         public string TemplateName
         {
@@ -54,6 +55,12 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _hasHeaderRecord, value); }
         }
 
+        public bool AutoTypeDetection
+        {
+            get { return _autoTypeDetection; }
+            set { SetProperty(ref _autoTypeDetection, value); }
+        }
+
         public GenerateConfigDialogViewModel()
         {
             ApplyCommand = new DelegateCommand(_ => Apply(), _ => !string.IsNullOrWhiteSpace(TemplateName) && !HasErrors);
@@ -66,6 +73,7 @@ namespace CsvEditSharp.ViewModels
                 .Select((x, i) => new { Info = x, Index = i })
                 .FirstOrDefault(a => a.Info.LCID == CultureInfo.CurrentCulture.LCID)?.Index ?? 0;
             HasHeaderRecord = true;
+            AutoTypeDetection = true;
         }
 
         private void Apply()
@@ -75,7 +83,8 @@ namespace CsvEditSharp.ViewModels
                 TemplateName = TemplateName,
                 TargetFileEncoding = Encodings[TargetEncodingIndex].GetEncoding(),
                 CaltureInfo = CultureInfoList[CultureInfoIndex],
-                HasHeaderRecord = HasHeaderRecord
+                HasHeaderRecord = HasHeaderRecord,
+                AutoTypeDetection = AutoTypeDetection
             };
         }
         

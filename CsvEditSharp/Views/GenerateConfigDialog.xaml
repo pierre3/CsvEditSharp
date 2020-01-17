@@ -34,14 +34,15 @@
         <TextBox x:Name="templateNameTextBox" Grid.Row="0" Grid.Column="1" Margin="2,4"
                  Text="{Binding TemplateName,UpdateSourceTrigger=PropertyChanged}"/>
 
-        <Label Grid.Row="1" Content="Target File Encoding"/>
-        <ComboBox Grid.Row="1" Grid.Column="1" Margin="2,4" 
+        <StackPanel Margin="2,4" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
+        <CheckBox IsChecked="{Binding HasHeaderRecord}">Has header record</CheckBox>
+        <CheckBox Margin="16,0" IsChecked="{Binding AutoTypeDetection}">Auto type detection</CheckBox>
+        </StackPanel>
+        <Label Grid.Row="2" Content="Target File Encoding"/>
+        <ComboBox Grid.Row="2" Grid.Column="1" Margin="2,4" 
                   IsEditable="False"
                   SelectedIndex="{Binding TargetEncodingIndex}" 
                   ItemsSource="{Binding Encodings, Converter={StaticResource encodingConverter}}"/>
-
-        <CheckBox Grid.Row="2" Grid.Column="1" Margin="2,4"
-                  IsChecked="{Binding HasHeaderRecord}">Has header record</CheckBox>
         <TextBlock Margin="2" Grid.Row="3" Grid.ColumnSpan="2" 
                        Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
                        Foreground="Red" />

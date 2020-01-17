@@ -12,7 +12,8 @@ namespace CsvEditSharp.T4
         private bool HasHeaders { get; }
         private string EncodingName { get; }
         private CultureInfo CultureInfo { get; }
-        public ConfigurationTemplateGenerator(string encodingName, CultureInfo cultureInfo, IEnumerable<string> firstRow, IEnumerable<string> headers = null)
+        private bool AutoTypeDetection { get; }
+        public ConfigurationTemplateGenerator(string encodingName, CultureInfo cultureInfo, bool autoTypeDetection, IEnumerable<string> firstRow, IEnumerable<string> headers = null)
         {
             if (firstRow == null) { throw new ArgumentNullException(nameof(firstRow)); }
 
@@ -28,8 +29,9 @@ namespace CsvEditSharp.T4
                         Type = type,
                         CultureInfo = CultureInfo
                     });
+            AutoTypeDetection = autoTypeDetection;
         }
-
+        
         private IEnumerable<ColumnDefs> GenerateColumnDefs(IEnumerable<string> headers)
         {
             var i = 0;
@@ -63,6 +65,7 @@ namespace CsvEditSharp.T4
 
         private string FieldToTypeName(string field)
         {
+            if (!AutoTypeDetection) { return "string"; }
             if (field.ToLower() == "true" || field.ToLower() == "false")
             {
                 return "bool";

@@ -18,7 +18,7 @@ namespace CsvEditSharp.T4
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+    #line 1 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
     public partial class ConfigurationTemplateGenerator : ConfigurationTemplateGeneratorBase
     {
@@ -30,114 +30,138 @@ namespace CsvEditSharp.T4
         {
             this.Write("Encoding = Encoding.GetEncoding(\"");
             
-            #line 6 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 6 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(EncodingName));
             
             #line default
             #line hidden
             this.Write("\");\r\n\r\nclass FieldData\r\n{\r\n");
             
-            #line 10 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 10 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
  foreach(var p in Prop) { 
+            
+            #line default
+            #line hidden
+            
+            #line 11 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ var isNullable = false; 
+            
+            #line default
+            #line hidden
+            
+            #line 12 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ if( p.Type == "DateTime" ){ 
+	isNullable = true;
+
+            
+            #line default
+            #line hidden
+            this.Write("\t[CultureInfo(\"");
+            
+            #line 15 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(p.CultureInfo.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\")]\r\n");
+            
+            #line 16 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ } 
+            
+            #line default
+            #line hidden
+            
+            #line 17 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ if( p.Type == "decimal" ) { 
+	isNullable = true;
+
+            
+            #line default
+            #line hidden
+            this.Write("\t[CultureInfo(\"");
+            
+            #line 20 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(p.CultureInfo.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\")]\r\n\t[NumberStyles(NumberStyles.Any)] \r\n");
+            
+            #line 22 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ } 
+            
+            #line default
+            #line hidden
+            
+            #line 23 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ if( p.Column.Name == null ) { 
+            
+            #line default
+            #line hidden
+            this.Write("\t[Index(");
+            
+            #line 24 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(p.Column.Index));
+            
+            #line default
+            #line hidden
+            this.Write(")]\r\n");
+            
+            #line 25 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ } 
             
             #line default
             #line hidden
             this.Write("\tpublic ");
             
-            #line 11 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 26 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(p.Type));
+            
+            #line default
+            #line hidden
+            
+            #line 26 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(isNullable? "?" : ""));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 11 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 26 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(p.Name));
             
             #line default
             #line hidden
             this.Write(" { get; set; }\r\n");
             
-            #line 12 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 27 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("}\r\n\r\nRegisterClassMap<FieldData>(classMap =>\r\n{\r\n");
+            this.Write("}\r\n\r\nRegisterClassMap<FieldData>(classMap =>\r\n{\r\n\tclassMap.AutoMap();\r\n});\r\n\r\nSet" +
+                    "Configuration(config=>\r\n{\r\n");
             
-            #line 17 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
- foreach(var p in Prop) { 
-	if (p.Column.Name == null) { 
-
-            
-            #line default
-            #line hidden
-            this.Write("\tclassMap.Map(m => m.");
-            
-            #line 20 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(p.Name));
-            
-            #line default
-            #line hidden
-            this.Write(").Index(");
-            
-            #line 20 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(p.Column.Index));
-            
-            #line default
-            #line hidden
-            this.Write(");\r\n");
-            
-            #line 21 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
- } else { 
-            
-            #line default
-            #line hidden
-            this.Write("    classMap.Map(m => m.");
-            
-            #line 22 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(p.Name));
-            
-            #line default
-            #line hidden
-            this.Write(").Name(\"");
-            
-            #line 22 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(p.Column.Name));
-            
-            #line default
-            #line hidden
-            this.Write("\");\r\n");
-            
-            #line 23 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
- } 
-} 
-            
-            #line default
-            #line hidden
-            this.Write("});\r\n\r\nSetConfiguration(config=>\r\n{\r\n");
-            
-            #line 29 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 37 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
  if( HasHeaders ){ 
             
             #line default
             #line hidden
             this.Write("\t//config.HasHeaderRecord = true;\r\n");
             
-            #line 31 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 39 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
  } else { 
             
             #line default
             #line hidden
             this.Write("\tconfig.HasHeaderRecord = false;\r\n");
             
-            #line 33 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 41 "D:\git\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
  } 
             
             #line default
             #line hidden
-            this.Write("\t//config.AllowComments = true;\r\n\t//config.Comment = \'#\';\r\n\t//config.Delimiter = " +
-                    "\',\';\r\n});");
+            this.Write("});");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -136,7 +136,7 @@ namespace CsvEditSharp.Models
             SettingsList.Remove(oldName);
         }
 
-        private string GenerateCsvConfigText(string targetFilePath, Encoding targetFileEncoding, CultureInfo cultureInfo, bool hasHeaders)
+        private string GenerateCsvConfigText(string targetFilePath, Encoding targetFileEncoding, CultureInfo cultureInfo, bool hasHeaders, bool autoTypeDetection)
         {
             using (var reader = new StreamReader(targetFilePath, targetFileEncoding))
             {
@@ -147,7 +147,7 @@ namespace CsvEditSharp.Models
                     headers = parser.Read();
                 }
                 var row = parser.Read();
-                var config = new T4.ConfigurationTemplateGenerator(targetFileEncoding.WebName, cultureInfo ,row, headers);
+                var config = new T4.ConfigurationTemplateGenerator(targetFileEncoding.WebName, cultureInfo, autoTypeDetection ,row, headers);
 
                 return config.TransformText();
             }
@@ -166,7 +166,7 @@ namespace CsvEditSharp.Models
             }
 
             //Generate a CSV config template.
-            var configText = GenerateCsvConfigText(targetFilePath, newSettings.TargetFileEncoding, newSettings.CaltureInfo, newSettings.HasHeaderRecord);
+            var configText = GenerateCsvConfigText(targetFilePath, newSettings.TargetFileEncoding, newSettings.CaltureInfo, newSettings.HasHeaderRecord, newSettings.AutoTypeDetection);
             //Save to template file.
             var templateFilePath = Path.Combine(ConfigFileDirectory, newSettings.TemplateName + ".config.csx");
             File.WriteAllText(templateFilePath, configText);
