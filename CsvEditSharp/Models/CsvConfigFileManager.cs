@@ -140,7 +140,7 @@ namespace CsvEditSharp.Models
         {
             using (var reader = new StreamReader(targetFilePath, targetFileEncoding))
             {
-                var parser = new CsvHelper.CsvParser(reader);
+                var parser = new CsvHelper.CsvParser(reader, cultureInfo);
                 string[] headers = null;
                 if (hasHeaders)
                 {
@@ -148,7 +148,7 @@ namespace CsvEditSharp.Models
                 }
                 var row = parser.Read();
                 var config = new T4.ConfigurationTemplateGenerator(targetFileEncoding.WebName, cultureInfo, autoTypeDetection ,row, headers);
-
+               
                 return config.TransformText();
             }
         }

@@ -5,7 +5,7 @@
 <#@ import namespace="System.Collections.Generic" #>
 ICsvEditSharpConfigurationHost host = GetHost();
 Encoding = Encoding.GetEncoding("<#= EncodingName #>");
-
+CultureInfo = CultureInfo.GetCultureInfo("<#= CultureInfo.Name #>");
 class FieldData
 {
 <# foreach(var p in Prop) { #>
@@ -13,12 +13,10 @@ class FieldData
 <# if( p.Type == "DateTime" ){ 
 	isNullable = true;
 #>
-	[CultureInfo("<#= p.CultureInfo.Name #>")]
 <# } #>
 <# if( p.Type == "decimal" ) { 
 	isNullable = true;
 #>
-	[CultureInfo("<#= p.CultureInfo.Name #>")]
 	[NumberStyles(NumberStyles.Any)] 
 <# } #>
 <# if( p.Column.Name == null ) { #>
@@ -28,15 +26,12 @@ class FieldData
 <# } #>
 }
 
-host.RegisterClassMap<FieldData>(classMap =>
-{
-	classMap.AutoMap();
-});
+host.RegisterClassMap<FieldData>();
 
 host.SetConfiguration(config=>
 {
 <# if( HasHeaders ){ #>
-	//config.HasHeaderRecord = true;
+	//config.HasHeaderRecord = false;
 <# } else { #>
 	config.HasHeaderRecord = false;
 <# } #>

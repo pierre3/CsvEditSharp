@@ -1,6 +1,7 @@
 ﻿using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Text;
 
@@ -9,8 +10,13 @@ namespace CsvEditSharp.Models
     public interface ICsvEditSharpConfigurationHost
     {
         Encoding Encoding { get; set; }
+
+        CultureInfo CultureInfo { get; set; }
+
         ClassMap ClassMapForReading { get; }
+        
         ClassMap ClassMapForWriting { get; }
+        
         IDictionary<string, ColumnValidation> ColumnValidations { get; }
 
         ICsvEditSharpConfigurationHost GetHost();
@@ -21,7 +27,7 @@ namespace CsvEditSharp.Models
 
         void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter, RegisterClassMapTarget target);
 
-        void SetConfiguration(Action<Configuration> configurationSetter);
+        void SetConfiguration(Action<CsvConfiguration> configurationSetter);
 
         void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
 
