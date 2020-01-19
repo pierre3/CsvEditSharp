@@ -16,7 +16,6 @@ namespace CsvEditSharp.ViewModels
     public class MainWindowViewModel : BindableBase, IDisposable
     {
         private static readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
-
         private ObservableCollection<object> _csvRows;
         private ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
         private bool _hasErrorMessages = false;
@@ -231,7 +230,7 @@ namespace CsvEditSharp.ViewModels
             Workspace = new CsvEditSharpWorkspace(_host, _errorMessages);
 
             ConfigurationDoc = new TextDocument(StringTextSource.Empty);
-            QueryDoc = new TextDocument(new StringTextSource("Query<FieldData>( records => records.Where(row => true).OrderBy(row => row) );"));
+            QueryDoc = new TextDocument(new StringTextSource("host.Query<FieldData>( records => records.Where(row => true).OrderBy(row => row) );"));
 
             CurrentFilePath = string.Empty;
             CurrentFileName = "(Empty)";
@@ -274,6 +273,7 @@ namespace CsvEditSharp.ViewModels
             catch(Exception e)
             {
                 ErrorMessages.Add(e.ToString());
+                return;
             }
             await RunConfigurationAsync();
         }
@@ -313,6 +313,7 @@ namespace CsvEditSharp.ViewModels
                 {
                     _host.Write(writer, CsvRows);
                 }
+                _viewService.MessageDialogService.ShowModal($"Saved to \"{fileName}\".", "CSV Data Saving");
             }
             catch (Exception e)
             {
@@ -344,26 +345,33 @@ namespace CsvEditSharp.ViewModels
         private void SaveConfigFile()
         {
             CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
+            _viewService.MessageDialogService.ShowModal($"Overwrite to \"{CsvConfigFileManager.Default.CurrentConfigFilePath}\".", "Configuration Data Saving");
         }
 
         private void SaveConfigAs()
         {
-            var service = _viewService.SaveConfigDialogService;
-            if (true == service.ShowModal())
+            try
             {
-                var fileName = string.Empty;
-                if (service.Result.IsTemplate)
+                var service = _viewService.SaveConfigDialogService;
+                if (true == service.ShowModal())
                 {
-                    fileName = CsvConfigFileManager.Default.MakeCurrentConfigFilePath(service.Result.TemplateName);
+                    var fileName = string.Empty;
+                    if (service.Result.IsTemplate)
+                    {
+                        fileName = CsvConfigFileManager.Default.MakeCurrentConfigFilePath(service.Result.TemplateName);
+                    }
+                    else
+                    {
+                        fileName = Path.Combine(Path.GetDirectoryName(CurrentFilePath), "Default.config.csx");
+                    }
+                    CurrentConfigName = Path.GetFileName(fileName);
+                    CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
+                    CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
+                    _viewService.MessageDialogService.ShowModal($"Saved to \"{fileName}\".", "Configuration Data Saving");
                 }
-                else
-                {
-                    fileName = Path.Combine(Path.GetDirectoryName(CurrentFilePath), "Default.config.csx");
-                }
-                CurrentConfigName = Path.GetFileName(fileName);
-                CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
-                CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-
+            }catch(Exception e)
+            {
+                ErrorMessages.Add(e.ToString());
             }
         }
 

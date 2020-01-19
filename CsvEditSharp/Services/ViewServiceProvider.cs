@@ -9,7 +9,7 @@ namespace CsvEditSharp.Services
         private IModalDialogService<GenerateConfigSettings> _generateConfigDialogService;
         private IModalDialogService<SaveConfigSettings> _saveConfigDialogService;
         private IModalDialogService _configSettingsDialogService;
-
+        private IModalDialogService _messageDialogService;
         public IFileSelectionService OpenFileSelectionService
         {
             get
@@ -67,6 +67,18 @@ namespace CsvEditSharp.Services
                     _configSettingsDialogService = new ConfigSettingsDialogService();
                 }
                 return _configSettingsDialogService;
+            }
+        }
+
+        public IModalDialogService MessageDialogService
+        {
+            get
+            {
+                if(_messageDialogService == null)
+                {
+                    _messageDialogService = new MessageDialogService();
+                }
+                return _messageDialogService;
             }
         }
     }

@@ -2,7 +2,7 @@
 {
     public interface IModalDialogService
     {
-        bool? ShowModal();
+        bool? ShowModal(params object[] parameters);
     }
 
     public interface IModalDialogService<T> : IModalDialogService

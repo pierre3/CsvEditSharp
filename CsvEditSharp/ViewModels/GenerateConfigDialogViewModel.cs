@@ -61,8 +61,12 @@ namespace CsvEditSharp.ViewModels
             set { SetProperty(ref _autoTypeDetection, value); }
         }
 
-        public GenerateConfigDialogViewModel()
+        public GenerateConfigDialogViewModel(string templateName)
         {
+            if (!string.IsNullOrWhiteSpace(templateName))
+            {
+                TemplateName = templateName;
+            }
             ApplyCommand = new DelegateCommand(_ => Apply(), _ => !string.IsNullOrWhiteSpace(TemplateName) && !HasErrors);
         
             TargetEncodingIndex = Encodings
@@ -97,7 +101,7 @@ namespace CsvEditSharp.ViewModels
             }
             else if (CsvConfigFileManager.Default.SettingsList.Contains(TemplateName))
             {
-                AddErrorInfo(nameof(TemplateName), $"{TemplateName} is already exist.");
+                AddErrorInfo(nameof(TemplateName), $"\"{TemplateName}\" is already exist.");
             }
         }
         

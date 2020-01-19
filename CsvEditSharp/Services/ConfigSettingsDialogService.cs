@@ -5,7 +5,7 @@ namespace CsvEditSharp.Services
 {
     class ConfigSettingsDialogService : IModalDialogService
     {
-        public bool? ShowModal()
+        public bool? ShowModal(params object[] parameters)
         {
             var dialog = new ConfigSettingsDialog();
             dialog.Owner = App.Current.MainWindow;

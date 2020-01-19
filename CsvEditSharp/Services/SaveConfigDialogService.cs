@@ -7,7 +7,7 @@ namespace CsvEditSharp.Services
     public class SaveConfigDialogService : IModalDialogService<SaveConfigSettings>
     {
         public SaveConfigSettings Result { get; private set; }
-        public bool? ShowModal()
+        public bool? ShowModal(params object[] parameters)
         {
             var vm = new SaveConfigDialogViewModel();
             var dialog = new SaveConfigDialog();

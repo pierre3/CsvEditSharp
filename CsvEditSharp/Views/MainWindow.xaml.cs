@@ -40,7 +40,7 @@ namespace CsvEditSharp
         {
             if (VM == null) { return; }
             // Open code completion after the user has pressed dot:
-            if (e.Text == ".")
+            if (e.Text == "." || e.Text == "[")
             {
                 var textArea = sender as ICSharpCode.AvalonEdit.Editing.TextArea;
                 ICSharpCode.AvalonEdit.TextEditor editor = null;
@@ -99,7 +99,7 @@ namespace CsvEditSharp
             completionWindow = new CompletionWindow(editor.TextArea);
             IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
 
-            var position = editor.TextArea.Caret.Offset;
+            var position = editor.TextArea.Caret.Offset + 1;
             var code = editor.Document.Text + " ";
             if (editor == queryEdit)
             {

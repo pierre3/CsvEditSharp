@@ -13,6 +13,8 @@ namespace CsvEditSharp.Models
         ClassMap ClassMapForWriting { get; }
         IDictionary<string, ColumnValidation> ColumnValidations { get; }
 
+        ICsvEditSharpConfigurationHost GetHost();
+        
         void RegisterClassMap<T>();
 
         void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter);

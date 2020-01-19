@@ -299,6 +299,7 @@
     <Compile Include="Models\EnumerableExt.cs" />
     <Compile Include="Models\SaveConfigSettings.cs" />
     <Compile Include="Services\ConfigSettingsDialogService.cs" />
+    <Compile Include="Services\MessageDialogService.cs" />
     <Compile Include="Services\SaveConfigDialogService.cs" />
     <Compile Include="T4\ConfigurationTemplateGenerator.cs">
       <AutoGen>True</AutoGen>

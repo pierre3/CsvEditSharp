@@ -43,7 +43,7 @@ namespace CsvEditSharp.Models
         }
 
         public static void InitializeDefault(IModalDialogService<GenerateConfigSettings> dialogService,
-            string settingsFileName = null, string configFileDirectory = null)
+            string configFileDirectory = null)
         {
             Default = new CsvConfigFileManager(dialogService, configFileDirectory);
         }
@@ -82,9 +82,9 @@ namespace CsvEditSharp.Models
                 CurrentConfigFilePath = templateFilePath;
                 return configText;
             }
-
+            var defaultName = Path.GetFileNameWithoutExtension(targetFilePath);
             //Generate a new config template.
-            if (true != _dialogService.ShowModal()) { return ""; }
+            if (true != _dialogService.ShowModal(defaultName)) { return ""; }
 
             var configFileSettings = _dialogService.Result;
             return GenerateCsvConfig(targetFilePath, configFileSettings);
@@ -157,18 +157,15 @@ namespace CsvEditSharp.Models
         {
             if (!File.Exists(targetFilePath)) { throw new FileNotFoundException("Target CSV file not exist.", targetFilePath); }
 
-            var targetFileDir = Path.GetDirectoryName(targetFilePath);
-            var targetFileName = Path.GetFileNameWithoutExtension(targetFilePath);
-            var configFilePath = Path.Combine(targetFileDir, targetFileName + ".config.csx");
-            if (File.Exists(configFilePath))
+            //Save to template file.
+            var templateFilePath = Path.Combine(ConfigFileDirectory, newSettings.TemplateName + ".config.csx");
+            if (File.Exists(templateFilePath))
             {
-                throw new InvalidOperationException($"Config File \"{configFilePath}\" already exists.");
+                throw new InvalidOperationException($"Config File \"{templateFilePath}\" already exists.");
             }
 
             //Generate a CSV config template.
             var configText = GenerateCsvConfigText(targetFilePath, newSettings.TargetFileEncoding, newSettings.CaltureInfo, newSettings.HasHeaderRecord, newSettings.AutoTypeDetection);
-            //Save to template file.
-            var templateFilePath = Path.Combine(ConfigFileDirectory, newSettings.TemplateName + ".config.csx");
             File.WriteAllText(templateFilePath, configText);
 
             CurrentConfigFilePath = templateFilePath;

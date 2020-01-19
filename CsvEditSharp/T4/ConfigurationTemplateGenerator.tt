@@ -3,6 +3,7 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
+ICsvEditSharpConfigurationHost host = GetHost();
 Encoding = Encoding.GetEncoding("<#= EncodingName #>");
 
 class FieldData
@@ -27,12 +28,12 @@ class FieldData
 <# } #>
 }
 
-RegisterClassMap<FieldData>(classMap =>
+host.RegisterClassMap<FieldData>(classMap =>
 {
 	classMap.AutoMap();
 });
 
-SetConfiguration(config=>
+host.SetConfiguration(config=>
 {
 <# if( HasHeaders ){ #>
 	//config.HasHeaderRecord = true;

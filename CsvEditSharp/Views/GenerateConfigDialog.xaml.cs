@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using CsvEditSharp.ViewModels;
+using System.Windows;
 
 namespace CsvEditSharp.Views
 {

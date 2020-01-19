@@ -8,7 +8,7 @@
              xmlns:bindings="clr-namespace:CsvEditSharp.Bindings"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              Title="Generate a configuration script" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
-             Height="200" Width="400" >
+             Width="420" Height="255">
 
     <Window.Resources>
         <bindings:EncodingInfoToStringConverter x:Key="encodingConverter"/>
@@ -34,23 +34,23 @@
         <TextBox x:Name="templateNameTextBox" Grid.Row="0" Grid.Column="1" Margin="2,4"
                  Text="{Binding TemplateName,UpdateSourceTrigger=PropertyChanged}"/>
 
-        <StackPanel Margin="2,4" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2">
-        <CheckBox IsChecked="{Binding HasHeaderRecord}">Has header record</CheckBox>
-        <CheckBox Margin="16,0" IsChecked="{Binding AutoTypeDetection}">Auto type detection</CheckBox>
+        <StackPanel Margin="4,20,4,4" Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Right">
+            <CheckBox IsChecked="{Binding HasHeaderRecord}">Has header record</CheckBox>
+            <CheckBox Margin="16,0" IsChecked="{Binding AutoTypeDetection}">Auto type detection</CheckBox>
         </StackPanel>
         <Label Grid.Row="2" Content="Target File Encoding"/>
         <ComboBox Grid.Row="2" Grid.Column="1" Margin="2,4" 
                   IsEditable="False"
                   SelectedIndex="{Binding TargetEncodingIndex}" 
                   ItemsSource="{Binding Encodings, Converter={StaticResource encodingConverter}}"/>
-        <TextBlock Margin="2" Grid.Row="3" Grid.ColumnSpan="2" 
-                       Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
-                       Foreground="Red" />
         <Label Grid.Row="3" Content="Culture Info"/>
         <ComboBox Grid.Row="3" Grid.Column="1" Margin="2,4" 
                   IsEditable="False"
                   SelectedIndex="{Binding CultureInfoIndex}" 
                   ItemsSource="{Binding CultureInfoList, Converter={StaticResource cultureInfoConverter}}"/>
+        <TextBlock Margin="2" Grid.Row="4" Grid.ColumnSpan="2" 
+                       Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
+                       Foreground="Red" />
 
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">

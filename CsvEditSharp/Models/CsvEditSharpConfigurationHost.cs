@@ -18,6 +18,11 @@ namespace CsvEditSharp.Models
         private IList<object> itemsSource;
         private Func<IEnumerable<object>, IEnumerable<object>> query;
 
+        public ICsvEditSharpConfigurationHost GetHost()
+        {
+            return this;
+        }
+
         public IEnumerable<object> Records { get; private set; }
         public ClassMap ClassMapForReading { get; private set; }
 
