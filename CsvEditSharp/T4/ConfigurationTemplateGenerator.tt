@@ -4,8 +4,12 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 ICsvEditSharpConfigurationHost host = GetHost();
-Encoding = Encoding.GetEncoding("<#= EncodingName #>");
-CultureInfo = CultureInfo.GetCultureInfo("<#= CultureInfo.Name #>");
+host.Encoding = Encoding.GetEncoding("<#= EncodingName #>");
+host.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo("<#= CultureInfo.Name #>"))
+{
+	HasHeaderRecord = <#= ( HasHeaders )? "true" : "false" #>
+};
+
 class FieldData
 {
 <# foreach(var p in Prop) { #>
@@ -27,12 +31,3 @@ class FieldData
 }
 
 host.RegisterClassMap<FieldData>();
-
-host.SetConfiguration(config=>
-{
-<# if( HasHeaders ){ #>
-	//config.HasHeaderRecord = false;
-<# } else { #>
-	config.HasHeaderRecord = false;
-<# } #>
-});

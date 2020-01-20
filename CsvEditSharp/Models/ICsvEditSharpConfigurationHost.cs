@@ -11,7 +11,7 @@ namespace CsvEditSharp.Models
     {
         Encoding Encoding { get; set; }
 
-        CultureInfo CultureInfo { get; set; }
+        CsvConfiguration CsvConfiguration {get;set;}
 
         ClassMap ClassMapForReading { get; }
         
@@ -26,8 +26,6 @@ namespace CsvEditSharp.Models
         void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter);
 
         void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter, RegisterClassMapTarget target);
-
-        void SetConfiguration(Action<CsvConfiguration> configurationSetter);
 
         void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
 
