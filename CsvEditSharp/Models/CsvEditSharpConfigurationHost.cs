@@ -41,7 +41,7 @@ namespace CsvEditSharp.Models
 
         public void RegisterClassMap<T>()
         {
-            recordType = typeof(T);
+            RegisterClassMap<T>(classMap => classMap.AutoMap(CsvConfiguration), RegisterClassMapTarget.Both);
         }
 
         public void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter)
