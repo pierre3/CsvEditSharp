@@ -11,21 +11,21 @@ namespace CsvEditSharp.Models
     {
         Encoding Encoding { get; set; }
 
-        CsvConfiguration CsvConfiguration {get;set;}
+        CsvConfiguration CsvConfiguration { get; set; }
 
         ClassMap ClassMapForReading { get; }
-        
+
         ClassMap ClassMapForWriting { get; }
-        
+
         IDictionary<string, ColumnValidation> ColumnValidations { get; }
 
         ICsvEditSharpConfigurationHost GetHost();
-        
-        void RegisterClassMap<T>();
 
-        void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter);
+        void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter = null);
 
-        void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter, RegisterClassMapTarget target);
+        void RegisterClassMapForReading<T>(Action<ClassMap<T>> propertyMapSetter = null);
+
+        void RegisterClassMapForWriting<T>(Action<ClassMap<T>> propertyMapSetter = null);
 
         void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
 
@@ -33,6 +33,5 @@ namespace CsvEditSharp.Models
 
         void Query<T>(Action<IEnumerable<T>> query);
     }
-
 
 }

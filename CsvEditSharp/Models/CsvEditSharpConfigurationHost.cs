@@ -39,36 +39,48 @@ namespace CsvEditSharp.Models
             Reset();
         }
 
-        public void RegisterClassMap<T>()
+        public void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter = null)
         {
-            RegisterClassMap<T>(classMap => classMap.AutoMap(CsvConfiguration), RegisterClassMapTarget.Both);
-        }
-
-        public void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter)
-        {
+            if(propertyMapSetter == null)
+            {
+                propertyMapSetter = (classMap) => classMap.AutoMap(CsvConfiguration);
+            }
             RegisterClassMap<T>(propertyMapSetter, RegisterClassMapTarget.Both);
         }
 
-        public void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter, RegisterClassMapTarget target)
+        public void RegisterClassMapForReading<T>(Action<ClassMap<T>> propertyMapSetter = null)
+        {
+            if (propertyMapSetter == null)
+            {
+                propertyMapSetter = (classMap) => classMap.AutoMap(CsvConfiguration);
+            }
+            RegisterClassMap<T>(propertyMapSetter, RegisterClassMapTarget.Reader);
+        }
+
+        public void RegisterClassMapForWriting<T>(Action<ClassMap<T>> propertyMapSetter = null)
+        {
+            if (propertyMapSetter == null)
+            {
+                propertyMapSetter = (classMap) => classMap.AutoMap(CsvConfiguration);
+            }
+            RegisterClassMap<T>(propertyMapSetter, RegisterClassMapTarget.Writer);
+        }
+
+        private void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter, RegisterClassMapTarget target)
         {
             recordType = typeof(T);
-            if (propertyMapSetter != null)
+            switch (target)
             {
-                var classMap = new AnonimousCsvClassMap<T>(propertyMapSetter);
-                
-                switch (target)
-                {
-                    case RegisterClassMapTarget.Reader:
-                        ClassMapForReading = classMap;
-                        break;
-                    case RegisterClassMapTarget.Writer:
-                        ClassMapForWriting = classMap;
-                        break;
-                    case RegisterClassMapTarget.Both:
-                        ClassMapForReading = classMap;
-                        ClassMapForWriting = classMap;
-                        break;
-                }
+                case RegisterClassMapTarget.Reader:
+                    ClassMapForReading = new AnonimousCsvClassMap<T>(propertyMapSetter);
+                    break;
+                case RegisterClassMapTarget.Writer:
+                    ClassMapForWriting = new AnonimousCsvClassMap<T>(propertyMapSetter);
+                    break;
+                case RegisterClassMapTarget.Both:
+                    ClassMapForReading = new AnonimousCsvClassMap<T>(propertyMapSetter);
+                    ClassMapForWriting = new AnonimousCsvClassMap<T>(propertyMapSetter);
+                    break;
             }
         }
 
@@ -115,17 +127,17 @@ namespace CsvEditSharp.Models
 
         public void Write(TextWriter baseWriter, IEnumerable records)
         {
-            using (var writer = new CsvWriter(baseWriter,CsvConfiguration))
+            using (var writer = new CsvWriter(baseWriter, CsvConfiguration))
             {
                 if (ClassMapForWriting != null)
                 {
                     var booleanMaps = ClassMapForWriting.MemberMaps
                         .Where(map => map.Data.TypeConverter is BooleanConverter);
-                    foreach(var map in booleanMaps)
+                    foreach (var map in booleanMaps)
                     {
                         map.Data.TypeConverter = new CustomBooleanConverter();
                     }
-                    
+
                     writer.Configuration.RegisterClassMap(ClassMapForWriting);
                 }
                 writer.WriteRecords(records);
@@ -169,7 +181,7 @@ namespace CsvEditSharp.Models
         {
             public AnonimousCsvClassMap(Action<ClassMap<T>> propertyMapSetter)
             {
-                propertyMapSetter(this);
+                propertyMapSetter?.Invoke(this);
             }
         }
 

@@ -9,16 +9,21 @@ namespace CsvEditSharp.Bindings
 {
     public class DataGridColumnConverter : IValueConverter
     {
-
-        private ITypeConverter typeConverter;
         private MemberMapData memberMapData;
+        private ITypeConverter converter;
         public string HeaderName { get; }
         
-        public DataGridColumnConverter(MemberMapData mapData)
+        public DataGridColumnConverter(CsvConfiguration configuration, MemberMapData mapData)
         {
-            var headerName = mapData.Names[mapData.NameIndex];
-            var converter = mapData.TypeConverter;
-            typeConverter = converter ?? new DefaultTypeConverter();
+            var headerName = mapData.Member.Name;
+            if (mapData.Names.Count > 0)
+            {
+                headerName = mapData.Names[mapData.NameIndex];
+            }
+            
+            converter = mapData.TypeConverter
+                ?? configuration.TypeConverterCache.GetConverter(mapData.Member)
+                ?? new DefaultTypeConverter();
             memberMapData = mapData;
             HeaderName = headerName;
         }
@@ -28,7 +33,7 @@ namespace CsvEditSharp.Bindings
             if (targetType != typeof(string)) { return value; }
             try
             {
-                return typeConverter.ConvertToString(value, null, memberMapData);
+                return converter.ConvertToString(value, null, memberMapData);
             }
             catch
             {
@@ -38,11 +43,10 @@ namespace CsvEditSharp.Bindings
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var oldValue = value as string;
-            if (oldValue == null) { return value; }
+            if (!(value is string oldValue)) { return value; }
             try
             {
-                return typeConverter.ConvertFromString(oldValue, null, memberMapData);
+                return converter.ConvertFromString(oldValue, null, memberMapData);
             }
             catch
             {

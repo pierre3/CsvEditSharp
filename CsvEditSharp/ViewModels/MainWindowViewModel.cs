@@ -382,11 +382,9 @@ namespace CsvEditSharp.ViewModels
 
         public DataGridColumnConverter GetDataGridColumnConverter(string propertyName)
         {
-           
             var memberMap = _host.ClassMapForWriting?.MemberMaps?.FirstOrDefault(m => m.Data.Member.Name == propertyName);
             if (memberMap?.Data == null) { return null; }
-
-            return new DataGridColumnConverter(memberMap.Data);
+            return new DataGridColumnConverter(_host.CsvConfiguration, memberMap.Data);
         }
 
         public void Dispose()

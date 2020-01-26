@@ -13,7 +13,7 @@
 
   <Properties>
     <DisplayName>CSVEditSharp</DisplayName>
-    <PublisherDisplayName>kobayashi hirotada</PublisherDisplayName>
+    <PublisherDisplayName>pierre3</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
 
@@ -31,8 +31,8 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="CsvEditSharpPackage"
-        Description="CsvEditSharpPackage"
+        DisplayName="CSV Edit ♯"
+        Description="A CSV editor to configure read / write settings using C # script."
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"
         Square44x44Logo="Images\Square44x44Logo.png">
