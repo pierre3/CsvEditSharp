@@ -20,7 +20,10 @@ namespace CsvEditSharp.Bindings
             {
                 headerName = mapData.Names[mapData.NameIndex];
             }
-            
+            if(mapData.TypeConverterOptions.CultureInfo == null)
+            {
+                mapData.TypeConverterOptions.CultureInfo = configuration.CultureInfo;
+            }
             converter = mapData.TypeConverter
                 ?? configuration.TypeConverterCache.GetConverter(mapData.Member)
                 ?? new DefaultTypeConverter();
