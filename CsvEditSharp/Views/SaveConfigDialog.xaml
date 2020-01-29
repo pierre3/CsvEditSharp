@@ -18,7 +18,7 @@
                 <TextBox x:Name="templateNameTextBox" Width="250" 
                          Text="{Binding TemplateName, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            <RadioButton Margin="2,8" GroupName="radioGroup1">Save into the same location as the CSV file as "Default.config.csx"</RadioButton>
+            <RadioButton Margin="2,8" GroupName="radioGroup1">Save in the same location as a CSV file as "Default.config.csx"</RadioButton>
             <TextBlock Margin="2" 
                        Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
                        Foreground="Red" />
