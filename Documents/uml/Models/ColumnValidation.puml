@@ -1,7 +1,0 @@
-@startuml
-class ColumnValidation {
-    + Validation : Func<object, bool> <<get>>
-    + ErrorMessage : string <<get>>
-    + ColumnValidation(validation:Func<object, bool>, errorMessage:string)
-}
-@enduml

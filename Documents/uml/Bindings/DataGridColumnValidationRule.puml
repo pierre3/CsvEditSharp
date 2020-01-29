@@ -1,7 +1,0 @@
-@startuml
-class DataGridColumnValidationRule {
-    + DataGridColumnValidationRule(isValidate:Func<object, bool>, errorContent:object)
-    + <<override>> Validate(value:object, cultureInfo:CultureInfo) : ValidationResult
-}
-ValidationRule <|-- DataGridColumnValidationRule
-@enduml

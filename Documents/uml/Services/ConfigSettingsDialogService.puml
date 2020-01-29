@@ -1,6 +1,0 @@
-@startuml
-class ConfigSettingsDialogService {
-    + ShowModal() : bool?
-}
-IModalDialogService <|-- ConfigSettingsDialogService
-@enduml

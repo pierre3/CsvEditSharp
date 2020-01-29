@@ -1,6 +1,0 @@
-@startuml
-class SaveConfigSettings {
-    + IsTemplate : bool <<get>> <<set>>
-    + TemplateName : string <<get>> <<set>>
-}
-@enduml

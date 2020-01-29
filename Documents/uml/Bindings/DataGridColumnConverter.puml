@@ -1,9 +1,0 @@
-@startuml
-class DataGridColumnConverter {
-    + HeaderName : string <<get>>
-    + DataGridColumnConverter(headerName:string, converter:ITypeConverter, options:TypeConverterOptions)
-    + Convert(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
-    + ConvertBack(value:object, targetType:Type, parameter:object, culture:CultureInfo) : object
-}
-IValueConverter <|-- DataGridColumnConverter
-@enduml

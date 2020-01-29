@@ -1,8 +1,0 @@
-@startuml
-class DelegateCommand {
-    + DelegateCommand(execute:Action<object>, canExecute:Func<object, bool>)
-    + CanExecute(parameter:object) : bool
-    + Execute(parameter:object) : void
-}
-ICommand <|-- DelegateCommand
-@enduml

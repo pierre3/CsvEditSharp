@@ -1,6 +1,0 @@
-@startuml
-class OpenFileDialogService {
-    + SelectFile(title:string, filter:string, initialDirectory:string) : string
-}
-IFileSelectionService <|-- OpenFileDialogService
-@enduml

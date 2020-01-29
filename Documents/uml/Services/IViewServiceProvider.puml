@@ -1,9 +1,0 @@
-@startuml
-interface IViewServiceProvider {
-    OpenFileSelectionService : IFileSelectionService <<get>>
-    SaveFileSelectionService : IFileSelectionService <<get>>
-    GenerateConfigDialogService : IModalDialogService<GenerateConfigSettings> <<get>>
-    SaveConfigDialogService : IModalDialogService<SaveConfigSettings> <<get>>
-    ConfigSettingsDialogService : IModalDialogService <<get>>
-}
-@enduml

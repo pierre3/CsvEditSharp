@@ -1,9 +1,0 @@
-@startuml
-class SaveConfigDialogViewModel {
-    + ApplyCommand : ICommand <<get>>
-    + TemplateName : string <<get>> <<set>>
-    + IsTemplate : bool <<get>> <<set>>
-    + SaveConfigDialogViewModel()
-}
-ErrorNotificationBindableBase <|-- SaveConfigDialogViewModel
-@enduml

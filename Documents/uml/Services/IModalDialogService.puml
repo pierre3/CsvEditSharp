@@ -1,9 +1,0 @@
-@startuml
-interface IModalDialogService {
-    ShowModal() : bool?
-}
-interface "IModalDialogService`1"<T> {
-    Result : T <<get>>
-}
-IModalDialogService <|-- "IModalDialogService`1"
-@enduml

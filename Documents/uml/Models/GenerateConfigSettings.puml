@@ -1,8 +1,0 @@
-@startuml
-class GenerateConfigSettings {
-    + TemplateName : string <<get>> <<set>>
-    + TargetFileEncoding : Encoding <<get>> <<set>>
-    + TargetFileEncodingName : string <<get>> <<set>>
-    + HasHeaderRecord : bool <<get>> <<set>>
-}
-@enduml

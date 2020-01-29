@@ -1,5 +1,0 @@
-@startuml
-class EnumerableExt <<static>> {
-    + {static} ForEach(source:IEnumerable<T>, action:Action<T>) : void
-}
-@enduml

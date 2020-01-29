@@ -1,6 +1,0 @@
-@startuml
-class CustomBooleanConverter {
-    + <<override>> ConvertToString(options:TypeConverterOptions, value:object) : string
-}
-BooleanConverter <|-- CustomBooleanConverter
-@enduml
