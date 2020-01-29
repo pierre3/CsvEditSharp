@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CsvEditSharp.Views"
         mc:Ignorable="d" WindowStartupLocation="CenterOwner"
-        Title="Save As" Height="200" Width="360" WindowStyle="ToolWindow">
+        Title="Save As" Height="200" Width="400" WindowStyle="ToolWindow">
     <Grid Margin="8">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
@@ -15,10 +15,10 @@
             <RadioButton Margin="2,8,2,2" GroupName="radioGroup1" IsChecked="{Binding IsTemplate}">Save as a new file</RadioButton>
             <StackPanel Orientation="Horizontal" Margin="16,0,0,0">
                 <Label>Config Name</Label>
-                <TextBox x:Name="templateNameTextBox" Width="200" 
+                <TextBox x:Name="templateNameTextBox" Width="250" 
                          Text="{Binding TemplateName, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            <RadioButton Margin="2,8" GroupName="radioGroup1">Save into the current directory as "Default.config.csx"</RadioButton>
+            <RadioButton Margin="2,8" GroupName="radioGroup1">Save into the same location as the CSV file as "Default.config.csx"</RadioButton>
             <TextBlock Margin="2" 
                        Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
                        Foreground="Red" />

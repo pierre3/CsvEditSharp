@@ -7,12 +7,12 @@
   IgnorableNamespaces="uap rescap">
 
   <Identity
-    Name="51c5771c-b6c4-4321-ab66-a530b84c90c8"
-    Publisher="CN=kobayashi hirotada"
+    Name="49630pierre3.5978996E3A893"
+    Publisher="CN=16FF7F91-F996-44E6-B764-E871112CA1E3"
     Version="1.0.0.0" />
 
   <Properties>
-    <DisplayName>CSVEditSharp</DisplayName>
+    <DisplayName>CSV Edit Sharp</DisplayName>
     <PublisherDisplayName>pierre3</PublisherDisplayName>
     <Logo>Images\StoreLogo.png</Logo>
   </Properties>
@@ -31,7 +31,7 @@
       Executable="$targetnametoken$.exe"
       EntryPoint="$targetentrypoint$">
       <uap:VisualElements
-        DisplayName="CSV Edit ♯"
+        DisplayName="CSV Edit Sharp"
         Description="A CSV editor to configure read / write settings using C # script."
         BackgroundColor="transparent"
         Square150x150Logo="Images\Square150x150Logo.png"

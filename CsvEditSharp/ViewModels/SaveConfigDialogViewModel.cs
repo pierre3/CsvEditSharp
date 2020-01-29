@@ -31,7 +31,7 @@ namespace CsvEditSharp.ViewModels
 
         public SaveConfigDialogViewModel()
         {
-            ApplyCommand = new DelegateCommand(_ => { }, _ => !string.IsNullOrWhiteSpace(TemplateName) && !HasErrors);
+            ApplyCommand = new DelegateCommand(_ => { }, _ => (!IsTemplate || !string.IsNullOrWhiteSpace(TemplateName)) && !HasErrors);
         }
 
         private void ValidateTemplateName()
