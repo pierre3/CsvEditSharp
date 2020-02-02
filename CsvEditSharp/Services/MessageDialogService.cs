@@ -1,11 +1,12 @@
-﻿namespace CsvEditSharp.Services
+﻿using System.Windows;
+namespace CsvEditSharp.Services
 {
-    public class MessageDialogService : IModalDialogService
+    public class OkCancelDialogService : IModalDialogService
     {
         public bool? ShowModal(params object[] parameters)
         {
-            System.Windows.MessageBox.Show((string)parameters[0], (string)parameters[1]);
-            return true;
+            var ret = System.Windows.MessageBox.Show((string)parameters[0], (string)parameters[1],MessageBoxButton.OKCancel,MessageBoxImage.Question);
+            return (ret == MessageBoxResult.OK);
         }
     }
 

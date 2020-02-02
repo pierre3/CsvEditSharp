@@ -62,17 +62,21 @@ namespace CsvEditSharp.Models
             }
         }
 
-        public string GetCsvConfigString(string targetFilePath, string templateName)
+        public string GetDefaultConfigString(string targetFilePath)
         {
             //Read a default config file
-            var defaultConfigPath = Path.Combine(Path.GetDirectoryName(targetFilePath), "Default.config.csx");
+            var defaultConfigPath = Path.Combine(Path.GetDirectoryName(targetFilePath), "_default.config.csx");
             if (File.Exists(defaultConfigPath))
             {
                 var configText = File.ReadAllText(defaultConfigPath, Encoding.UTF8);
                 CurrentConfigFilePath = defaultConfigPath;
                 return configText;
             }
+            return null;
+        }
 
+        public string GetCsvConfigString(string targetFilePath, string templateName)
+        {
             //Read a config file from selected template.
             if (SettingsList.Skip(1).Contains(templateName))
             {
@@ -147,6 +151,7 @@ namespace CsvEditSharp.Models
                     headers = parser.Read();
                 }
                 var row = parser.Read();
+                if(row?.Length == 0) { row = null; }
                 var config = new T4.ConfigurationTemplateGenerator(targetFileEncoding.WebName, cultureInfo, autoTypeDetection ,row, headers);
                
                 return config.TransformText();

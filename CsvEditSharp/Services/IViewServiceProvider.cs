@@ -10,7 +10,9 @@ namespace CsvEditSharp.Services
         IModalDialogService<SaveConfigSettings> SaveConfigDialogService { get; }
         IModalDialogService ConfigSettingsDialogService { get; }
 
-        IModalDialogService MessageDialogService { get; }
+        IModalDialogService OkCancelDialogService { get; }
+
+        IModalDialogService<string> SelectConfigurationDialogService { get; }
     }
 
 }

@@ -1,0 +1,28 @@
+﻿<Window x:Class="CsvEditSharp.Views.SelectConfigurationDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:CsvEditSharp.Views"
+        mc:Ignorable="d" WindowStyle="ToolWindow" WindowStartupLocation="CenterOwner"
+        Title="Select a Configuration Script" Height="120" Width="400">
+    <Grid Margin="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <Label Margin="2,0">Configuration Script</Label>
+        <ComboBox Width="160" x:Name="configTemplateComboBox" 
+                  VerticalAlignment="Top"
+            ItemsSource="{Binding Items}"
+            SelectedItem="{Binding SelectedItem}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Margin="0,12,0,0" 
+                    Orientation="Horizontal" 
+                    VerticalAlignment="Top" HorizontalAlignment="Center">
+            <Button Width="90" Margin="4" IsDefault="True" Click="Button_Click" Command="{Binding OkCommand}">OK</Button>
+            <Button Width="90" Margin="4" IsCancel="True">Cancel</Button>
+        </StackPanel>
+    </Grid>
+</Window>

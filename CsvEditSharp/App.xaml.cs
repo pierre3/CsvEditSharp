@@ -2,6 +2,7 @@
 using CsvEditSharp.Services;
 using CsvEditSharp.ViewModels;
 using System.Windows;
+using System.Linq;
 
 namespace CsvEditSharp
 {
@@ -16,7 +17,7 @@ namespace CsvEditSharp
 
             var viewService = new ViewServiceProvider();
             CsvConfigFileManager.InitializeDefault(viewService.GenerateConfigDialogService);
-            var vm = new MainWindowViewModel(viewService);
+            var vm = new MainWindowViewModel(viewService, e.Args.FirstOrDefault());
             MainWindow = new MainWindow(vm);
             MainWindow.Show();
         }

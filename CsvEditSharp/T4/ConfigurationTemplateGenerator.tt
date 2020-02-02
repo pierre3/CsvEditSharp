@@ -3,9 +3,9 @@
 <#@ import namespace="System.Linq" #>
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
-ICsvEditSharpConfigurationHost host = GetHost();
-host.Encoding = Encoding.GetEncoding("<#= EncodingName #>");
-host.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo("<#= CultureInfo.Name #>"))
+ICsvEditSharpApi api = GetCsvEditSharpApi();
+api.Encoding = Encoding.GetEncoding("<#= EncodingName #>");
+api.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo("<#= CultureInfo.Name #>"))
 {
 	HasHeaderRecord = <#= ( HasHeaders )? "true" : "false" #>
 };
@@ -30,4 +30,4 @@ class FieldData
 <# } #>
 }
 
-host.RegisterClassMap<FieldData>();
+api.RegisterClassMap<FieldData>();

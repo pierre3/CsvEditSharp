@@ -15,20 +15,20 @@ namespace CsvEditSharp.ViewModels
 {
     public class MainWindowViewModel : BindableBase, IDisposable
     {
-        private static readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|All Files|*.*";
+        private static readonly string CsvFileFilter = "CSV File|*.csv|Plain Text File|*.txt|Tab Separated Values File|*.tsv|All Files|*.*";
         private ObservableCollection<object> _csvRows;
         private ObservableCollection<string> _errorMessages = new ObservableCollection<string>();
         private bool _hasErrorMessages = false;
         private IDocument _configurationDoc;
         private IDocument _queryDoc;
-        private CsvEditSharpConfigurationHost _host;
+        private CsvEditSharpApi _host;
         private IViewServiceProvider _viewService;
         private int _selectedTab;
 
         private string _currentFilePath;
         private string _currentFileName;
         private string _currentConfigName;
-        private string _selectedTemplate;
+        private string _startupFilePath;
 
         private ICommand _readCsvCommand;
         private ICommand _queryCommand;
@@ -38,20 +38,14 @@ namespace CsvEditSharp.ViewModels
         private ICommand _saveConfigCommand;
         private ICommand _saveConfigAsCommand;
         private ICommand _configSettingsCommand;
-        private ICommand _deleteTemplateCommand;
 
         private CsvEditSharpWorkspace Workspace { get; }
+
 
         public int SelectedTab
         {
             get { return _selectedTab; }
             set { SetProperty(ref _selectedTab, value); }
-        }
-
-        public string SelectedTemplate
-        {
-            get { return _selectedTemplate; }
-            set { SetProperty(ref _selectedTemplate, value); }
         }
 
         public string CurrentFilePath
@@ -62,13 +56,13 @@ namespace CsvEditSharp.ViewModels
 
         public string CurrentFileName
         {
-            get { return _currentFileName; }
+            get { return _currentFileName.Replace("_","__"); }
             set { SetProperty(ref _currentFileName, value); }
         }
 
         public string CurrentConfigName
         {
-            get { return _currentConfigName; }
+            get { return _currentConfigName.Replace("_", "__"); }
             set
             {
                 if (value == "") { value = "(Empty)"; }
@@ -92,11 +86,6 @@ namespace CsvEditSharp.ViewModels
         {
             get { return _hasErrorMessages; }
             set { SetProperty(ref _hasErrorMessages, value); }
-        }
-
-        public ObservableCollection<string> ConfigFileTemplates
-        {
-            get { return CsvConfigFileManager.Default.SettingsList; }
         }
 
         public IDocument ConfigurationDoc
@@ -190,8 +179,7 @@ namespace CsvEditSharp.ViewModels
             {
                 if (_saveConfigAsCommand == null)
                 {
-                    _saveConfigAsCommand = new DelegateCommand(_ => SaveConfigAs(), _ => !string.IsNullOrWhiteSpace(ConfigurationDoc.Text)
-                        && File.Exists(CsvConfigFileManager.Default.CurrentConfigFilePath));
+                    _saveConfigAsCommand = new DelegateCommand(_ => SaveConfigAs(), _ => !string.IsNullOrWhiteSpace(ConfigurationDoc.Text));
                 }
                 return _saveConfigAsCommand;
             }
@@ -209,24 +197,12 @@ namespace CsvEditSharp.ViewModels
             }
         }
 
-        public ICommand DeleteTemplateCommand
-        {
-            get
-            {
-                if (_deleteTemplateCommand == null)
-                {
-                    _deleteTemplateCommand = new DelegateCommand(_ => CsvConfigFileManager.Default.RemoveConfigFile(SelectedTemplate),
-                        _ => !string.IsNullOrEmpty(SelectedTemplate));
-                }
-                return _deleteTemplateCommand;
-            }
-        }
 
-        public MainWindowViewModel(IViewServiceProvider viewServiceProvider)
+        public MainWindowViewModel(IViewServiceProvider viewServiceProvider,string startupFileName)
         {
             _viewService = viewServiceProvider;
             _errorMessages.CollectionChanged += (_, __) => HasErrorMessages = _errorMessages.Count > 0;
-            _host = new CsvEditSharpConfigurationHost();
+            _host = new CsvEditSharpApi();
             Workspace = new CsvEditSharpWorkspace(_host, _errorMessages);
 
             ConfigurationDoc = new TextDocument(StringTextSource.Empty);
@@ -235,8 +211,8 @@ namespace CsvEditSharp.ViewModels
             CurrentFilePath = string.Empty;
             CurrentFileName = "(Empty)";
             CurrentConfigName = "(Empty)";
-            SelectedTemplate = ConfigFileTemplates.First();
             SelectedTab = 0;
+            _startupFilePath = startupFileName;
         }
 
         public DataGridColumnValidationRule GetDataGridColumnValidation(string propertyName)
@@ -260,12 +236,34 @@ namespace CsvEditSharp.ViewModels
         {
             //OpenFileDialog
             var openFileService = _viewService.OpenFileSelectionService;
-            CurrentFilePath = openFileService.SelectFile("Select a CSV File", CsvFileFilter, null);
+            var fileName = openFileService.SelectFile("Select a CSV File", CsvFileFilter, null);
+            await ReadCsvAsync(fileName);
+        }
+
+        public async Task ReadStartupCsvAsync()
+        {
+            if (!string.IsNullOrEmpty(_startupFilePath))
+            {
+                await ReadCsvAsync(_startupFilePath);
+            }
+        }
+
+        private async Task ReadCsvAsync(string fileName)
+        {
+            CurrentFilePath = fileName;
             if (!File.Exists(CurrentFilePath)) { return; }
             try
             {
-                var configText = CsvConfigFileManager.Default.GetCsvConfigString(CurrentFilePath, _selectedTemplate);
-
+                var configText = CsvConfigFileManager.Default.GetDefaultConfigString(CurrentFilePath);
+                if (null == configText)
+                {
+                    var selectConfigDialog = _viewService.SelectConfigurationDialogService;
+                    if (true != selectConfigDialog.ShowModal(CurrentFilePath))
+                    {
+                        return;
+                    }
+                    configText = selectConfigDialog.Result;
+                }
                 CurrentConfigName = Path.GetFileName(CsvConfigFileManager.Default.CurrentConfigFilePath);
                 CurrentFileName = Path.GetFileName(CurrentFilePath);
                 ConfigurationDoc.Text = configText;
@@ -283,7 +281,6 @@ namespace CsvEditSharp.ViewModels
             _host.Reset();
             ErrorMessages.Clear();
             await Workspace.RunScriptAsync(ConfigurationDoc.Text);
-
             try
             {
                 using (var stream = new FileStream(_currentFilePath, FileMode.Open, FileAccess.Read))
@@ -296,7 +293,6 @@ namespace CsvEditSharp.ViewModels
             {
                 ErrorMessages.Add(e.ToString());
             }
-
             CsvRows = new ObservableCollection<object>(_host.Records);
             SelectedTab = 0;
         }
@@ -313,7 +309,6 @@ namespace CsvEditSharp.ViewModels
                 {
                     _host.Write(writer, CsvRows);
                 }
-                _viewService.MessageDialogService.ShowModal($"Saved to \"{fileName}\".", "CSV Data Saving");
             }
             catch (Exception e)
             {
@@ -344,8 +339,12 @@ namespace CsvEditSharp.ViewModels
 
         private void SaveConfigFile()
         {
-            CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-            _viewService.MessageDialogService.ShowModal($"Overwrite to \"{CsvConfigFileManager.Default.CurrentConfigFilePath}\".", "Configuration Data Saving");
+            if (true == _viewService.OkCancelDialogService.ShowModal(
+                $"Are you sure you want to overwrite the configuration file ? \"{CsvConfigFileManager.Default.CurrentConfigFilePath}\"", 
+                "Configuration Data Saving"))
+            {
+                CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
+            }
         }
 
         private void SaveConfigAs()
@@ -362,12 +361,13 @@ namespace CsvEditSharp.ViewModels
                     }
                     else
                     {
-                        fileName = Path.Combine(Path.GetDirectoryName(CurrentFilePath), "Default.config.csx");
+                        fileName = Path.Combine(Path.GetDirectoryName(CurrentFilePath), "_default.config.csx");
                     }
                     CurrentConfigName = Path.GetFileName(fileName);
                     CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
                     CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
-                    _viewService.MessageDialogService.ShowModal($"Saved to \"{fileName}\".", "Configuration Data Saving");
+                    CsvConfigFileManager.Default.GetConfigFiles();
+                    _viewService.OkCancelDialogService.ShowModal($"Saved to \"{fileName}\".", "Configuration Data Saving");
                 }
             }catch(Exception e)
             {

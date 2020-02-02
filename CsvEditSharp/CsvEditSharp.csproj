@@ -43,8 +43,8 @@
     <ApplicationIcon>CsvEditSharp.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CsvHelper, Version=13.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.13.0.0\lib\net47\CsvHelper.dll</HintPath>
+    <Reference Include="CsvHelper, Version=14.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.14.0.0\lib\net47\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.AvalonEdit, Version=6.0.1.278, Culture=neutral, PublicKeyToken=9cc39be672370310, processorArchitecture=MSIL">
       <HintPath>..\packages\AvalonEdit.6.0.1\lib\net45\ICSharpCode.AvalonEdit.dll</HintPath>
@@ -101,7 +101,7 @@
       <HintPath>..\packages\Microsoft.VisualStudio.LanguageServices.3.4.0\lib\net472\Microsoft.VisualStudio.LanguageServices.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Threading, Version=16.4.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.VisualStudio.Threading.16.4.43\lib\net472\Microsoft.VisualStudio.Threading.dll</HintPath>
+      <HintPath>..\packages\Microsoft.VisualStudio.Threading.16.4.45\lib\net472\Microsoft.VisualStudio.Threading.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.Validation, Version=15.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.VisualStudio.Validation.15.5.31\lib\netstandard2.0\Microsoft.VisualStudio.Validation.dll</HintPath>
@@ -301,6 +301,7 @@
     <Compile Include="Models\CustomBooleanConverter.cs" />
     <Compile Include="Models\EnumerableExt.cs" />
     <Compile Include="Models\SaveConfigSettings.cs" />
+    <Compile Include="Services\SelectConfigDialogService.cs" />
     <Compile Include="Services\ConfigSettingsDialogService.cs" />
     <Compile Include="Services\MessageDialogService.cs" />
     <Compile Include="Services\SaveConfigDialogService.cs" />
@@ -309,6 +310,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ConfigurationTemplateGenerator.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\SelectConfiturationDialogViewModel.cs" />
     <Compile Include="ViewModels\ConfigSettingsDialogViewModel.cs" />
     <Compile Include="ViewModels\SaveConfigDialogViewModel.cs" />
     <Compile Include="Views\ConfigSettingsDialog.xaml.cs">
@@ -316,6 +318,9 @@
     </Compile>
     <Compile Include="Views\SaveConfigDialog.xaml.cs">
       <DependentUpon>SaveConfigDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SelectConfigurationDialog.xaml.cs">
+      <DependentUpon>SelectConfigurationDialog.xaml</DependentUpon>
     </Compile>
     <Page Include="Views\ConfigSettingsDialog.xaml">
       <SubType>Designer</SubType>
@@ -342,8 +347,8 @@
     <Compile Include="Models\CsvEditSharpWorkspace.cs" />
     <Compile Include="Models\RegisterClassMapTarget.cs" />
     <Compile Include="Models\ColumnValidation.cs" />
-    <Compile Include="Models\ICsvEditSharpConfigurationHost.cs" />
-    <Compile Include="Models\CsvEditSharpConfigurationHost.cs" />
+    <Compile Include="Models\ICsvSharpApi.cs" />
+    <Compile Include="Models\CsvEditSharpApi.cs" />
     <Compile Include="Bindings\BindableBase.cs" />
     <Compile Include="Bindings\DelegateCommand.cs" />
     <Compile Include="Services\GenerageConfigDialogService.cs" />
@@ -363,6 +368,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="Views\SaveConfigDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SelectConfigurationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -419,6 +428,8 @@
   <ItemGroup>
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.Analyzers.dll" />
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.8\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.45\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.CodeFixes.dll" />
+    <Analyzer Include="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.45\analyzers\cs\Microsoft.VisualStudio.Threading.Analyzers.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
@@ -426,7 +437,9 @@
       <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.8\build\Microsoft.CodeAnalysis.Analyzers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeAnalysis.Analyzers.2.9.8\build\Microsoft.CodeAnalysis.Analyzers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.45\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.45\build\Microsoft.VisualStudio.Threading.Analyzers.targets'))" />
   </Target>
+  <Import Project="..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.45\build\Microsoft.VisualStudio.Threading.Analyzers.targets" Condition="Exists('..\packages\Microsoft.VisualStudio.Threading.Analyzers.16.4.45\build\Microsoft.VisualStudio.Threading.Analyzers.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

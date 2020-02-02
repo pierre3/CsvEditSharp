@@ -12,13 +12,13 @@ using System.Text;
 
 namespace CsvEditSharp.Models
 {
-    public class CsvEditSharpConfigurationHost : ICsvEditSharpConfigurationHost
+    public class CsvEditSharpApi : ICsvEditSharpApi
     {
         private Type recordType;
         private IList<object> itemsSource;
         private Func<IEnumerable<object>, IEnumerable<object>> query;
 
-        public ICsvEditSharpConfigurationHost GetHost()
+        public ICsvEditSharpApi GetCsvEditSharpApi()
         {
             return this;
         }
@@ -34,7 +34,7 @@ namespace CsvEditSharp.Models
 
         public IDictionary<string, ColumnValidation> ColumnValidations { get; } = new Dictionary<string, ColumnValidation>();
 
-        public CsvEditSharpConfigurationHost()
+        public CsvEditSharpApi()
         {
             Reset();
         }

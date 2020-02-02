@@ -35,10 +35,10 @@ namespace CsvEditSharp.Models
             typeof(CsvHelper.Configuration.ClassMap),
             typeof(CsvHelper.Configuration.Attributes.NameAttribute),
             typeof(CsvHelper.TypeConversion.TypeConverter),
-            typeof(ICsvEditSharpConfigurationHost)
+            typeof(ICsvEditSharpApi)
 
         };
-        private readonly ICsvEditSharpConfigurationHost host;
+        private readonly ICsvEditSharpApi host;
         private Script<object> script;
         private ScriptState<object> scriptState;
 
@@ -51,7 +51,7 @@ namespace CsvEditSharp.Models
         private readonly IList<string> errorMessages;
        
 
-        public CsvEditSharpWorkspace(ICsvEditSharpConfigurationHost host, IList<string> errorMessages)
+        public CsvEditSharpWorkspace(ICsvEditSharpApi host, IList<string> errorMessages)
         {
             this.host = host;
             this.errorMessages = errorMessages;
@@ -96,7 +96,7 @@ namespace CsvEditSharp.Models
                     ScriptOptions.Default
                     .WithReferences(referenceTypes.Select(t=>t.Assembly).Distinct())
                     .WithImports(referenceTypes.Select(t=>t.Namespace).Distinct()),
-                    typeof(ICsvEditSharpConfigurationHost));
+                    typeof(ICsvEditSharpApi));
             }
             catch (CompilationErrorException e)
             {

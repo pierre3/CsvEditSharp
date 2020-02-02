@@ -54,9 +54,9 @@
 
         <StackPanel Grid.Row="5" Grid.ColumnSpan="2" 
                     Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button Padding="2" Margin="8,0" Width="90" IsCancel="True">Cancel</Button>
             <Button Padding="2" Margin="8,0" Width="90" IsDefault="True" 
                     Command="{Binding ApplyCommand}" Click="Button_Click">OK</Button>
+            <Button Padding="2" Margin="8,0" Width="90" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
 </Window>

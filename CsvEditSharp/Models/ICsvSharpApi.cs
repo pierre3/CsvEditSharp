@@ -7,7 +7,7 @@ using System.Text;
 
 namespace CsvEditSharp.Models
 {
-    public interface ICsvEditSharpConfigurationHost
+    public interface ICsvEditSharpApi
     {
         Encoding Encoding { get; set; }
 
@@ -19,7 +19,7 @@ namespace CsvEditSharp.Models
 
         IDictionary<string, ColumnValidation> ColumnValidations { get; }
 
-        ICsvEditSharpConfigurationHost GetHost();
+        ICsvEditSharpApi GetCsvEditSharpApi();
 
         void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter = null);
 

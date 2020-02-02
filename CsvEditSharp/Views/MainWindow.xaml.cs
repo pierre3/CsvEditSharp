@@ -149,5 +149,9 @@ namespace CsvEditSharp
             }
         }
 
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            await VM?.ReadStartupCsvAsync();
+        }
     }
 }

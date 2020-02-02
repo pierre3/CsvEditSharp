@@ -28,15 +28,15 @@ namespace CsvEditSharp.T4
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("ICsvEditSharpConfigurationHost host = GetHost();\r\nhost.Encoding = Encoding.GetEnc" +
-                    "oding(\"");
+            this.Write("ICsvEditSharpApi api = GetCsvEditSharpApi();\r\napi.Encoding = Encoding.GetEncoding" +
+                    "(\"");
             
             #line 7 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(EncodingName));
             
             #line default
             #line hidden
-            this.Write("\");\r\nhost.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo(\"");
+            this.Write("\");\r\napi.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo(\"");
             
             #line 8 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(CultureInfo.Name));
@@ -139,7 +139,7 @@ namespace CsvEditSharp.T4
             
             #line default
             #line hidden
-            this.Write("}\r\n\r\nhost.RegisterClassMap<FieldData>();\r\n");
+            this.Write("}\r\n\r\napi.RegisterClassMap<FieldData>();\r\n");
             return this.GenerationEnvironment.ToString();
         }
     }

@@ -15,12 +15,12 @@ namespace CsvEditSharp.T4
         private bool AutoTypeDetection { get; }
         public ConfigurationTemplateGenerator(string encodingName, CultureInfo cultureInfo, bool autoTypeDetection, IEnumerable<string> firstRow, IEnumerable<string> headers = null)
         {
-            if (firstRow == null) { throw new ArgumentNullException(nameof(firstRow)); }
+            if (firstRow == null && headers == null) { throw new System.IO.InvalidDataException("Invalid CSV file format."); }
 
             EncodingName = encodingName;
             HasHeaders = headers != null;
             CultureInfo = cultureInfo?? CultureInfo.CurrentCulture;
-            Prop = firstRow.Select(field => FieldToTypeName(field))
+            Prop = DetectFieldTypeNames(firstRow)
                 .Zip(GenerateColumnDefs(headers), (type, defs) =>
                     new PropertyDefs
                     {
@@ -32,6 +32,24 @@ namespace CsvEditSharp.T4
             AutoTypeDetection = autoTypeDetection;
         }
         
+        private IEnumerable<string> DetectFieldTypeNames(IEnumerable<string> firstRow)
+        {
+            if (firstRow == null)
+            {
+                while (true)
+                {
+                    yield return "string";
+                }
+            }
+            else 
+            {
+                foreach(var field in firstRow)
+                {
+                    yield return FieldToTypeName(field);
+                }
+            }
+        }
+
         private IEnumerable<ColumnDefs> GenerateColumnDefs(IEnumerable<string> headers)
         {
             var i = 0;

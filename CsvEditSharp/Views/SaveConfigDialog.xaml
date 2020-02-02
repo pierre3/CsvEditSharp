@@ -18,15 +18,15 @@
                 <TextBox x:Name="templateNameTextBox" Width="250" 
                          Text="{Binding TemplateName, UpdateSourceTrigger=PropertyChanged}" />
             </StackPanel>
-            <RadioButton Margin="2,8" GroupName="radioGroup1">Save in the same location as a CSV file as "Default.config.csx"</RadioButton>
+            <RadioButton Margin="2,8" GroupName="radioGroup1">Save in the same location as a CSV file as "__default.config.csx"</RadioButton>
             <TextBlock Margin="2" 
                        Text="{Binding ElementName=templateNameTextBox,Path=(Validation.Errors)/ErrorContent}" 
                        Foreground="Red" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="4,8" 
                     HorizontalAlignment="Center" VerticalAlignment="Bottom">
-            <Button Margin="4" Width="90" IsCancel="True">Cancel</Button>
             <Button Margin="4" Width="90" IsDefault="True" Click="Button_Click" Command="{Binding ApplyCommand}">OK</Button>
+            <Button Margin="4" Width="90" IsCancel="True">Cancel</Button>
         </StackPanel>
     </Grid>
 </Window>
