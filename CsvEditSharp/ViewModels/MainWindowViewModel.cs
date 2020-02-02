@@ -250,10 +250,11 @@ namespace CsvEditSharp.ViewModels
 
         private async Task ReadCsvAsync(string fileName)
         {
-            CurrentFilePath = fileName;
-            if (!File.Exists(CurrentFilePath)) { return; }
+            
+            if (!File.Exists(fileName)) { return; }
             try
             {
+                CurrentFilePath = fileName;
                 var configText = CsvConfigFileManager.Default.GetDefaultConfigString(CurrentFilePath);
                 if (null == configText)
                 {
@@ -367,7 +368,6 @@ namespace CsvEditSharp.ViewModels
                     CsvConfigFileManager.Default.CurrentConfigFilePath = fileName;
                     CsvConfigFileManager.Default.SaveConfigFile(ConfigurationDoc.Text);
                     CsvConfigFileManager.Default.GetConfigFiles();
-                    _viewService.OkCancelDialogService.ShowModal($"Saved to \"{fileName}\".", "Configuration Data Saving");
                 }
             }catch(Exception e)
             {
