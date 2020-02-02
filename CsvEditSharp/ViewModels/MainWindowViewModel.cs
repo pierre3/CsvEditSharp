@@ -206,7 +206,7 @@ namespace CsvEditSharp.ViewModels
             Workspace = new CsvEditSharpWorkspace(_host, _errorMessages);
 
             ConfigurationDoc = new TextDocument(StringTextSource.Empty);
-            QueryDoc = new TextDocument(new StringTextSource("host.Query<FieldData>( records => records.Where(row => true).OrderBy(row => row) );"));
+            QueryDoc = new TextDocument(new StringTextSource("api.Query<FieldData>( records => records.Where(row => true).OrderBy(row => row) );"));
 
             CurrentFilePath = string.Empty;
             CurrentFileName = "(Empty)";

@@ -23,8 +23,10 @@ class FieldData
 #>
 	[NumberStyles(NumberStyles.Any)] 
 <# } #>
-<# if( p.Column.Name == null ) { #>
+<# if(p.Column.UseIndex) { #>
 	[Index(<#= p.Column.Index #>)]
+<# } else if(p.Column.UseName){ #>
+	[Name("<#= p.Column.Name #>")]
 <# } #>
 	public <#= p.Type #><#= isNullable? "?" : "" #> <#= p.Name #> { get; set; }
 <# } #>

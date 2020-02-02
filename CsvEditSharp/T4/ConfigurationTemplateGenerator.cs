@@ -94,7 +94,7 @@ namespace CsvEditSharp.T4
             #line hidden
             
             #line 26 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
- if( p.Column.Name == null ) { 
+ if(p.Column.UseIndex) { 
             
             #line default
             #line hidden
@@ -108,33 +108,47 @@ namespace CsvEditSharp.T4
             this.Write(")]\r\n");
             
             #line 28 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+ } else if(p.Column.UseName){ 
+            
+            #line default
+            #line hidden
+            this.Write("\t[Name(\"");
+            
+            #line 29 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(p.Column.Name));
+            
+            #line default
+            #line hidden
+            this.Write("\")]\r\n");
+            
+            #line 30 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
  } 
             
             #line default
             #line hidden
             this.Write("\tpublic ");
             
-            #line 29 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 31 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(p.Type));
             
             #line default
             #line hidden
             
-            #line 29 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 31 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(isNullable? "?" : ""));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 29 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 31 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(p.Name));
             
             #line default
             #line hidden
             this.Write(" { get; set; }\r\n");
             
-            #line 30 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
+            #line 32 "C:\CsvEditSharp\CsvEditSharp\T4\ConfigurationTemplateGenerator.tt"
  } 
             
             #line default

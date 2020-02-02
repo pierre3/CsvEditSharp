@@ -19,19 +19,36 @@ namespace CsvEditSharp.T4
 
             EncodingName = encodingName;
             HasHeaders = headers != null;
-            CultureInfo = cultureInfo?? CultureInfo.CurrentCulture;
+            CultureInfo = cultureInfo ?? CultureInfo.CurrentCulture;
             Prop = DetectFieldTypeNames(firstRow)
                 .Zip(GenerateColumnDefs(headers), (type, defs) =>
-                    new PropertyDefs
+                {
+                    var columnName = defs.Name;
+                    if (string.IsNullOrEmpty(defs.Name))
+                    {
+                        defs.UseIndex = true;
+                    }
+                    else
+                    {
+                        columnName = ReplaceIdentifier(defs.Name);
+                        if (defs.Name != columnName)
+                        {
+                            defs.UseName = true;
+                        }
+                    }
+                    return new PropertyDefs
                     {
                         Column = defs,
-                        Name = IsIdentifier(defs.Name) ? defs.Name : $"column_{ defs.Index}",
+                        Name = defs.UseIndex
+                            ? $"Column_{ defs.Index}"
+                            : columnName,
                         Type = type,
                         CultureInfo = CultureInfo
-                    });
+                    };
+                });
             AutoTypeDetection = autoTypeDetection;
         }
-        
+
         private IEnumerable<string> DetectFieldTypeNames(IEnumerable<string> firstRow)
         {
             if (firstRow == null)
@@ -41,9 +58,9 @@ namespace CsvEditSharp.T4
                     yield return "string";
                 }
             }
-            else 
+            else
             {
-                foreach(var field in firstRow)
+                foreach (var field in firstRow)
                 {
                     yield return FieldToTypeName(field);
                 }
@@ -69,16 +86,16 @@ namespace CsvEditSharp.T4
             }
         }
 
-        private bool IsIdentifier(string s)
+        private string ReplaceIdentifier(string s)
         {
+            if (string.IsNullOrEmpty(s)) { return s; }
 
-            if (s == null || s.Length == 0) { return false; }
+            var startChar = SyntaxFacts.IsIdentifierStartCharacter(s[0]) ? s[0] : '_';
 
-            if (!SyntaxFacts.IsIdentifierStartCharacter(s[0]))
-            {
-                return false;
-            }
-            return s.Skip(1).All(c => SyntaxFacts.IsIdentifierPartCharacter(c));
+            return new string(new[] { startChar }.Concat(
+                s.Skip(1)
+                    .Select(c => SyntaxFacts.IsIdentifierPartCharacter(c) ? c : '_'))
+                    .ToArray());
         }
 
         private string FieldToTypeName(string field)
@@ -89,16 +106,16 @@ namespace CsvEditSharp.T4
                 return "bool";
             }
 
-            if (DateTime.TryParse(field,CultureInfo, DateTimeStyles.None , out DateTime _))
+            if (DateTime.TryParse(field, CultureInfo, DateTimeStyles.None, out DateTime _))
             {
                 return "DateTime";
             }
 
-            if (decimal.TryParse(field,NumberStyles.Any, CultureInfo, out decimal _))
+            if (decimal.TryParse(field, NumberStyles.Any, CultureInfo, out decimal _))
             {
                 return "decimal";
             }
-            
+
             return "string";
         }
 
@@ -106,6 +123,10 @@ namespace CsvEditSharp.T4
         {
             public int Index { get; set; }
             public string Name { get; set; }
+
+            public bool UseIndex { get; set; }
+            public bool UseName { get; set; }
+
         }
 
         private class PropertyDefs
@@ -113,7 +134,7 @@ namespace CsvEditSharp.T4
             public ColumnDefs Column { get; set; }
             public string Name { get; set; }
             public string Type { get; set; }
-            public CultureInfo CultureInfo { get;set; }
+            public CultureInfo CultureInfo { get; set; }
 
         }
     }

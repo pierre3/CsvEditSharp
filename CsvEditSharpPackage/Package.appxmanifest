@@ -9,7 +9,7 @@
   <Identity
     Name="49630pierre3.5978996E3A893"
     Publisher="CN=16FF7F91-F996-44E6-B764-E871112CA1E3"
-    Version="1.0.0.0" />
+    Version="1.0.2.0" />
 
   <Properties>
     <DisplayName>CSV Edit Sharp</DisplayName>

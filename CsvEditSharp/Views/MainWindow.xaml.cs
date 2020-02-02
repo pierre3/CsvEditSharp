@@ -128,7 +128,7 @@ namespace CsvEditSharp
 
             if (!string.IsNullOrEmpty(converter.HeaderName))
             {
-                e.Column.Header = converter.HeaderName;
+                e.Column.Header = converter.HeaderName.Replace("_","__");
             }
 
             var textColumn = e.Column as DataGridTextColumn;
