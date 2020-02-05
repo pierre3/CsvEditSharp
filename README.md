@@ -187,12 +187,12 @@ void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelect
 Sets a validation in column. 
 
 ```cs
-AddValidation<FieldData,DateTime>(
+api.AddValidation<FieldData,DateTime>(
     m => m.Birthday , 
     dt => dt <= DateTime.Now.Date,
     "Cannot enter a future date.");
 
-AddValidation<FieldData, double>(
+api.AddValidation<FieldData, double>(
     m => m.PocketMoney , 
     n => (n > 0) && (n < 10000.0),
     "PocketMoney must be in the range $0 to $10000.");
@@ -211,7 +211,7 @@ void Query<T>(Action<IEnumerable<T>> query);
 #### Filter & Sort Data
 
 ```cs
-Query<FieldData>(source => source
+api.Query<FieldData>(source => source
     .Where(m => m.Gender == Gender.Female )
     .Where(m => !m.Married )
     .OrderBy(m => m.Age) );
@@ -222,7 +222,7 @@ Query<FieldData>(source => source
 #### Update Data
 
 ```cs
-Query<FieldData>( record => record
+api.Query<FieldData>( record => record
 	.Where( m => m.Gender == Gender.Male )
 	.Where( m => !m.Married )
 	.ForEach( m =>
