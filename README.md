@@ -1,87 +1,117 @@
 # CsvEditSharp
 
-CsvEditSharp is a CSV editor. You can describe reading and writing settings in CSharp script.
+CsvEditSharp is a CSV editor that describes read / write settings with C # script.
 
-![CsvEditSharpMain03](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main03.png)
+In the script, write read / write settings using API of "CsvHelper" which is a open source .Net class library.
 
-## Download
-
-- ~~CsvEditSharp is now available in the [Windows Store](https://www.microsoft.com/store/apps/9nblggh4197m).~~
-- Download binaries [here](https://github.com/pierre3/CsvEditSharp/releases/) .
+![Window000](/Documents/Capture000.png)
 
 ## Framework
 - Windows Presentation Foundation (WPF) 
-- .Net Framework 4.6.1
+- .Net Framework 4.7.2
 
-## Liblary
+## Libraries
 - [CsvHelper](https://joshclose.github.io/CsvHelper/)
 - [AvalonEdit](http://avalonedit.net/)
 - [Microsoft.CodeAnalysis.CSharp.Scripting](https://www.nuget.org/packages/Microsoft.CodeAnalysis.CSharp.Scripting/)
 
-## Exsamples
 
-### sample csv
+# Download
+
+- ~~CsvEditSharp is now available in the [Windows Store](https://www.microsoft.com/store/apps/9nblggh4197m).~~
+- Download binaries [here](https://github.com/pierre3/CsvEditSharp/releases/) .
+
+
+# Overview
+
+## sample csv
+
 ```
 Name,Birthday,Gender,Married,PocketMoney
-Joe Maldonado,6/4/1955,Male,N,$7028.74
-Mae Ross,10/10/1981,Male,Y,$1847.49
-Adele Owen,10/8/1993,Female,N,$2615.28
-Nina Pope,7/24/1967,Male,Y,$6265.55
-Marian Young,12/3/1969,Male,N,$9165.00
-Nicholas Cruz,3/16/1971,Male,Y,$8435.71
-Effie Moody,7/23/1990,Female,Y,$6883.24
-Larry Carson,11/12/1970,Male,N,$723.88
-Edna Watson,3/6/1967,Male,Y,$203.56
-Bettie Bishop,9/17/1985,Female,N,$5471.29
-Verna Fowler,12/8/1972,Male,N,$43.31
-Ola Zimmerman,6/5/1961,Female,Y,$1354.57
-Rachel Hart,10/3/1975,Female,Y,$8221.86
+Leona Lyons,10/3/1959,Female,TRUE,"$1,447"
+Randal Bass,9/28/1994,Male,FALSE,"$4,243"
+Ben Andrews,1/28/1998,Male,TRUE,"$4,949"
+Raul Silva,3/20/1991,Male,FALSE,"$2,685"
+Kristy Carlson,12/10/1970,Female,TRUE,$557
+Doris Dixon,11/1/1960,Female,FALSE,$56
+Jody Williams,9/26/1960,Male,TRUE,"$4,413"
+Angelina Rodgers,2/28/1993,Female,FALSE,"$3,992"
+Pablo Kelley,6/19/1974,Male,FALSE,"$2,817"
+Kristen Greene,8/26/1965,Female,TRUE,"$3,739"
+Janie Smith,12/22/1959,Female,FALSE,"$3,120"
+Julie Frazier,10/9/1964,Female,FALSE,"$3,958"
+Israel Pratt,4/20/1959,Male,FALSE,$418
 ...
 ```
 
-### configuration script
+- https://github.com/pierre3/CsvEditSharp/blob/master/Documents/person.csv
 
+
+## Configuration script
+
+### Automatically generated
+
+In the CSV file to be read for the first time, a script is automatically generated from the column name in the header and the first line of data.
+
+- Enter the information required for automatic generation.
+
+![Window002](/Documents/Capture002.png)
+
+- The following configuration script is generated.
 ```cs
-/* CSV Text Encoding */
-Encoding = Encoding.GetEncoding("utf-8");
-
-/* Class Declarations */
-class Person
+ICsvEditSharpApi api = GetCsvEditSharpApi();
+api.Encoding = Encoding.GetEncoding("utf-8");
+api.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo("en-US"))
 {
-    public string Name { get; set; }
-    public DateTime Birthday { get; set; }
-    public Gender Gender { get; set; }
-    public bool Married { get; set; }
-    public double PocketMoney { get; set; }
+	HasHeaderRecord = true
+};
+
+class FieldData
+{
+	public string Name { get; set; }
+	public DateTime? Birthday { get; set; }
+	public string Gender { get; set; }
+	public bool Married { get; set; }
+	[NumberStyles(NumberStyles.Any)] 
+	public decimal? PocketMoney { get; set; }
 }
 
-enum Gender
-{
-    Male,
-    Female
-}
-
-/* Set class map settings via CsvHelper */
-RegisterClassMap<Person>(classMap =>
-{
-    classMap.Map(m => m.Name).Name("Name");
-    classMap.Map(m => m.Birthday).Name("Birthday")
-        .TypeConverterOption("M/d/yyyy");
-    classMap.Map(m => m.Gender).Name("Gender");
-    classMap.Map(m => m.Married).Name("Married")
-        .TypeConverterOption(true,"Y")
-        .TypeConverterOption(false,"N");
-    
-    var culcure = System.Globalization.CultureInfo.GetCultureInfo("en-us");
-    classMap.Map(m => m.PocketMoney).Name("PocketMoney")
-        .TypeConverterOption("C")
-        .TypeConverterOption(NumberStyles.Currency)
-        .TypeConverterOption(culcure);
-});
+api.RegisterClassMap<FieldData>();
 ```
-![CsvEditSharpMain02](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/csvEditSharp_main02.png)
+
+- The CSV file is read and displayed according to the contents of the generated script.
+
+![Window003](/Documents/Capture004.png)
 
 ## Script API
+Configure using the ICsvEditSharpApi interface in the script.
+
+```cs
+public interface ICsvEditSharpApi
+{
+    Encoding Encoding { get; set; }
+    CsvConfiguration CsvConfiguration { get; set; }
+    IDictionary<string, ColumnValidation> ColumnValidations { get; }
+    ICsvEditSharpApi GetCsvEditSharpApi();
+    void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter = null);
+    void RegisterClassMapForReading<T>(Action<ClassMap<T>>　propertyMapSetter = null);
+    void RegisterClassMapForWriting<T>(Action<ClassMap<T>> propertyMapSetter = null);
+    void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector,
+        Func<TMember, bool> validation, string errorMessage);
+    void Query<T>(Func<IEnumerable<T>, IEnumerable<T>> query);
+    void Query<T>(Action<IEnumerable<T>> query);
+}
+```
+### GetCsvEditSharpApi Method
+
+```cs
+ICsvEditSharpApi GetCsvEditSharpApi();
+```
+Gets the CSV Edit Sharp API object.
+
+```cs
+ICsvEditSharpApi api = GetCsvEditSharpApi();
+```
 
 ### Encoding Property
 
@@ -92,103 +122,84 @@ Encoding Encoding { get; set; }
 Sets a `System.Text.Encoding` object for reading a CSV file.
 
 ```cs
-Encoding = Encoding.GetEncoding("utf-8");
+api.Encoding = Encoding.GetEncoding("utf-8");
 ```
 
-### RegisterClassMap Method
+### CsvConfiguration Property
+
+```cs
+CsvConfiguration CsvConfiguration { get; set; }
+```
+Sets a configuration for CSV reader and writer, using `CsvHelper.Configuration.CsvConfiguration`.
+
+```cs
+api.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo("en-US"))
+{
+    HasHeaderRecord = false,
+    AllowComments = true,
+    Comment = '#',
+    Delimiter = '\t'
+    //etc...
+};
+```
+
+### RegisterClassMap Methods
 
 ```cs    
-void RegisterClassMap<T>();
-void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter);
-void RegisterClassMap<T>(Action<CsvClassMap<T>> propertyMapSetter, RegisterClassMapTarget target);
+void RegisterClassMap<T>(Action<ClassMap<T>> propertyMapSetter = null);
+void RegisterClassMapForReading<T>(Action<ClassMap<T>>　propertyMapSetter = null);
+void RegisterClassMapForWriting<T>(Action<ClassMap<T>> propertyMapSetter = null);
 ```
 
-Set class map settings, using `CsvHelper.Configuration.CsvClassMap`.
+Set class map settings, using `CsvHelper.CsvConfiguration.CsvClassMap`.
 
 ```cs
-/* Set default class map settings */
-RegisterClassMap<Person>();
+/* Set the class map of FieldData for reading and writing, and Set the class map of auto mapping  */
+api.RegisterClassMap<FieldData>();
 
-/* Set class map settings for CSV reader and writer */
-RegisterClassMap<Person>(classMap => {
-    classMap.Map(m => m.Name);
-    classMap.Map(m => m.Birthday);
-    classMap.Map(m => m.Gender);
-    classMap.Map(m => m.Married)
-        .TypeConverterOption(true,"Y")
-        .TypeConverterOption(false,"N");
-    classMap.Map(m => m.PocketMoney)
-        .TypeConverterOption("C")
-        .TypeConverterOption(NumberStyles.Currency);
-});
-
-/* Set class map settings for CSV reader only */
-RegisterClassMap<Person>(classMap => {
-    classMap.Map(m => m.Name);
-    classMap.Map(m => m.Birthday);
-    classMap.Map(m => m.Gender);
-    classMap.Map(m => m.Married)
-        .TypeConverterOption(true,"Y")
-        .TypeConverterOption(false,"N");
-    classMap.Map(m => m.PocketMoney)
-        .TypeConverterOption("C")
-        .TypeConverterOption(NumberStyles.Currency);
-}, RegisterClassMapTarget.Reader);
-```
-
-### SetConfiguration Method
-
-```cs
-void SetConfiguration(Action<CsvConfiguration> configurationSetter);
-```
-
-Sets a configuration for CSV reader and writer, using `CsvHelper.Configuration.CsvConfiguration`
-
-(sample.csv)
-
-```
-Joe Maldonado;6/4/1955;Male;N;$7028.74
-# comment line
-Mae Ross;10/10/1981;Male;Y;$1847.49
-Adele Owen;10/8/1993;Female;N;$2615.28
-Nina Pope;7/24/1967;Male;Y;$6265.55
-Marian Young;12/3/1969;Male;N;$9165.00
-```
-
-```cs
-SetConfiguration(config =>
+/* Set the class map of FieldData for reading */
+api.RegisterClassMapForReading<FieldData>(classMap =>
 {
-    config.HasHeaderRecord = false;
-    config.AllowComments = true;
-    config.Comment = '#';
-    config.Delimiter = ';';
-    //etc...
+    classMap.AutoMap(api.CsvConfiguration);
+    classMap.Map(m => m.PocketMoney)
+        .TypeConverterOption
+		.NumberStyles(NumberStyles.Currency);
 });
+
+/* Set the class map of FieldData for writing */
+api.RegisterClassMapForWriting<FieldData>(classMap => 
+{
+    classMap.AutoMap(api.CsvConfiguration);
+    classMap.Map(m => m.PocketMoney)
+        .TypeConverterOption
+		.Format("C");
+});
+
 ```
 
 ### AddValidation Method
 
 ```cs
-void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector, Func<TMember, bool> validation, string errorMessage);
+void AddValidation<TType, TMember>(Expression<Func<TType, TMember>> memberSelector,
+    Func<TMember, bool> validation, string errorMessage);
 ```
 
 Sets a validation in column. 
 
 ```cs
-AddValidation<Person,DateTime>(
+AddValidation<FieldData,DateTime>(
     m => m.Birthday , 
     dt => dt <= DateTime.Now.Date,
     "Cannot enter a future date.");
 
-AddValidation<Person, double>(
+AddValidation<FieldData, double>(
     m => m.PocketMoney , 
     n => (n > 0) && (n < 10000.0),
     "PocketMoney must be in the range $0 to $10000.");
 
 ```
 
-![validation01](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/validation01.png)  
-![validation02](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/validation02.png)  
+![validation01](/Documents/Capture007.png)  
 
 ### Query Method
 
@@ -200,26 +211,99 @@ void Query<T>(Action<IEnumerable<T>> query);
 #### Filter & Sort Data
 
 ```cs
-Query<Person>(source => source
+Query<FieldData>(source => source
     .Where(m => m.Gender == Gender.Female )
-    .Where(m => m.Married )
-    .OrderBy(m => m.PocketMoney) );
+    .Where(m => !m.Married )
+    .OrderBy(m => m.Age) );
 ```
 
-![query](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/query.png)  
+![validation01](/Documents/Capture008.png) 
 
 #### Update Data
 
 ```cs
-Query<Person>( record => record
+Query<FieldData>( record => record
 	.Where( m => m.Gender == Gender.Male )
-	.Where( m => m.Married )
+	.Where( m => !m.Married )
 	.ForEach( m =>
 	{
-		m.Name += " *";
-		m.PocketMoney = 0;
+		m.Name += " ★";
 	})
 );
 ```
 
-![foreach](https://github.com/pierre3/CsvEditSharp/blob/master/Documents/foreach.png)
+![foreach](/Documents/Capture009.png)
+
+
+## An example configuration script
+
+```cs
+ICsvEditSharpApi api = GetCsvEditSharpApi();
+api.Encoding = Encoding.GetEncoding("utf-8");
+api.CsvConfiguration = new CsvConfiguration( CultureInfo.GetCultureInfo("en-US"))
+{
+	HasHeaderRecord = true
+};
+
+/* Definition of record class 
+ and set conversion options for auto mapping using attributes .
+ */
+class FieldData
+{
+	public string Name { get; set; }
+	[Format("d")]
+	public DateTime Birthday { get; set; }
+	public Gender Gender { get; set; }
+	public bool Married { get; set; }
+	[NumberStyles(NumberStyles.Any)]
+	[Format("C")]
+	public decimal? PocketMoney { get; set; }
+	public int Age { get; set; }
+}
+
+/* Define the enum type of selection item */
+enum Gender
+{
+	Male,
+	Female,
+	Other
+}
+
+int BirthDayToAge(DateTime birthday)
+{
+	var today = DateTime.Today;
+	var age = today.Year - birthday.Year;
+	if( birthday.Date > today.AddYears(-age))
+	{
+		age--;
+	}
+	return age;
+}
+
+/* Manually configure additional class maps. */
+api.RegisterClassMap<FieldData>(classMap =>
+{
+	classMap.AutoMap(api.CsvConfiguration);
+    //Calculate age from birthday and set in Age column
+	classMap.Map(m => m.Age).ConvertUsing(row => 
+	{
+		var birthday = row.GetField<DateTime>("Birthday");
+		return BirthDayToAge(birthday);
+	});
+});
+
+/* Add custom validations */
+api.AddValidation<FieldData,DateTime>(
+	m => m.Birthday, 
+	dt => dt.Date <= DateTime.Today,
+	"Cannot enter a future date.");
+
+api.AddValidation<FieldData, decimal?>(
+    m => m.PocketMoney , 
+    n => !n.HasValue || (n > 0m) && (n < 10000.0m),
+    "PocketMoney must be in the range $0 to $10000.");
+
+```
+
+
+![foreach](/Documents/Capture010.png)

@@ -1,8 +1,8 @@
-## CSV Edit �� privacy policy
+## CSV Edit ♯ privacy policy
 This application does not collect, store or transmit any personal information.
 
 
-## CSV Edit ��@�v���C�o�V�[�|���V�[
-�{�A�v���P�[�V�����́A�����Ȃ�l�����擾�A�ۑ��A���M���邱�Ƃ͂���܂���B
+## CSV Edit ♯　プライバシーポリシー
+本アプリケーションは、いかなる個人情報も取得、保存、送信することはありません。
 
 2020/01/29 pierre3
