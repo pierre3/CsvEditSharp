@@ -55,7 +55,7 @@ In the CSV file to be read for the first time, a script is automatically generat
 
 - Enter the information required for automatic generation.
 
-![Window002](/Documents/Capture002.png)
+![Window002](/Documents/Capture002.PNG)
 
 - The following configuration script is generated.
 ```cs
@@ -81,7 +81,7 @@ api.RegisterClassMap<FieldData>();
 
 - The CSV file is read and displayed according to the contents of the generated script.
 
-![Window003](/Documents/Capture004.png)
+![Window003](/Documents/Capture004.PNG)
 
 ## Script API
 Configure using the ICsvEditSharpApi interface in the script.
@@ -199,7 +199,7 @@ AddValidation<FieldData, double>(
 
 ```
 
-![validation01](/Documents/Capture007.png)  
+![validation01](/Documents/Capture007.PNG)  
 
 ### Query Method
 
@@ -217,7 +217,7 @@ Query<FieldData>(source => source
     .OrderBy(m => m.Age) );
 ```
 
-![validation01](/Documents/Capture008.png) 
+![validation01](/Documents/Capture008.PNG) 
 
 #### Update Data
 
@@ -232,7 +232,7 @@ Query<FieldData>( record => record
 );
 ```
 
-![foreach](/Documents/Capture009.png)
+![foreach](/Documents/Capture009.PNG)
 
 
 ## An example configuration script
@@ -306,4 +306,4 @@ api.AddValidation<FieldData, decimal?>(
 ```
 
 
-![foreach](/Documents/Capture010.png)
+![foreach](/Documents/Capture010.PNG)
