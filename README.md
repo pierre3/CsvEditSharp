@@ -18,7 +18,7 @@ In the script, write read / write settings using API of "CsvHelper" which is a o
 
 # Download
 
-- ~~CsvEditSharp is now available in the [Windows Store](https://www.microsoft.com/store/apps/9nblggh4197m).~~
+- CsvEditSharp is now available in the [Windows Store](	https://www.microsoft.com/store/apps/9PN205V6THDN)
 - Download binaries [here](https://github.com/pierre3/CsvEditSharp/releases/) .
 
 
